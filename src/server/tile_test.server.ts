@@ -5,8 +5,18 @@ import Tile from "./classes/tile";
 import { TileAttachmentInfo } from "./interfaces/tile";
 import { getRandom } from "shared/utils";
 import { remotes } from "shared/remotes";
+import { ServerScriptService } from "@rbxts/services";
+import FolderMerger from "./classes/folderMerger";
+import make from "@rbxts/make";
 
-const folder = services.ServerScriptService.FindFirstChild("TS")?.FindFirstChild("tiles") as Folder;
+const nonts = ServerScriptService.WaitForChild("tiles.non-ts") as Folder;
+const tsTiles = ServerScriptService.WaitForChild("TS").WaitForChild("tiles") as Folder;
+
+const folder = ServerScriptService.FindFirstChild("tiles") as Folder ?? make("Folder", {Name: "tiles", Parent: ServerScriptService}) as Folder;
+
+const merger = new FolderMerger(folder);
+
+merger.merge([nonts, tsTiles]);
 
 const test_parts = services.Workspace.WaitForChild("test_parts") as Folder;
 

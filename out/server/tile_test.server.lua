@@ -5,11 +5,17 @@ local TileRandomizer = TS.import(script, game:GetService("ServerScriptService"),
 local RandomTileAttacher = TS.import(script, game:GetService("ServerScriptService"), "TS", "classes", "random_tile_attachment").default
 local Tile = TS.import(script, game:GetService("ServerScriptService"), "TS", "classes", "tile").default
 local getRandom = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getRandom
-local _result = services.ServerScriptService:FindFirstChild("TS")
-if _result ~= nil then
-	_result = _result:FindFirstChild("tiles")
-end
-local folder = _result
+local ServerScriptService = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services").ServerScriptService
+local FolderMerger = TS.import(script, game:GetService("ServerScriptService"), "TS", "classes", "folderMerger").default
+local make = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "make")
+local nonts = ServerScriptService:WaitForChild("tiles.non-ts")
+local tsTiles = ServerScriptService:WaitForChild("TS"):WaitForChild("tiles")
+local folder = ServerScriptService:FindFirstChild("tiles") or make("Folder", {
+	Name = "tiles",
+	Parent = ServerScriptService,
+})
+local merger = FolderMerger.new(folder)
+merger:merge({ nonts, tsTiles })
 local test_parts = services.Workspace:WaitForChild("test_parts")
 local children = test_parts:GetChildren()
 local tiles = TileRandomizer.new(folder)
