@@ -165,7 +165,10 @@ do
 		print(offset)
 		-- Apply the offset to the other tile's center
 		local otherCenter = tile._model:WaitForChild("centerPoint")
-		otherCenter.Position = thisAttach.part.Position - offset
+		local _position_1 = thisAttach.part.Position
+		local _position_2 = otherOffset.position
+		local _vector3 = Vector3.new(0, 1, 0)
+		otherCenter.Position = _position_1 - _position_2 - _vector3
 		-- Apply offsets and update attachment points
 		tile:applyOffsets()
 		local _attachmentPoints_2 = self.attachmentPoints

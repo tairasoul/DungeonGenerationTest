@@ -1,14 +1,9 @@
 -- Compiled with roblox-ts v2.1.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local services = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services")
-local TileRandomizer = TS.import(script, game:GetService("ServerScriptService"), "TS", "classes", "randomised.tiles").default
-local RandomTileAttacher = TS.import(script, game:GetService("ServerScriptService"), "TS", "classes", "random_tile_attachment").default
-local Tile = TS.import(script, game:GetService("ServerScriptService"), "TS", "classes", "tile").default
-local getRandom = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getRandom
 local ServerScriptService = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services").ServerScriptService
 local FolderMerger = TS.import(script, game:GetService("ServerScriptService"), "TS", "classes", "folderMerger").default
 local make = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "make")
-local tileStorage = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "vars", "folders").tiles
 local nonts = ServerScriptService:WaitForChild("tiles.non-ts")
 local tsTiles = ServerScriptService:WaitForChild("TS"):WaitForChild("tiles")
 local folder = ServerScriptService:FindFirstChild("tiles") or make("Folder", {
@@ -17,42 +12,34 @@ local folder = ServerScriptService:FindFirstChild("tiles") or make("Folder", {
 })
 local merger = FolderMerger.new(folder)
 merger:merge({ nonts, tsTiles })
-local test_parts = services.Workspace:WaitForChild("test_parts")
-local children = test_parts:GetChildren()
-local tiles = TileRandomizer.new(folder)
-local random = RandomTileAttacher.new(folder)
-local baseTile = random:attachTileToPoint(getRandom(children), "Hallway")
-local tc = Tile.new(baseTile)
-local tile2 = tiles:getTileOfType("Room")
-local clone2 = tile2:Clone()
-clone2.Parent = tileStorage
-local tc2 = Tile.new(clone2)
-local tc1Point = tc.attachmentPoints[1]
-local tc2Point = tc2.attachmentPoints[1]
-local info = {
-	thisTileAttachment = tc1Point,
-	attachmentPoint = tc2Point,
-}
-tc:attachTile(tc2, info)
-local hallway = tiles:getTileOfType("Hallway")
-local hc = hallway:Clone()
-hc.Parent = tileStorage
-local hct = Tile.new(hc)
-local thisTile = getRandom(tc2.attachmentPoints, function(inst)
-	return not inst.hasAttachment
-end)
-local attach = getRandom(hct.attachmentPoints, function(inst)
-	return not inst.hasAttachment
-end)
-if thisTile ~= nil and attach ~= nil then
-	tc2:attachTile(hct, {
-		thisTileAttachment = thisTile,
-		attachmentPoint = attach,
-	})
-end
--- let previousTile = tc2;
 --[[
-	for (let i = 0; i < 3; i++) {
+	const test_parts = services.Workspace.WaitForChild("test_parts") as Folder;
+	const children = test_parts.GetChildren();
+	const tiles = new TileRandomizer(folder);
+	const random = new RandomTileAttacher(folder);
+	const baseTile = random.attachTileToPoint(getRandom(children) as Part, "Hallway") as Model;
+	const tc = new Tile(baseTile);
+	const tile2 = tiles.getTileOfType("Room") as Model;
+	const clone2 = tile2.Clone();
+	clone2.Parent = tileStorage;
+	const tc2 = new Tile(clone2);
+	const tc1Point = tc.attachmentPoints[0];
+	const tc2Point = tc2.attachmentPoints[0];
+	const info: TileAttachmentInfo = {
+	thisTileAttachment: tc1Point,
+	attachmentPoint: tc2Point
+	}
+	tc.attachTile(tc2, info);
+	const hallway = tiles.getTileOfType("Hallway") as Model;
+	const hc = hallway.Clone();
+	hc.Parent = tileStorage;
+	const hct = new Tile(hc);
+	const thisTile = getRandom(tc2.attachmentPoints, (inst) => !inst.hasAttachment);
+	const attach = getRandom(hct.attachmentPoints, (inst) => !inst.hasAttachment);
+	if (thisTile !== undefined && attach !== undefined)
+	tc2.attachTile(hct, {thisTileAttachment: thisTile, attachmentPoint: attach})
+	//let previousTile = tc2;
+	/*for (let i = 0; i < 3; i++) {
 	const tile = tiles.getRandomTile();
 	if (tile === undefined) continue;
 	const clone = tile.Clone();

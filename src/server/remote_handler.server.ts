@@ -28,7 +28,7 @@ remotes.generateRoomWithDepth.connect((player, depth) => {
         const randomized = tiles.getRandomTile();
         if (randomized === undefined) continue;
         const clone = randomized.Clone();
-        clone.Parent = Workspace;
+        clone.Parent = tileStorage;
         const tc = new Tile(clone);
         const randomThis = getRandom(tile.attachmentPoints, (inst) => !inst.hasAttachment);
         const randomOther = getRandom(tc.attachmentPoints, (inst) => !inst.hasAttachment)

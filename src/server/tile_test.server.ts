@@ -18,7 +18,7 @@ const merger = new FolderMerger(folder);
 
 merger.merge([nonts, tsTiles]);
 
-const test_parts = services.Workspace.WaitForChild("test_parts") as Folder;
+/*const test_parts = services.Workspace.WaitForChild("test_parts") as Folder;
 
 const children = test_parts.GetChildren();
 

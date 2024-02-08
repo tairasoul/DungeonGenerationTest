@@ -79,20 +79,8 @@ export default class Tile {
         if (!thisOffset || !otherOffset) {
             throw "Offsets not found for attachment points";
         }
-    
-        // Calculate the direction from other part's attachment point to center
-        const direction = thisAttach.part.CFrame.LookVector;
-
-        print(direction);
-    
-        // Calculate the offset based on the direction and other part's offset
-        const offset = direction.mul(otherOffset.position);
-
-        print(offset);
-    
-        // Apply the offset to the other tile's center
         const otherCenter = tile._model.WaitForChild("centerPoint") as Part;
-        otherCenter.Position = thisAttach.part.Position.sub(offset);
+        otherCenter.Position = thisAttach.part.Position.sub(otherOffset.position).sub(new Vector3(0, 1, 0));
         
         // Apply offsets and update attachment points
         tile.applyOffsets();
