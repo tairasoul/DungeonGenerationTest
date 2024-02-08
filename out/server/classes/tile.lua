@@ -191,6 +191,14 @@ do
 		-- ▲ ReadonlyArray.find ▲
 		_result_5.hasAttachment = true
 	end
+	function Tile:setPosition(position, rotation)
+		local point = self._model:WaitForChild("centerPoint")
+		point.Position = position
+		if rotation then
+			point.Rotation = rotation
+		end
+		self:applyOffsets()
+	end
 end
 return {
 	default = Tile,

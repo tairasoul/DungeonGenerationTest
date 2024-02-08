@@ -87,4 +87,12 @@ export default class Tile {
         (this.attachmentPoints.find((v) => v === thisAttach) as AttachmentPoint).hasAttachment = true;
         (tile.attachmentPoints.find((v) => v === otherTile) as AttachmentPoint).hasAttachment = true;
     }
+
+    setPosition(position: Vector3, rotation: Vector3) {
+        const point = this._model.WaitForChild("centerPoint") as Part;
+        point.Position = position;
+        if (rotation)
+            point.Rotation = rotation;
+        this.applyOffsets();
+    }
 }
