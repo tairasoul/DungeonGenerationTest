@@ -46,8 +46,8 @@ export default class RoomAttachment {
         const point = this._tile.attachmentPoints.find((v) => v === attachment);
         const offset = this.attachmentOffsets.find((v) => v.part === point?.part);
         if (offset === undefined || point === undefined) return;
-        const center = this._tile.centerPoint;
-        center.Position = part.Position.add(offset.offset);
+        const center = this._tile.originModel;
+        center.MoveTo(part.Position.add(offset.offset));
         this.applyOffsets();
         point.part.Destroy();
     }

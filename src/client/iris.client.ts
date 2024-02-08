@@ -20,5 +20,9 @@ iris.Connect(() => {
             print("clearing tiles");
             remotes.clearTiles.fire();
         }
+        if (iris.Button(["re-apply tile offsets"]).clicked()) {
+            print("re-applying tile offsets");
+            remotes.applyOffsets.fire()
+        }
     iris.End();
 });

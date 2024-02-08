@@ -16,3 +16,12 @@ export function getDistance(vector1: Vector3, vector2: Vector3) {
 export function guid() {
     return HttpService.GenerateGUID();
 }
+
+export function eulerToVector(euler: LuaTuple<[number, number, number]>) {
+    return new Vector3(euler[0], euler[1], euler[2])
+}
+
+export function cframeFromComponents(xyz: Vector3, components: LuaTuple<[number, number, number, number, number, number, number, number, number, number, number, number]>) {
+    const cframe = new CFrame(xyz.X, xyz.Y, xyz.Z, components[3], components[4], components[5], components[6], components[7], components[8], components[9], components[10], components[11])
+    return cframe;
+}

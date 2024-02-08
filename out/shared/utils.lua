@@ -34,8 +34,17 @@ end
 local function guid()
 	return HttpService:GenerateGUID()
 end
+local function eulerToVector(euler)
+	return Vector3.new(euler[1], euler[2], euler[3])
+end
+local function cframeFromComponents(xyz, components)
+	local cframe = CFrame.new(xyz.X, xyz.Y, xyz.Z, components[4], components[5], components[6], components[7], components[8], components[9], components[10], components[11], components[12])
+	return cframe
+end
 return {
 	getRandom = getRandom,
 	getDistance = getDistance,
 	guid = guid,
+	eulerToVector = eulerToVector,
+	cframeFromComponents = cframeFromComponents,
 }

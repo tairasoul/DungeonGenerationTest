@@ -102,10 +102,11 @@ do
 		if offset == nil or point == nil then
 			return nil
 		end
-		local center = self._tile.centerPoint
+		local center = self._tile.originModel
+		local _fn = center
 		local _position = part.Position
 		local _offset = offset.offset
-		center.Position = _position + _offset
+		_fn:MoveTo(_position + _offset)
 		self:applyOffsets()
 		point.part:Destroy()
 	end

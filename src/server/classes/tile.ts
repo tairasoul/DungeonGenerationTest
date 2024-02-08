@@ -1,8 +1,9 @@
 import { AttachmentPoint } from "server/interfaces/room";
 import { OffsetInfo, TileAttachmentInfo } from "server/interfaces/tile";
+import { cframeFromComponents, eulerToVector } from "shared/utils";
 
 export default class Tile {
-    private _model: Model;
+    _model: Model;
     private calculatedOffsets: {
         internalParts: OffsetInfo[],
         attachments: OffsetInfo[]
@@ -13,7 +14,7 @@ export default class Tile {
     public attachmentPoints: AttachmentPoint[] = [];
     constructor(model: Model) {
         this._model = model;
-        const points = this._model.WaitForChild("centerPoint").WaitForChild("apoints") as Folder;
+        const points = this._model.WaitForChild("apoints") as Folder;
         for (const child of points.GetChildren() as Part[]) {
             this.attachmentPoints.push(
                 {
@@ -30,7 +31,7 @@ export default class Tile {
         const centerPoint = (this._model.WaitForChild("centerPoint") as Part).CFrame;
     
         // Calculate position and rotation offsets for internal parts
-        const internalParts = this._model.GetDescendants().filter((v) => !v.IsA("Folder") && !v.IsA("ModuleScript") && !(v.Name === "centerPoint") && v.Parent !== this._model.WaitForChild("centerPoint").WaitForChild("apoints"));
+        const internalParts = this._model.GetDescendants().filter((v) => !(v.Name === "centerPoint") && v.Parent !== this._model.WaitForChild("apoints") && v.IsA("Part"));
         for (const part of internalParts as Part[]) {
             const offset = centerPoint.ToObjectSpace(part.CFrame);
             this.calculatedOffsets.internalParts.push({
@@ -41,7 +42,7 @@ export default class Tile {
         }
     
         // Calculate position and rotation offsets for attachment points
-        const attachmentPoints = this._model.WaitForChild("centerPoint").WaitForChild("apoints").GetChildren() as Part[];
+        const attachmentPoints = this._model.WaitForChild("apoints").GetChildren() as Part[];
         for (const attachment of attachmentPoints) {
             const offset = centerPoint.ToObjectSpace(attachment.CFrame);
             this.calculatedOffsets.attachments.push({
@@ -58,17 +59,11 @@ export default class Tile {
         // Apply position and rotation offsets for internal parts
         for (const offset of this.calculatedOffsets.internalParts) {
             offset.part.Position = centerPoint.add(offset.position);
-            print(offset.part);
-            print(offset.part.CFrame);
-            print(offset.part.CFrame.Rotation.mul(new Vector3(offset.rotation[2], offset.rotation[1], offset.rotation[0])))
         }
     
         // Apply position and rotation offsets for attachment points
         for (const offset of this.calculatedOffsets.attachments) {
             offset.part.Position = centerPoint.add(offset.position);
-            print(offset.part);
-            print(offset.part.CFrame);
-            print(offset.part.CFrame.Rotation.mul(new Vector3(offset.rotation[2], offset.rotation[1], offset.rotation[0])))
         }
     }
 
@@ -85,11 +80,15 @@ export default class Tile {
         if (!thisOffset || !otherOffset) {
             throw "Offsets not found for attachment points";
         }
-        const otherCenter = tile._model.WaitForChild("centerPoint") as Part;
-        otherCenter.Position = thisAttach.part.Position.sub(otherOffset.position);
+        const otherCenter = tile._model;
+        const newPosition = thisOffset.part.CFrame.add(otherOffset.position).sub(new Vector3(0, 2, 0));
+        const pos = newPosition.Position;
+        const centerPos = (this._model.WaitForChild("centerPoint") as Part).Position;
+        otherCenter.PivotTo(new CFrame(pos, new Vector3(centerPos.X, pos.Y, centerPos.Z)));
+        //otherCenter.PivotTo();
         
         // Apply offsets and update attachment points
-        tile.applyOffsets();
+        //tile.applyOffsets();
         (this.attachmentPoints.find((v) => v === thisAttach) as AttachmentPoint).hasAttachment = true;
         (tile.attachmentPoints.find((v) => v === otherTile) as AttachmentPoint).hasAttachment = true;
     }

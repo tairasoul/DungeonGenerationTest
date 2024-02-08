@@ -18,7 +18,7 @@ do
 		}
 		self.attachmentPoints = {}
 		self._model = model
-		local points = self._model:WaitForChild("centerPoint"):WaitForChild("apoints")
+		local points = self._model:WaitForChild("apoints")
 		for _, child in points:GetChildren() do
 			local _attachmentPoints = self.attachmentPoints
 			local _arg0 = {
@@ -35,7 +35,7 @@ do
 		-- Calculate position and rotation offsets for internal parts
 		local _exp = self._model:GetDescendants()
 		local _arg0 = function(v)
-			return not v:IsA("Folder") and (not v:IsA("ModuleScript") and (not (v.Name == "centerPoint") and v.Parent ~= self._model:WaitForChild("centerPoint"):WaitForChild("apoints")))
+			return not (v.Name == "centerPoint") and (v.Parent ~= self._model:WaitForChild("apoints") and v:IsA("Part"))
 		end
 		-- ▼ ReadonlyArray.filter ▼
 		local _newValue = {}
@@ -59,7 +59,7 @@ do
 			table.insert(_internalParts, _arg0_1)
 		end
 		-- Calculate position and rotation offsets for attachment points
-		local attachmentPoints = self._model:WaitForChild("centerPoint"):WaitForChild("apoints"):GetChildren()
+		local attachmentPoints = self._model:WaitForChild("apoints"):GetChildren()
 		for _, attachment in attachmentPoints do
 			local offset = centerPoint:ToObjectSpace(attachment.CFrame)
 			local _attachments = self.calculatedOffsets.attachments
@@ -77,21 +77,11 @@ do
 		for _, offset in self.calculatedOffsets.internalParts do
 			local _position = offset.position
 			offset.part.Position = centerPoint + _position
-			print(offset.part)
-			print(offset.part.CFrame)
-			local _rotation = offset.part.CFrame.Rotation
-			local _vector3 = Vector3.new(offset.rotation[3], offset.rotation[2], offset.rotation[1])
-			print(_rotation * _vector3)
 		end
 		-- Apply position and rotation offsets for attachment points
 		for _, offset in self.calculatedOffsets.attachments do
 			local _position = offset.position
 			offset.part.Position = centerPoint + _position
-			print(offset.part)
-			print(offset.part.CFrame)
-			local _rotation = offset.part.CFrame.Rotation
-			local _vector3 = Vector3.new(offset.rotation[3], offset.rotation[2], offset.rotation[1])
-			print(_rotation * _vector3)
 		end
 	end
 	function Tile:attachTile(tile, info)
@@ -166,12 +156,17 @@ do
 		if not thisOffset or not otherOffset then
 			error("Offsets not found for attachment points")
 		end
-		local otherCenter = tile._model:WaitForChild("centerPoint")
-		local _position = thisAttach.part.Position
-		local _position_1 = otherOffset.position
-		otherCenter.Position = _position - _position_1
+		local otherCenter = tile._model
+		local _cFrame = thisOffset.part.CFrame
+		local _position = otherOffset.position
+		local _vector3 = Vector3.new(0, 2, 0)
+		local newPosition = _cFrame + _position - _vector3
+		local pos = newPosition.Position
+		local centerPos = (self._model:WaitForChild("centerPoint")).Position
+		otherCenter:PivotTo(CFrame.new(pos, Vector3.new(centerPos.X, pos.Y, centerPos.Z)))
+		-- otherCenter.PivotTo();
 		-- Apply offsets and update attachment points
-		tile:applyOffsets()
+		-- tile.applyOffsets();
 		local _attachmentPoints_2 = self.attachmentPoints
 		local _arg0_4 = function(v)
 			return v == thisAttach
