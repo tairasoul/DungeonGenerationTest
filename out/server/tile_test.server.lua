@@ -20,8 +20,8 @@ local tile2 = tiles:getTileOfType("Room")
 local clone2 = tile2:Clone()
 clone2.Parent = services.Workspace
 local tc2 = Tile.new(clone2)
-local tc1Point = tc.attachmentData[1].attachment
-local tc2Point = tc2.attachmentData[1].attachment
+local tc1Point = tc.attachmentPoints[1]
+local tc2Point = tc2.attachmentPoints[1]
 local info = {
 	thisTileAttachment = tc1Point,
 	attachmentPoint = tc2Point,
@@ -31,16 +31,16 @@ local hallway = tiles:getTileOfType("Hallway")
 local hc = hallway:Clone()
 hc.Parent = services.Workspace
 local hct = Tile.new(hc)
-local thisTile = getRandom(tc2.attachmentData, function(inst)
-	return not inst.attachment.hasAttachment
+local thisTile = getRandom(tc2.attachmentPoints, function(inst)
+	return not inst.hasAttachment
 end)
-local attach = getRandom(hct.attachmentData, function(inst)
-	return not inst.attachment.hasAttachment
+local attach = getRandom(hct.attachmentPoints, function(inst)
+	return not inst.hasAttachment
 end)
 if thisTile ~= nil and attach ~= nil then
 	tc2:attachTile(hct, {
-		thisTileAttachment = thisTile.attachment,
-		attachmentPoint = attach.attachment,
+		thisTileAttachment = thisTile,
+		attachmentPoint = attach,
 	})
 end
 -- let previousTile = tc2;
