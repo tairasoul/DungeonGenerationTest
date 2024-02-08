@@ -18,7 +18,7 @@ do
 		}
 		self.attachmentPoints = {}
 		self._model = model
-		local points = self._model:WaitForChild("apoints")
+		local points = self._model:WaitForChild("centerPoint"):WaitForChild("apoints")
 		for _, child in points:GetChildren() do
 			local _attachmentPoints = self.attachmentPoints
 			local _arg0 = {
@@ -35,7 +35,7 @@ do
 		-- Calculate position and rotation offsets for internal parts
 		local _exp = self._model:GetDescendants()
 		local _arg0 = function(v)
-			return not v:IsA("Folder") and (not v:IsA("ModuleScript") and (not (v.Name == "centerPoint") and v.Parent ~= self._model:WaitForChild("apoints")))
+			return not v:IsA("Folder") and (not v:IsA("ModuleScript") and (not (v.Name == "centerPoint") and v.Parent ~= self._model:WaitForChild("centerPoint"):WaitForChild("apoints")))
 		end
 		-- ▼ ReadonlyArray.filter ▼
 		local _newValue = {}
@@ -59,7 +59,7 @@ do
 			table.insert(_internalParts, _arg0_1)
 		end
 		-- Calculate position and rotation offsets for attachment points
-		local attachmentPoints = self._model:WaitForChild("apoints"):GetChildren()
+		local attachmentPoints = self._model:WaitForChild("centerPoint"):WaitForChild("apoints"):GetChildren()
 		for _, attachment in attachmentPoints do
 			local offset = centerPoint:ToObjectSpace(attachment.CFrame)
 			local _attachments = self.calculatedOffsets.attachments
@@ -72,22 +72,16 @@ do
 		end
 	end
 	function Tile:applyOffsets()
-		local centerPoint = (self._model:WaitForChild("centerPoint")).CFrame
+		local centerPoint = (self._model:WaitForChild("centerPoint")).Position
 		-- Apply position and rotation offsets for internal parts
 		for _, offset in self.calculatedOffsets.internalParts do
-			local _cFrame = CFrame.new(centerPoint.Position)
 			local _position = offset.position
-			local partCFrame = _cFrame + _position
-			local _arg0 = CFrame.Angles(offset.rotation[1], offset.rotation[2], offset.rotation[3])
-			offset.part.CFrame = partCFrame * _arg0
+			offset.part.Position = centerPoint + _position
 		end
 		-- Apply position and rotation offsets for attachment points
 		for _, offset in self.calculatedOffsets.attachments do
-			local _cFrame = CFrame.new(centerPoint.Position)
 			local _position = offset.position
-			local partCFrame = _cFrame + _position
-			local _arg0 = CFrame.Angles(offset.rotation[1], offset.rotation[2], offset.rotation[3])
-			offset.part.CFrame = partCFrame * _arg0
+			offset.part.Position = centerPoint + _position
 		end
 	end
 	function Tile:attachTile(tile, info)
@@ -131,8 +125,6 @@ do
 		if otherTile.hasAttachment then
 			error("Attachment point " .. (tostring(info.attachmentPoint) .. (" already has attachment on tile " .. tile._model.Name)))
 		end
-		local _object = {}
-		local _left = "this"
 		local _attachments = self.calculatedOffsets.attachments
 		local _arg0_2 = function(v)
 			return v.part == thisAttach.part
@@ -146,8 +138,7 @@ do
 			end
 		end
 		-- ▲ ReadonlyArray.find ▲
-		_object[_left] = _result_2
-		local _left_1 = "other"
+		local thisOffset = _result_2
 		local _attachments_1 = tile.calculatedOffsets.attachments
 		local _arg0_3 = function(v)
 			return v.part == otherTile.part
@@ -161,45 +152,50 @@ do
 			end
 		end
 		-- ▲ ReadonlyArray.find ▲
-		_object[_left_1] = _result_3
-		local offsets = _object
+		local otherOffset = _result_3
+		if not thisOffset or not otherOffset then
+			error("Offsets not found for attachment points")
+		end
+		-- Calculate the direction from other part's attachment point to center
+		local direction = thisAttach.part.CFrame.LookVector
+		print(direction)
+		-- Calculate the offset based on the direction and other part's offset
+		local _position = otherOffset.position
+		local offset = direction * _position
+		print(offset)
+		-- Apply the offset to the other tile's center
 		local otherCenter = tile._model:WaitForChild("centerPoint")
-		local _position = thisAttach.part.Position
-		local _position_1 = offsets.other.position
-		otherCenter.Position = _position - _position_1
+		otherCenter.Position = thisAttach.part.Position - offset
+		-- Apply offsets and update attachment points
 		tile:applyOffsets()
 		local _attachmentPoints_2 = self.attachmentPoints
 		local _arg0_4 = function(v)
-			if v.part == thisAttach.part then
-				local copy = v
-				copy.hasAttachment = true
-				return copy
+			return v == thisAttach
+		end
+		-- ▼ ReadonlyArray.find ▼
+		local _result_4
+		for _i, _v in _attachmentPoints_2 do
+			if _arg0_4(_v, _i - 1, _attachmentPoints_2) == true then
+				_result_4 = _v
+				break
 			end
-			return v
 		end
-		-- ▼ ReadonlyArray.map ▼
-		local _newValue = table.create(#_attachmentPoints_2)
-		for _k, _v in _attachmentPoints_2 do
-			_newValue[_k] = _arg0_4(_v, _k - 1, _attachmentPoints_2)
-		end
-		-- ▲ ReadonlyArray.map ▲
-		self.attachmentPoints = _newValue
+		-- ▲ ReadonlyArray.find ▲
+		_result_4.hasAttachment = true
 		local _attachmentPoints_3 = tile.attachmentPoints
 		local _arg0_5 = function(v)
-			if v.part == otherTile.part then
-				local copy = v
-				copy.hasAttachment = true
-				return copy
+			return v == otherTile
+		end
+		-- ▼ ReadonlyArray.find ▼
+		local _result_5
+		for _i, _v in _attachmentPoints_3 do
+			if _arg0_5(_v, _i - 1, _attachmentPoints_3) == true then
+				_result_5 = _v
+				break
 			end
-			return v
 		end
-		-- ▼ ReadonlyArray.map ▼
-		local _newValue_1 = table.create(#_attachmentPoints_3)
-		for _k, _v in _attachmentPoints_3 do
-			_newValue_1[_k] = _arg0_5(_v, _k - 1, _attachmentPoints_3)
-		end
-		-- ▲ ReadonlyArray.map ▲
-		tile.attachmentPoints = _newValue_1
+		-- ▲ ReadonlyArray.find ▲
+		_result_5.hasAttachment = true
 	end
 end
 return {

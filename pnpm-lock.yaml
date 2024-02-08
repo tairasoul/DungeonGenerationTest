@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@rbxts/character-promise':
+    specifier: ^1.0.2
+    version: 1.0.2
   '@rbxts/faker':
     specifier: ^0.2.8
     version: 0.2.8
@@ -93,6 +96,12 @@ devDependencies:
     version: 5.3.3
 
 packages:
+
+  /@rbxts/character-promise@1.0.2:
+    resolution: {integrity: sha512-5RYqcCywWqTrSAvkE2mrNWnLoqoOfmZGZn7+50pcAulbXbZd4svgHDY7+yUbevVIcQDa5meEKrVkt7sC0YBBVw==}
+    dependencies:
+      '@rbxts/validate-tree': 2.0.2
+    dev: false
 
   /@rbxts/colour-utils@1.4.1:
     resolution: {integrity: sha512-eIBRRj9BOXh9DoOnuTi/E5IV+7diI5IxasV/GLwzgLRs+ti/8lB36d+Z2nZ3/DQ7RhlBas7vfiVhwDmo+VI6ZQ==}
@@ -422,6 +431,10 @@ packages:
     dependencies:
       '@rbxts/roact': 1.4.4-ts.0
       '@rbxts/t': 3.1.1
+    dev: false
+
+  /@rbxts/validate-tree@2.0.2:
+    resolution: {integrity: sha512-OA0E9ZjEeOpPa3XeV5/oC51aro2QFcL5dItufbagYZW8TOsX8C+FDXLx+A/ulMwcF42WcFNcQybxzcWSS/QSrA==}
     dev: false
 
   /@rbxts/vfx-system@1.0.1:

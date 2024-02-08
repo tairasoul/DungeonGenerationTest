@@ -3,7 +3,7 @@ import TileRandomizer from "./randomised.tiles";
 import TileParser from "./tileParser";
 import RoomAttachment from "./room_attachment";
 import { getRandom } from "shared/utils";
-import { Workspace } from "@rbxts/services";
+import { tiles } from "shared/vars/folders";
 
 export default class RandomTileAttacher {
     private tileRandomiser: TileRandomizer;
@@ -15,7 +15,7 @@ export default class RandomTileAttacher {
         const tile = this.tileRandomiser.getTileOfType(tileType);
         if (tile === undefined) return;
         const clone = tile.Clone();
-        clone.Parent = Workspace;
+        clone.Parent = tiles;
         const parser = new TileParser(clone);
         const tileData = parser.getTileData();
         const attachment = new RoomAttachment(tileData);
@@ -30,7 +30,7 @@ export default class RandomTileAttacher {
         const tile = this.tileRandomiser.getRandomTile();
         if (tile === undefined) return;
         const clone = tile.Clone();
-        clone.Parent = Workspace;
+        clone.Parent = tiles;
         const parser = new TileParser(clone);
         const tileData = parser.getTileData();
         const attachment = new RoomAttachment(tileData);

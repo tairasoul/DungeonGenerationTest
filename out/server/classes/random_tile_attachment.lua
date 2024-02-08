@@ -4,7 +4,7 @@ local TileRandomizer = TS.import(script, game:GetService("ServerScriptService"),
 local TileParser = TS.import(script, game:GetService("ServerScriptService"), "TS", "classes", "tileParser").default
 local RoomAttachment = TS.import(script, game:GetService("ServerScriptService"), "TS", "classes", "room_attachment").default
 local getRandom = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getRandom
-local Workspace = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services").Workspace
+local tiles = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "vars", "folders").tiles
 local RandomTileAttacher
 do
 	RandomTileAttacher = setmetatable({}, {
@@ -26,7 +26,7 @@ do
 			return nil
 		end
 		local clone = tile:Clone()
-		clone.Parent = Workspace
+		clone.Parent = tiles
 		local parser = TileParser.new(clone)
 		local tileData = parser:getTileData()
 		local attachment = RoomAttachment.new(tileData)
@@ -44,7 +44,7 @@ do
 			return nil
 		end
 		local clone = tile:Clone()
-		clone.Parent = Workspace
+		clone.Parent = tiles
 		local parser = TileParser.new(clone)
 		local tileData = parser:getTileData()
 		local attachment = RoomAttachment.new(tileData)

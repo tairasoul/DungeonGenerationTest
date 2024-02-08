@@ -8,6 +8,7 @@ local getRandom = TS.import(script, game:GetService("ReplicatedStorage"), "TS", 
 local ServerScriptService = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services").ServerScriptService
 local FolderMerger = TS.import(script, game:GetService("ServerScriptService"), "TS", "classes", "folderMerger").default
 local make = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "make")
+local tileStorage = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "vars", "folders").tiles
 local nonts = ServerScriptService:WaitForChild("tiles.non-ts")
 local tsTiles = ServerScriptService:WaitForChild("TS"):WaitForChild("tiles")
 local folder = ServerScriptService:FindFirstChild("tiles") or make("Folder", {
@@ -24,7 +25,7 @@ local baseTile = random:attachTileToPoint(getRandom(children), "Hallway")
 local tc = Tile.new(baseTile)
 local tile2 = tiles:getTileOfType("Room")
 local clone2 = tile2:Clone()
-clone2.Parent = services.Workspace
+clone2.Parent = tileStorage
 local tc2 = Tile.new(clone2)
 local tc1Point = tc.attachmentPoints[1]
 local tc2Point = tc2.attachmentPoints[1]
@@ -35,7 +36,7 @@ local info = {
 tc:attachTile(tc2, info)
 local hallway = tiles:getTileOfType("Hallway")
 local hc = hallway:Clone()
-hc.Parent = services.Workspace
+hc.Parent = tileStorage
 local hct = Tile.new(hc)
 local thisTile = getRandom(tc2.attachmentPoints, function(inst)
 	return not inst.hasAttachment

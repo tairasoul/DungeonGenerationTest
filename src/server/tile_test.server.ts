@@ -4,10 +4,10 @@ import RandomTileAttacher from "./classes/random_tile_attachment";
 import Tile from "./classes/tile";
 import { TileAttachmentInfo } from "./interfaces/tile";
 import { getRandom } from "shared/utils";
-import { remotes } from "shared/remotes";
 import { ServerScriptService } from "@rbxts/services";
 import FolderMerger from "./classes/folderMerger";
 import make from "@rbxts/make";
+import { tiles as tileStorage } from "shared/vars/folders";
 
 const nonts = ServerScriptService.WaitForChild("tiles.non-ts") as Folder;
 const tsTiles = ServerScriptService.WaitForChild("TS").WaitForChild("tiles") as Folder;
@@ -31,7 +31,7 @@ const baseTile = random.attachTileToPoint(getRandom(children) as Part, "Hallway"
 const tc = new Tile(baseTile);
 const tile2 = tiles.getTileOfType("Room") as Model;
 const clone2 = tile2.Clone();
-clone2.Parent = services.Workspace;
+clone2.Parent = tileStorage;
 const tc2 = new Tile(clone2);
 const tc1Point = tc.attachmentPoints[0];
 const tc2Point = tc2.attachmentPoints[0];
@@ -44,7 +44,7 @@ tc.attachTile(tc2, info);
 const hallway = tiles.getTileOfType("Hallway") as Model;
 
 const hc = hallway.Clone();
-hc.Parent = services.Workspace;
+hc.Parent = tileStorage;
 const hct = new Tile(hc);
 const thisTile = getRandom(tc2.attachmentPoints, (inst) => !inst.hasAttachment);
 const attach = getRandom(hct.attachmentPoints, (inst) => !inst.hasAttachment);

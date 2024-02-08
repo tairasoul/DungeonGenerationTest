@@ -15,7 +15,7 @@ do
 		self._model = model
 	end
 	function TileParser:getTileData()
-		local folder = self._model:WaitForChild("apoints")
+		local folder = self._model:WaitForChild("centerPoint"):WaitForChild("apoints")
 		local children = folder:GetChildren()
 		local roomInfo = require(self._model:FindFirstChild("room.info"))
 		local tileData = {

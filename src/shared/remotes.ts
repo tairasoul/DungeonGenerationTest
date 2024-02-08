@@ -2,6 +2,8 @@ import { Server, createRemotes, remote } from "@rbxts/remo";
 
 export const remotes = createRemotes(
     {
-        async: remote<Server>()
+        generateRoom: remote<Server>(),
+        generateRoomWithDepth: remote<Server, [number]>(),
+        clearTiles: remote<Server>()
     }
 )

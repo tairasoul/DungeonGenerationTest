@@ -4,7 +4,9 @@ local _remo = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_inc
 local createRemotes = _remo.createRemotes
 local remote = _remo.remote
 local remotes = createRemotes({
-	async = remote(),
+	generateRoom = remote(),
+	generateRoomWithDepth = remote(),
+	clearTiles = remote(),
 })
 return {
 	remotes = remotes,

@@ -16,6 +16,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@rbxts/character-promise": "^1.0.2",
     "@rbxts/faker": "^0.2.8",
     "@rbxts/horseman": "^1.1.7",
     "@rbxts/instance-utils": "^1.1.1",
