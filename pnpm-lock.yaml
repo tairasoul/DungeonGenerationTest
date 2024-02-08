@@ -1,0 +1,548 @@
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  '@rbxts/faker':
+    specifier: ^0.2.8
+    version: 0.2.8
+  '@rbxts/horseman':
+    specifier: ^1.1.7
+    version: 1.1.7(@rbxts/flipper@2.0.1)(@rbxts/types@1.0.749)
+  '@rbxts/instance-utils':
+    specifier: ^1.1.1
+    version: 1.1.1
+  '@rbxts/iris':
+    specifier: ^1.0.1
+    version: 1.0.1
+  '@rbxts/iris-plugin':
+    specifier: ^1.0.1
+    version: 1.0.1
+  '@rbxts/math':
+    specifier: ^1.1.0
+    version: 1.1.0
+  '@rbxts/must':
+    specifier: ^1.0.5
+    version: 1.0.5
+  '@rbxts/object-pool':
+    specifier: ^1.1.0
+    version: 1.1.0
+  '@rbxts/objecthighlighter':
+    specifier: ^2.0.2
+    version: 2.0.2
+  '@rbxts/promise-forward':
+    specifier: ^1.0.5
+    version: 1.0.5
+  '@rbxts/region':
+    specifier: ^0.0.3
+    version: 0.0.3
+  '@rbxts/remo':
+    specifier: ^1.3.1
+    version: 1.3.1
+  '@rbxts/services':
+    specifier: ^1.5.3
+    version: 1.5.3
+  '@rbxts/task-queue':
+    specifier: ^1.0.0
+    version: 1.0.0
+  '@rbxts/timer':
+    specifier: ^0.0.9
+    version: 0.0.9
+  '@rbxts/tweenreplicator':
+    specifier: ^1.0.5
+    version: 1.0.5
+  '@rbxts/vfx-system':
+    specifier: ^1.0.1
+    version: 1.0.1
+  '@rbxts/wcs':
+    specifier: ^0.6.32
+    version: 0.6.32
+  '@rbxts/wired':
+    specifier: ^0.1.12
+    version: 0.1.12
+
+devDependencies:
+  '@rbxts/compiler-types':
+    specifier: 2.1.0-types.1
+    version: 2.1.0-types.1
+  '@rbxts/types':
+    specifier: ^1.0.749
+    version: 1.0.749
+  typescript:
+    specifier: ^5.3.3
+    version: 5.3.3
+
+packages:
+
+  /@rbxts/colour-utils@1.4.1:
+    resolution: {integrity: sha512-eIBRRj9BOXh9DoOnuTi/E5IV+7diI5IxasV/GLwzgLRs+ti/8lB36d+Z2nZ3/DQ7RhlBas7vfiVhwDmo+VI6ZQ==}
+    dev: false
+
+  /@rbxts/compiler-types@2.1.0-types.1:
+    resolution: {integrity: sha512-+ztwutzuNivWsgsERiC7n5il4C5gfJUuGJUmXYRq8FwY4ye3aupRi9RocmyAHq6255sO7z+RM61AVbqx3llsLQ==}
+    dev: true
+
+  /@rbxts/compiler-types@2.1.1-types.0:
+    resolution: {integrity: sha512-wBRma9MgPbOxvCaQEUvraHLHAmLFGW9R6fT65+MBu3uCYM6vUNWj8l4dHRxgkUK8lnGYdGWxsr/sZFk8sdvwog==}
+    dev: false
+
+  /@rbxts/destroyed-instance-logging@1.0.5:
+    resolution: {integrity: sha512-D5t9JiOy3hKKVrZLN2DFrEb/kDnO5DeRAVcTZ6nbTBW0uvL2JFSdIdNdyn97gq9bW1wiZRcTJT3OrxMsyiIrjg==}
+    dependencies:
+      '@rbxts/services': 1.5.3
+      '@rbxts/testez': 0.3.1-ts.7
+    dev: false
+
+  /@rbxts/dumpster@1.0.8:
+    resolution: {integrity: sha512-mkitEvfA166+EkRPF51vji9ZkAJEbqtwvrMAtPhP6EJy8IKAgh5QseHu5Zh1d5n459ufy1qY+5XHjGi2fQCqJg==}
+    dev: false
+
+  /@rbxts/faker@0.2.8:
+    resolution: {integrity: sha512-f0BnbxeZQeqaHL6hwc/r+UWVwgqIX7zkD3hktCNGxQIJr8MDYLTuEqACVXiCLr+UDxNbtFr0Mw9U3927VRyTLg==}
+    dev: false
+
+  /@rbxts/flipper@2.0.1:
+    resolution: {integrity: sha512-kxb5AZizP05XSmo3waS/QkcfNMD5b6HX4gGwyHOyBow260R5MIT4L/ZUPLvleXXyb9b67X4NVmHoac1tPXOLNA==}
+    dev: false
+
+  /@rbxts/geom@1.1.20:
+    resolution: {integrity: sha512-wIQXvxl7KjFQKyTLMK8ZSBEbrO2X/eTpbDpRQQD/oAYPseRBG/VqmME3jo4827qSwFvIMG5Y4Xq0x6itIqBDIQ==}
+    dependencies:
+      '@rbxts/linked-lists': 1.0.4
+      '@rbxts/sift': 0.0.8
+      incremental-convex-hull: 1.0.1
+    dev: false
+
+  /@rbxts/horseman@1.1.7(@rbxts/flipper@2.0.1)(@rbxts/types@1.0.749):
+    resolution: {integrity: sha512-B5EyQDS6x5fyVK7+xF36cNwbSxAk210yEB20PZOMRSy035+ZYAR1bJjyVwYFe3e11UyK2eSallN+1XsUZnL5Tw==}
+    dependencies:
+      '@rbxts/colour-utils': 1.4.1
+      '@rbxts/geom': 1.1.20
+      '@rbxts/janitor': 1.15.4-ts.0
+      '@rbxts/precomputed': 1.0.2
+      '@rbxts/pretty-roact-hooks': 3.2.1(@rbxts/flipper@2.0.1)(@rbxts/roact-hooked@2.6.2)(@rbxts/roact@1.4.4-ts.0)
+      '@rbxts/reflex': 4.3.1
+      '@rbxts/rich-text-stream': 2.1.3
+      '@rbxts/ripple': 0.7.1
+      '@rbxts/roact': 1.4.4-ts.0
+      '@rbxts/roact-hooked': 2.6.2(@rbxts/roact@1.4.4-ts.0)
+      '@rbxts/roact-hooked-plus': 1.8.1(@rbxts/roact-hooked@2.6.2)(@rbxts/roact@1.4.4-ts.0)
+      '@rbxts/roact-hooks': 0.4.1-ts.3
+      '@rbxts/roact-reflex': 2.1.0(@rbxts/reflex@4.3.1)(@rbxts/roact-hooked@2.6.2)(@rbxts/roact@1.4.4-ts.0)
+      '@rbxts/roact-rodux': 0.2.2-ts.8(@rbxts/roact@1.4.4-ts.0)(@rbxts/rodux@3.0.0-ts.3)(@rbxts/types@1.0.749)
+      '@rbxts/rodux': 3.0.0-ts.3
+      '@rbxts/services': 1.5.3
+      '@rbxts/sift': 0.0.8
+      '@rbxts/t': 3.1.1
+      '@rbxts/ui-labs': 1.0.2
+      rbxts-transformer-t: 1.1.5
+    transitivePeerDependencies:
+      - '@rbxts/flipper'
+      - '@rbxts/types'
+    dev: false
+
+  /@rbxts/immut@0.4.4-ts.0:
+    resolution: {integrity: sha512-NwEBp3GmBfcEHTLx1U4dQtNjstoYlWs86n4BeEKY23x5rSjfxOQtoKwEsoTkcxZuodQG2rFQz5IGT/OKqWAgOg==}
+    dev: false
+
+  /@rbxts/instance-utils@1.1.1:
+    resolution: {integrity: sha512-37Ue8RhvZ2bBBn3Ecc9DHo1eyyFUiXS0NxMKiJCqstB53h8NX/1rmAkXPGg2rT8UfU7SOLHkMi3Nbj7FD9BJYw==}
+    dev: false
+
+  /@rbxts/iris-plugin@1.0.1:
+    resolution: {integrity: sha512-DCAg66sigaiqJH4GALsL/FPkkJ/UrKXJd0N7XM2If3de0nPycy1nDIKHbX7sgAAwNOIKfaIkrcH0KojCn7Se4w==}
+    dev: false
+
+  /@rbxts/iris@1.0.1:
+    resolution: {integrity: sha512-GEhBZFtX+yztxBcZtdUIncmz/mJkCCNTK9EEPwjM52mll2n5uEmJMCw7amB0evJ0dB1Fw+t+zfXSm4PwkD9LNQ==}
+    dev: false
+
+  /@rbxts/janitor@1.15.4-ts.0:
+    resolution: {integrity: sha512-xPDNoVWkkDd06JoJ35dC2059Rfzue/URxkkN5ND+eogkVel2e5tZB1WCHLlpbJMQiF4gsfg1RGFgFqHHp9wdzg==}
+    dev: false
+
+  /@rbxts/linked-lists@1.0.4:
+    resolution: {integrity: sha512-ZC2yHSv38A7PppTXEu9urP3zUrRaRM2N8CElmGstgd5c8hy9s9muEg2pBm+4nw8b1KsnY1MvjWHPiD3l95jC1g==}
+    dependencies:
+      '@rbxts/testez': 0.3.1-ts.7
+    dev: false
+
+  /@rbxts/maid@1.1.0:
+    resolution: {integrity: sha512-bVWXZ0p2M3OJzPzvN5fY0T4s37ezUMY7EX31Xspp7Ds4C/K9yE4MHMRXjtlNvsYVPmoc5tdhAbpZY02Veix5lg==}
+    dev: false
+
+  /@rbxts/math@1.1.0:
+    resolution: {integrity: sha512-fd+EYnQ2bCGkA9TXdBCi4aTJBjGmMsq4qNe/KB/HVtARBuvjtWLsTegi2aU4WBqS960CZW7K9KpGf9xBc1aw4A==}
+    dev: false
+
+  /@rbxts/must@1.0.5:
+    resolution: {integrity: sha512-QGlXPSWbFYVzd4FBQt/LHKNkqD1emJrwpiU2SzLr7yEgez9oJdBNu4sQdhnSbrnJDiE7NKPQiDANs8fYiZhOJg==}
+    dependencies:
+      '@rbxts/testez': 0.3.1-ts.7
+    dev: false
+
+  /@rbxts/object-pool@1.1.0:
+    resolution: {integrity: sha512-IEYbRFu/+x7+bVPa5j5iJjWKiavhTImfDcJvIB0x01sRX5CdUHmZHABJCnE0M2oPa8jFBlebH4TYf9p2q21cFA==}
+    dependencies:
+      '@rbxts/destroyed-instance-logging': 1.0.5
+    dev: false
+
+  /@rbxts/objecthighlighter@2.0.2:
+    resolution: {integrity: sha512-FFQU38iaIcmJdUfcDlE/OtPkSnbPpeHpTvuz81wtkbvfVcdoRtj16TdnSHXF7StdCVH1bj3DVU8N5hMFpC09wA==}
+    dev: false
+
+  /@rbxts/precomputed@1.0.2:
+    resolution: {integrity: sha512-bc7QohqNCVr0sxH5CXnobSkQvxhqOtAeVMZ7nCasf/kcXqdX2eJpg3SSxqhXwC6tfBCp0yQpKFiuHt1o9azEmw==}
+    dev: false
+
+  /@rbxts/pretty-roact-hooks@3.2.1(@rbxts/flipper@2.0.1)(@rbxts/roact-hooked@2.6.2)(@rbxts/roact@1.4.4-ts.0):
+    resolution: {integrity: sha512-fn97QUp3mRn0uO9m6XmnrmngBTpf7JFiqyoz3NIiv1ir0Tad/odoehijjTwWR6gXEmClSEjXDj+oNDLumsOCyA==}
+    peerDependencies:
+      '@rbxts/flipper': ^2.0.1
+      '@rbxts/roact': 1.4.4-ts.0
+      '@rbxts/roact-hooked': ^2.3.3
+    dependencies:
+      '@rbxts/flipper': 2.0.1
+      '@rbxts/roact': 1.4.4-ts.0
+      '@rbxts/roact-hooked': 2.6.2(@rbxts/roact@1.4.4-ts.0)
+      '@rbxts/services': 1.5.3
+      '@rbxts/set-timeout': 1.1.2
+    dev: false
+
+  /@rbxts/promise-forward@1.0.5:
+    resolution: {integrity: sha512-FrL3pIQDbRD1hKsUNH1Fwwd5jOuqU0vzKQI4Xo96AqzizYc4fb6vDkUg9Iq+IFki6FVlFvPN+YnvkCxGMjJw4Q==}
+    dev: false
+
+  /@rbxts/reflex@4.3.1:
+    resolution: {integrity: sha512-S5MbEpHKeRh9NWhwGJ789WbUsmlAlpQziWaNK4+kz1EpaaQ7uHQMZAuN1DYl4+QkqmOSuPlj04COwmArBGWH1Q==}
+    dev: false
+
+  /@rbxts/region@0.0.3:
+    resolution: {integrity: sha512-bu+Xq2VS7nSyobiKxz57toCCNi9Spf9IG3YLWwwtCd26DZziBQLrS6c5/DKxIgBOqvynuQtgsa+2bU/ZRgv5Ag==}
+    dev: false
+
+  /@rbxts/remo@1.3.1:
+    resolution: {integrity: sha512-cGYEoYOLC5W0SdHGlHx73HmEs2CRPm4I5FRw8wRjQdm0D9BLepCXa9Vw2u7vXt5p54Nqd99Ctmf/ZL6Z0bwKkQ==}
+    dev: false
+
+  /@rbxts/rich-text-stream@2.1.3:
+    resolution: {integrity: sha512-YHv7ETSUPebgvYbbvHhc1XSSUjE4iS8raIxpTj2TsL3aUawsHaKSWqp0lFjd0j10rcE/KviAbMTYtdpfbeWkMQ==}
+    dev: false
+
+  /@rbxts/ripple@0.7.1:
+    resolution: {integrity: sha512-m8oJtsfDl1pJArSxz41AdrLGvC6e4zM/biUHdrsqpfPaouhkxSoAvExYwWV9oduDBRb03U5gyEnRpXUOERqiFA==}
+    dev: false
+
+  /@rbxts/roact-hooked-plus@1.8.1(@rbxts/roact-hooked@2.6.2)(@rbxts/roact@1.4.4-ts.0):
+    resolution: {integrity: sha512-ipJf6pZcQZlx/0hyisQz2eoRECg38knUgjkEvx2dvAHfs0+IDgera7mcwv6zTMACqalaXu00inc4E5dpOrs54A==}
+    peerDependencies:
+      '@rbxts/roact': '*'
+      '@rbxts/roact-hooked': ^2.0.0
+    dependencies:
+      '@rbxts/flipper': 2.0.1
+      '@rbxts/roact': 1.4.4-ts.0
+      '@rbxts/roact-hooked': 2.6.2(@rbxts/roact@1.4.4-ts.0)
+      '@rbxts/services': 1.5.3
+    dev: false
+
+  /@rbxts/roact-hooked@2.6.2(@rbxts/roact@1.4.4-ts.0):
+    resolution: {integrity: sha512-2J/wxYOuzs7rCq5i7B+AoCSwdeQHc0jnr/HuD3wz92NVK5h2zjeEC/91Auee438/QXJKDbBGmB9cZV/p1ZVvmg==}
+    peerDependencies:
+      '@rbxts/roact': '*'
+    dependencies:
+      '@rbxts/roact': 1.4.4-ts.0
+    dev: false
+
+  /@rbxts/roact-hooks@0.4.1-ts.3:
+    resolution: {integrity: sha512-+8A42hDsSwZNnXDe1XIRpJhjSpxFvkBa8nB5QM1zuL2q5G6h6SGp7augY6vp6euze/gH4/Laho07PUM8bz0RKQ==}
+    dev: false
+
+  /@rbxts/roact-reflex@2.1.0(@rbxts/reflex@4.3.1)(@rbxts/roact-hooked@2.6.2)(@rbxts/roact@1.4.4-ts.0):
+    resolution: {integrity: sha512-2RKp9P4MQn2rxK6xk0lcaAZNlD9+X2zLvqkueFSuW4HvgrX3wWtk4RGKjRzRu+pvnszIhdgJpsUZT+lyTObsSQ==}
+    peerDependencies:
+      '@rbxts/reflex': ^4.1.0
+      '@rbxts/roact': 1.4.4-ts.0
+      '@rbxts/roact-hooked': ^2.3.3
+    dependencies:
+      '@rbxts/reflex': 4.3.1
+      '@rbxts/roact': 1.4.4-ts.0
+      '@rbxts/roact-hooked': 2.6.2(@rbxts/roact@1.4.4-ts.0)
+    dev: false
+
+  /@rbxts/roact-rodux@0.2.2-ts.8(@rbxts/roact@1.4.4-ts.0)(@rbxts/rodux@3.0.0-ts.3)(@rbxts/types@1.0.749):
+    resolution: {integrity: sha512-qeVAOtIYvU3HhCqILZHDn1VAcat6XMJ/CdAEq/2jqNd15lxtuqSso07BapVfmP8qmRnznwWlGJ9eDOhOpr9xPA==}
+    peerDependencies:
+      '@rbxts/roact': ^1.4.4-ts.0
+      '@rbxts/rodux': ^3.0.0-ts.3
+      '@rbxts/types': ^1.0.627
+    dependencies:
+      '@rbxts/roact': 1.4.4-ts.0
+      '@rbxts/rodux': 3.0.0-ts.3
+      '@rbxts/types': 1.0.749
+    dev: false
+
+  /@rbxts/roact@1.4.4-ts.0:
+    resolution: {integrity: sha512-gn9mBoGG/Clzgv2kyOvLNVd9dh5t6z+jukC3ITv2HnfPqvf/sMbz/VMaBoiB7t5umuiIe0LjW0ctZrkrS+uTOA==}
+    dev: false
+
+  /@rbxts/rodux@3.0.0-ts.3:
+    resolution: {integrity: sha512-LrLowiF1YL5U+lQheCNMo8sbrSEoZAIlVFOGB7Edjein5TtZAeNgyJrhY5yFH5gAfJQzFRnZWVOxWFaMlD0GRg==}
+    dev: false
+
+  /@rbxts/services@1.5.3:
+    resolution: {integrity: sha512-0Lr1OJCfhCILu0Z2+W2Hhx4nIRWLW3llSvzPskozv9AlBR99qTWrhJlh/4dux1RciKPFbZiTYi1CP+/kCloIQw==}
+    dev: false
+
+  /@rbxts/set-timeout@1.1.2:
+    resolution: {integrity: sha512-P/A0IiH9wuZdSJYr4Us0MDFm61nvIFR0acfKFHLkcOsgvIgELC90Up9ugiSsaMEHRIcIcO5UjE39LuS3xTzQHw==}
+    dependencies:
+      '@rbxts/services': 1.5.3
+    dev: false
+
+  /@rbxts/shared-class@1.0.6:
+    resolution: {integrity: sha512-CAAcFEY0k2seo3ZDX9WojxFSDEMZS0lBIeg9PjRX9U1N/CiuBbDwMoeopWTD8scFSR50lYRyAeDZt2x+qGUg7A==}
+    dependencies:
+      '@rbxts/maid': 1.1.0
+      '@rbxts/remo': 1.3.1
+      '@rbxts/services': 1.5.3
+      '@rbxts/signal': 1.1.1
+      '@rbxts/t': 3.1.1
+      rbxts-transformer-t-new: 1.1.5
+    dev: false
+
+  /@rbxts/sift@0.0.8:
+    resolution: {integrity: sha512-PCwc7MFbJwUgy4pCGz6HEW0NAhNuL87dELx/5WIRIn0G5xIQ3L/Ij1huv+zRYmnNr3+ludR6zhwKqh+irAY8+g==}
+    dev: false
+
+  /@rbxts/signal@1.1.1:
+    resolution: {integrity: sha512-WX+ONE+ld4pG9PvRkR8OgDld9NpaV1RfXyUIw+Q2oXP/5rehkYzvt20NWtrLAP3NhMc5inYInLd+hnufey6nFw==}
+    dev: false
+
+  /@rbxts/signals-tooling@1.0.8:
+    resolution: {integrity: sha512-BJ5uiFqoKMw7F5QfK5k21CXg/RoFiikh1PfEgoobbEbgWRxPbNT4QCWDASixxcNjBA0Hfph1hb7CUc61p+u6KQ==}
+    dependencies:
+      '@rbxts/dumpster': 1.0.8
+      '@rbxts/services': 1.5.3
+    dev: false
+
+  /@rbxts/t@2.2.1:
+    resolution: {integrity: sha512-MoFLHRQdm1tpAviAVxgkQj/ktxtnGBund2HXQj5xRqgYUWuC3kYuLkctuxXiJHUd1o1JzfU/HvVHtZfpqp61tg==}
+    dev: false
+
+  /@rbxts/t@3.1.1:
+    resolution: {integrity: sha512-r+IvHHGLt9ZM8+cJAs5Q7ZyGaSlsbkXTaeat85FxRmjjozykHLbQ24rY/5utJbp63a5uCy3Wyl1fGv/Gk/GnIw==}
+    dev: false
+
+  /@rbxts/task-queue@1.0.0:
+    resolution: {integrity: sha512-8BGJJapEoxVzNXY/vlcQ1KZ8v2yttGHouNwX5duw9mRdvilLz7P9+q8Sv1akUqbvGGVVKM6VC8SqDXvIBkBzPw==}
+    dev: false
+
+  /@rbxts/testez@0.3.1-ts.7:
+    resolution: {integrity: sha512-DkIlRFdMODHjJPEYJT/cPYv2ZQzSqAufF4XAsqrx7zFg8OVAkSHY5aGChGoPNrZo0PM4zz9bw46ZIVqLfcM05Q==}
+    dev: false
+
+  /@rbxts/timer@0.0.9:
+    resolution: {integrity: sha512-XeX68qpRjNxvDy5efcWI0jGKM4zRFyV6EhQHSmuBbWZDQl1pD2F7h95lSZK53ai2Z2mP1l94UQYY93WMODUcIQ==}
+    dependencies:
+      '@rbxts/dumpster': 1.0.8
+      '@rbxts/services': 1.5.3
+      '@rbxts/signals-tooling': 1.0.8
+    dev: false
+
+  /@rbxts/tweenreplicator@1.0.5:
+    resolution: {integrity: sha512-8jhyVCTdOJGrPNb1nHRHgHxnXqRGidZSHFG8jF5ZRViRUtN4tfd029JBLr2leJwEZyeI0m3wPCXVo7vDrkT1Xw==}
+    dependencies:
+      '@rbxts/compiler-types': 2.1.1-types.0
+      '@rbxts/services': 1.5.3
+    dev: false
+
+  /@rbxts/types@1.0.749:
+    resolution: {integrity: sha512-33khx5jxuIizYyEZTxLH9q+quexkigZQ0FGVRY2TImhYvHSWpIiGf48PFRMUm4gDxCN8nLwGqhunfOEs3uKE1w==}
+
+  /@rbxts/ui-labs@1.0.2:
+    resolution: {integrity: sha512-PED8QJTBQFIXzJBDE0Vz6CKGn3+0X3rHzQAlAQjFX/JZxaK2M/UMkZ0GZiH3SQqhPnrcPxi+qXyBPnpqxDaZ1Q==}
+    dependencies:
+      '@rbxts/roact': 1.4.4-ts.0
+      '@rbxts/t': 3.1.1
+    dev: false
+
+  /@rbxts/vfx-system@1.0.1:
+    resolution: {integrity: sha512-FW51GjGR/2QLc+7l2Hj/K5urhqi0eAXYXg3rF64/ZeX06b+5rF1CgdQSdzrf32d49eMC9ABNVmH6IkJdCaNleA==}
+    dependencies:
+      '@rbxts/services': 1.5.3
+      '@rbxts/shared-class': 1.0.6
+    dev: false
+
+  /@rbxts/wcs@0.6.32:
+    resolution: {integrity: sha512-SLbpGY1dKx8BZL/oLYQPJS8SfFVAu5M+mqkw4QU7cZLSRZMfopjVAQzSLiw3KJLqteIIcfgRs8jDDbanazxX5g==}
+    dependencies:
+      '@rbxts/immut': 0.4.4-ts.0
+      '@rbxts/janitor': 1.15.4-ts.0
+      '@rbxts/reflex': 4.3.1
+      '@rbxts/remo': 1.3.1
+      '@rbxts/services': 1.5.3
+      '@rbxts/signal': 1.1.1
+      '@rbxts/t': 3.1.1
+      '@rbxts/timer': 0.0.9
+    dev: false
+
+  /@rbxts/wired@0.1.12:
+    resolution: {integrity: sha512-da42QGoEkU69DoWfr0ciQzUBTVA/vvZ+WCXYzTI9QNDt1oj+4U7BPfT/BKIra8H6A2roBwI74coAH+gZdh3YGQ==}
+    dev: false
+
+  /bit-twiddle@1.0.2:
+    resolution: {integrity: sha512-B9UhK0DKFZhoTFcfvAzhqsjStvGJp9vYWf3+6SNTtdSQnvIgfkHbgHrg/e4+TH71N2GDu8tpmCVoyfrL1d7ntA==}
+    dev: false
+
+  /expand-tilde@2.0.2:
+    resolution: {integrity: sha512-A5EmesHW6rfnZ9ysHQjPdJRni0SRar0tjtG5MNtm9n5TUvsYU8oozprtRD4AqHxcZWWlVuAmQo2nWKfN9oyjTw==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      homedir-polyfill: 1.0.3
+    dev: false
+
+  /get-installed-path@4.0.8:
+    resolution: {integrity: sha512-PmANK1xElIHlHH2tXfOoTnSDUjX1X3GvKK6ZyLbUnSCCn1pADwu67eVWttuPzJWrXDDT2MfO6uAaKILOFfitmA==}
+    engines: {node: '>=6', npm: '>=5', yarn: '>=1'}
+    dependencies:
+      global-modules: 1.0.0
+    dev: false
+
+  /global-modules@1.0.0:
+    resolution: {integrity: sha512-sKzpEkf11GpOFuw0Zzjzmt4B4UZwjOcG757PPvrfhxcLFbq0wpsgpOqxpxtxFiCG4DtG93M6XRVbF2oGdev7bg==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      global-prefix: 1.0.2
+      is-windows: 1.0.2
+      resolve-dir: 1.0.1
+    dev: false
+
+  /global-prefix@1.0.2:
+    resolution: {integrity: sha512-5lsx1NUDHtSjfg0eHlmYvZKv8/nVqX4ckFbM+FrGcQ+04KWcWFo9P5MxPZYSzUvyzmdTbI7Eix8Q4IbELDqzKg==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      expand-tilde: 2.0.2
+      homedir-polyfill: 1.0.3
+      ini: 1.3.8
+      is-windows: 1.0.2
+      which: 1.3.1
+    dev: false
+
+  /homedir-polyfill@1.0.3:
+    resolution: {integrity: sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      parse-passwd: 1.0.0
+    dev: false
+
+  /incremental-convex-hull@1.0.1:
+    resolution: {integrity: sha512-mKRJDXtzo1R9LxCuB1TdwZXHaPaIEldoGPsXy2jrJc/kufyqp8y/VAQQxThSxM2aroLoh6uObexPk1ASJ7FB7Q==}
+    dependencies:
+      robust-orientation: 1.2.1
+      simplicial-complex: 1.0.0
+    dev: false
+
+  /ini@1.3.8:
+    resolution: {integrity: sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==}
+    dev: false
+
+  /is-windows@1.0.2:
+    resolution: {integrity: sha512-eXK1UInq2bPmjyX6e3VHIzMLobc4J94i4AWn+Hpq3OU5KkrRC96OAcR3PRJ/pGu6m8TRnBHP9dkXQVsT/COVIA==}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
+  /isexe@2.0.0:
+    resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
+    dev: false
+
+  /parse-passwd@1.0.0:
+    resolution: {integrity: sha512-1Y1A//QUXEZK7YKz+rD9WydcE1+EuPr6ZBgKecAB8tmoW6UFv0NREVJe1p+jRxtThkcbbKkfwIbWJe/IeE6m2Q==}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
+  /rbxts-transformer-t-new@1.1.5:
+    resolution: {integrity: sha512-OobOahAwTCh6jWhUMa+LGw71xWSmorSUG5NCOcZnjpJxAkNYRxxgl46Lzg9XTok+OWXIYOBCC54Jw3GQYLq/YA==}
+    dependencies:
+      '@rbxts/t': 2.2.1
+      get-installed-path: 4.0.8
+      typescript: 5.3.3
+    dev: false
+
+  /rbxts-transformer-t@1.1.5:
+    resolution: {integrity: sha512-8LLso0YZC8Vp8zqoqbmnManomP2OwUY4gX68grD0W1Cl/0zh8a7sc4/ngRnqr4h/dLRmw8+eaFUnuS1CPlL12A==}
+    dependencies:
+      '@rbxts/t': 2.2.1
+      get-installed-path: 4.0.8
+      typescript: 4.9.5
+    dev: false
+
+  /resolve-dir@1.0.1:
+    resolution: {integrity: sha512-R7uiTjECzvOsWSfdM0QKFNBVFcK27aHOUwdvK53BcW8zqnGdYp0Fbj82cy54+2A4P2tFM22J5kRfe1R+lM/1yg==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      expand-tilde: 2.0.2
+      global-modules: 1.0.0
+    dev: false
+
+  /robust-orientation@1.2.1:
+    resolution: {integrity: sha512-FuTptgKwY6iNuU15nrIJDLjXzCChWB+T4AvksRtwPS/WZ3HuP1CElCm1t+OBfgQKfWbtZIawip+61k7+buRKAg==}
+    dependencies:
+      robust-scale: 1.0.2
+      robust-subtract: 1.0.0
+      robust-sum: 1.0.0
+      two-product: 1.0.2
+    dev: false
+
+  /robust-scale@1.0.2:
+    resolution: {integrity: sha512-jBR91a/vomMAzazwpsPTPeuTPPmWBacwA+WYGNKcRGSh6xweuQ2ZbjRZ4v792/bZOhRKXRiQH0F48AvuajY0tQ==}
+    dependencies:
+      two-product: 1.0.2
+      two-sum: 1.0.0
+    dev: false
+
+  /robust-subtract@1.0.0:
+    resolution: {integrity: sha512-xhKUno+Rl+trmxAIVwjQMiVdpF5llxytozXJOdoT4eTIqmqsndQqFb1A0oiW3sZGlhMRhOi6pAD4MF1YYW6o/A==}
+    dev: false
+
+  /robust-sum@1.0.0:
+    resolution: {integrity: sha512-AvLExwpaqUqD1uwLU6MwzzfRdaI6VEZsyvQ3IAQ0ZJ08v1H+DTyqskrf2ZJyh0BDduFVLN7H04Zmc+qTiahhAw==}
+    dev: false
+
+  /simplicial-complex@1.0.0:
+    resolution: {integrity: sha512-mHauIKSOy3GquM5VnYEiu7eP5y4A8BiaN9ezUUgyYFz1k68PqDYcyaH3kenp2cyvWZE96QKE3nrxYw65Allqiw==}
+    dependencies:
+      bit-twiddle: 1.0.2
+      union-find: 1.0.2
+    dev: false
+
+  /two-product@1.0.2:
+    resolution: {integrity: sha512-vOyrqmeYvzjToVM08iU52OFocWT6eB/I5LUWYnxeAPGXAhAxXYU/Yr/R2uY5/5n4bvJQL9AQulIuxpIsMoT8XQ==}
+    dev: false
+
+  /two-sum@1.0.0:
+    resolution: {integrity: sha512-phP48e8AawgsNUjEY2WvoIWqdie8PoiDZGxTDv70LDr01uX5wLEQbOgSP7Z/B6+SW5oLtbe8qaYX2fKJs3CGTw==}
+    dev: false
+
+  /typescript@4.9.5:
+    resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
+    engines: {node: '>=4.2.0'}
+    hasBin: true
+    dev: false
+
+  /typescript@5.3.3:
+    resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+  /union-find@1.0.2:
+    resolution: {integrity: sha512-wFA9bMD/40k7ZcpKVXfu6X1qD3ri5ryO8HUsuA1RnxPCQl66Mu6DgkxyR+XNnd+osD0aLENixcJVFj+uf+O4gw==}
+    dev: false
+
+  /which@1.3.1:
+    resolution: {integrity: sha512-HxJdYWq1MTIQbJ3nw0cqssHoTNU267KlrDuGZ1WYlxDStUtKUhOaJmh112/TZmHxxUfuJqPXSOm7tDyas0OSIQ==}
+    hasBin: true
+    dependencies:
+      isexe: 2.0.0
+    dev: false
