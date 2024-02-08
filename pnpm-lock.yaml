@@ -62,6 +62,9 @@ dependencies:
   '@rbxts/services':
     specifier: ^1.5.3
     version: 1.5.3
+  '@rbxts/t':
+    specifier: ^3.1.1
+    version: 3.1.1
   '@rbxts/task-queue':
     specifier: ^1.0.0
     version: 1.0.0
