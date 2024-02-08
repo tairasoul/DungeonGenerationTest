@@ -80,7 +80,7 @@ export default class Tile {
             throw "Offsets not found for attachment points";
         }
         const otherCenter = tile._model.WaitForChild("centerPoint") as Part;
-        otherCenter.Position = thisAttach.part.Position.sub(otherOffset.position).sub(new Vector3(0, 1, 0));
+        otherCenter.Position = thisAttach.part.Position.sub(otherOffset.position);
         
         // Apply offsets and update attachment points
         tile.applyOffsets();

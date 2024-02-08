@@ -156,19 +156,10 @@ do
 		if not thisOffset or not otherOffset then
 			error("Offsets not found for attachment points")
 		end
-		-- Calculate the direction from other part's attachment point to center
-		local direction = thisAttach.part.CFrame.LookVector
-		print(direction)
-		-- Calculate the offset based on the direction and other part's offset
-		local _position = otherOffset.position
-		local offset = direction * _position
-		print(offset)
-		-- Apply the offset to the other tile's center
 		local otherCenter = tile._model:WaitForChild("centerPoint")
-		local _position_1 = thisAttach.part.Position
-		local _position_2 = otherOffset.position
-		local _vector3 = Vector3.new(0, 1, 0)
-		otherCenter.Position = _position_1 - _position_2 - _vector3
+		local _position = thisAttach.part.Position
+		local _position_1 = otherOffset.position
+		otherCenter.Position = _position - _position_1
 		-- Apply offsets and update attachment points
 		tile:applyOffsets()
 		local _attachmentPoints_2 = self.attachmentPoints
