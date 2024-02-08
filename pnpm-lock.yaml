@@ -5,12 +5,27 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@rbxts/abstractify':
+    specifier: ^1.1.5
+    version: 1.1.5
+  '@rbxts/bridgenet':
+    specifier: 2.0.0-rc4
+    version: 2.0.0-rc4
   '@rbxts/character-promise':
     specifier: ^1.0.2
     version: 1.0.2
+  '@rbxts/dispatcher':
+    specifier: ^1.3.0
+    version: 1.3.0
+  '@rbxts/easy-path':
+    specifier: ^1.0.7
+    version: 1.0.7
   '@rbxts/faker':
     specifier: ^0.2.8
     version: 0.2.8
+  '@rbxts/ghostevents':
+    specifier: ^1.0.0
+    version: 1.0.0
   '@rbxts/horseman':
     specifier: ^1.1.7
     version: 1.1.7(@rbxts/flipper@2.0.1)(@rbxts/types@1.0.749)
@@ -32,6 +47,12 @@ dependencies:
   '@rbxts/math':
     specifier: ^1.1.0
     version: 1.1.0
+  '@rbxts/messages':
+    specifier: ^1.0.3
+    version: 1.0.3
+  '@rbxts/minimax':
+    specifier: ^1.0.1
+    version: 1.0.1
   '@rbxts/must':
     specifier: ^1.0.5
     version: 1.0.5
@@ -47,6 +68,9 @@ dependencies:
   '@rbxts/promise-forward':
     specifier: ^1.0.5
     version: 1.0.5
+  '@rbxts/proton':
+    specifier: ^0.7.0
+    version: 0.7.0
   '@rbxts/randomstring':
     specifier: ^1.0.1
     version: 1.0.1
@@ -100,6 +124,24 @@ devDependencies:
 
 packages:
 
+  /@rbxts/abstractify@1.1.5:
+    resolution: {integrity: sha512-AFAadLgp5LgtWV2F35y5B34oPchUvIs5p18zoCc9336yC/TnzQU/mINeKIvQvyFPkh+ptvNwsG/w9diNUyjP2w==}
+    dependencies:
+      '@rbxts/services': 1.5.3
+    dev: false
+
+  /@rbxts/beacon@2.1.1:
+    resolution: {integrity: sha512-QeFMSGj+Iijp+tHcV9eyqVyeKZ/9zp7GqRJ/hecKiHmoTu4yFcyGnUQAaX7OdQKBCgLvWMJ9wK/FXMECjFA2Kg==}
+    dev: false
+
+  /@rbxts/bezier@0.2.0:
+    resolution: {integrity: sha512-iIyRwkHe1nGij//D0ll0J0fJoo/h9VVDyXHYL3CJtjaMc/F/xZg/wBVskAx4Ht93Vk+QfnVzU0sjPC5AMZObPw==}
+    dev: false
+
+  /@rbxts/bridgenet@2.0.0-rc4:
+    resolution: {integrity: sha512-445/oFvf8ozT5SlHUfTL3EIGJjwwE/c9SvbKJ2DUM5Erx1b8rx96u6Lopa2N3bo7hRm2t8kDghsrEHm2UGcBcA==}
+    dev: false
+
   /@rbxts/character-promise@1.0.2:
     resolution: {integrity: sha512-5RYqcCywWqTrSAvkE2mrNWnLoqoOfmZGZn7+50pcAulbXbZd4svgHDY7+yUbevVIcQDa5meEKrVkt7sC0YBBVw==}
     dependencies:
@@ -129,8 +171,19 @@ packages:
       '@rbxts/testez': 0.3.1-ts.7
     dev: false
 
+  /@rbxts/dispatcher@1.3.0:
+    resolution: {integrity: sha512-GSxx6NOLm9K3UpZXTsmnD9xeQseEAxM46jpMNeSukjKEN6ulq/4Gp/P8cAMTMyV6hLJXY2+weQ5fv25rwUxNpw==}
+    dev: false
+
   /@rbxts/dumpster@1.0.8:
     resolution: {integrity: sha512-mkitEvfA166+EkRPF51vji9ZkAJEbqtwvrMAtPhP6EJy8IKAgh5QseHu5Zh1d5n459ufy1qY+5XHjGi2fQCqJg==}
+    dev: false
+
+  /@rbxts/easy-path@1.0.7:
+    resolution: {integrity: sha512-qlBY5OZrhumsJWa2MWhJVLcY9JYcNcSq87a99hdnWbAoHcHsPTetNuI9rknw0s3mAKXkOvI0G7HPPM2GPopMlg==}
+    dependencies:
+      '@rbxts/bezier': 0.2.0
+      '@rbxts/services': 1.5.3
     dev: false
 
   /@rbxts/faker@0.2.8:
@@ -147,6 +200,12 @@ packages:
       '@rbxts/linked-lists': 1.0.4
       '@rbxts/sift': 0.0.8
       incremental-convex-hull: 1.0.1
+    dev: false
+
+  /@rbxts/ghostevents@1.0.0:
+    resolution: {integrity: sha512-c72xJeRoLcATrmQ5ouXaJAAzj8inrTjjIrndxsw2sGn5TKUWnafG1ozaEYGPR/guk0+sXPC78v6hUNVIVHwd2Q==}
+    dependencies:
+      '@rbxts/services': 1.5.3
     dev: false
 
   /@rbxts/horseman@1.1.7(@rbxts/flipper@2.0.1)(@rbxts/types@1.0.749):
@@ -225,6 +284,16 @@ packages:
     resolution: {integrity: sha512-fd+EYnQ2bCGkA9TXdBCi4aTJBjGmMsq4qNe/KB/HVtARBuvjtWLsTegi2aU4WBqS960CZW7K9KpGf9xBc1aw4A==}
     dev: false
 
+  /@rbxts/messages@1.0.3:
+    resolution: {integrity: sha512-CwndlKFhY74JQv9pjL9tTHydUv1ok8ejxlar2YTfcqweUh3qNu2FChoIGg1XH7dv5FYVc37U3jopa7xGWXPlKA==}
+    dependencies:
+      '@rbxts/t': 3.1.1
+    dev: false
+
+  /@rbxts/minimax@1.0.1:
+    resolution: {integrity: sha512-zW73189VRZMhQwr+NZOtaj/YEvRgoQIp6wvZxMbkQKu/x80YIPp9U9JPA5Lu3udNr3BAyhXYoi8S4WXcYibM6Q==}
+    dev: false
+
   /@rbxts/must@1.0.5:
     resolution: {integrity: sha512-QGlXPSWbFYVzd4FBQt/LHKNkqD1emJrwpiU2SzLr7yEgez9oJdBNu4sQdhnSbrnJDiE7NKPQiDANs8fYiZhOJg==}
     dependencies:
@@ -269,6 +338,13 @@ packages:
 
   /@rbxts/promise-forward@1.0.5:
     resolution: {integrity: sha512-FrL3pIQDbRD1hKsUNH1Fwwd5jOuqU0vzKQI4Xo96AqzizYc4fb6vDkUg9Iq+IFki6FVlFvPN+YnvkCxGMjJw4Q==}
+    dev: false
+
+  /@rbxts/proton@0.7.0:
+    resolution: {integrity: sha512-7x9hrFpWZybbutgfV3g0se3MkyjjIrE1ev4AWtTido1ZdVzPExKdO6KzMZ49QjOHihlzsXqUVPi+AYZl5ljddg==}
+    dependencies:
+      '@rbxts/beacon': 2.1.1
+      '@rbxts/services': 1.5.3
     dev: false
 
   /@rbxts/randomstring@1.0.1:
