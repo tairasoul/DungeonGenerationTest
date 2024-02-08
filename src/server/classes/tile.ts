@@ -58,11 +58,17 @@ export default class Tile {
         // Apply position and rotation offsets for internal parts
         for (const offset of this.calculatedOffsets.internalParts) {
             offset.part.Position = centerPoint.add(offset.position);
+            print(offset.part);
+            print(offset.part.CFrame);
+            print(offset.part.CFrame.Rotation.mul(new Vector3(offset.rotation[2], offset.rotation[1], offset.rotation[0])))
         }
     
         // Apply position and rotation offsets for attachment points
         for (const offset of this.calculatedOffsets.attachments) {
             offset.part.Position = centerPoint.add(offset.position);
+            print(offset.part);
+            print(offset.part.CFrame);
+            print(offset.part.CFrame.Rotation.mul(new Vector3(offset.rotation[2], offset.rotation[1], offset.rotation[0])))
         }
     }
 

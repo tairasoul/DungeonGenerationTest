@@ -77,11 +77,21 @@ do
 		for _, offset in self.calculatedOffsets.internalParts do
 			local _position = offset.position
 			offset.part.Position = centerPoint + _position
+			print(offset.part)
+			print(offset.part.CFrame)
+			local _rotation = offset.part.CFrame.Rotation
+			local _vector3 = Vector3.new(offset.rotation[3], offset.rotation[2], offset.rotation[1])
+			print(_rotation * _vector3)
 		end
 		-- Apply position and rotation offsets for attachment points
 		for _, offset in self.calculatedOffsets.attachments do
 			local _position = offset.position
 			offset.part.Position = centerPoint + _position
+			print(offset.part)
+			print(offset.part.CFrame)
+			local _rotation = offset.part.CFrame.Rotation
+			local _vector3 = Vector3.new(offset.rotation[3], offset.rotation[2], offset.rotation[1])
+			print(_rotation * _vector3)
 		end
 	end
 	function Tile:attachTile(tile, info)
