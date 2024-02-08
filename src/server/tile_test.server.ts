@@ -23,8 +23,8 @@ const tile2 = tiles.getTileOfType("Room") as Model;
 const clone2 = tile2.Clone();
 clone2.Parent = services.Workspace;
 const tc2 = new Tile(clone2);
-const tc1Point = tc.attachmentPoints[0];
-const tc2Point = tc2.attachmentPoints[0];
+const tc1Point = tc.attachmentData[0].attachment;
+const tc2Point = tc2.attachmentData[0].attachment;
 const info: TileAttachmentInfo = {
     thisTileAttachment: tc1Point,
     attachmentPoint: tc2Point
@@ -36,10 +36,10 @@ const hallway = tiles.getTileOfType("Hallway") as Model;
 const hc = hallway.Clone();
 hc.Parent = services.Workspace;
 const hct = new Tile(hc);
-const thisTile = getRandom(tc2.attachmentPoints, (inst) => !inst.hasAttachment);
-const attach = getRandom(hct.attachmentPoints, (inst) => !inst.hasAttachment);
+const thisTile = getRandom(tc2.attachmentData, (inst) => !inst.attachment.hasAttachment);
+const attach = getRandom(hct.attachmentData, (inst) => !inst.attachment.hasAttachment);
 if (thisTile !== undefined && attach !== undefined)
-    tc2.attachTile(hct, {thisTileAttachment: thisTile, attachmentPoint: attach})
+    tc2.attachTile(hct, {thisTileAttachment: thisTile.attachment, attachmentPoint: attach.attachment})
 
 //let previousTile = tc2;
 

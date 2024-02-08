@@ -3,100 +3,65 @@ import { OffsetInfo, TileAttachmentInfo } from "server/interfaces/tile";
 
 export default class Tile {
     private _model: Model;
-    private calculatedOffsets: {
-        internalParts: OffsetInfo[],
-        attachments: OffsetInfo[]
-    } = {
-        internalParts: [],
-        attachments: []
-    };
-    public attachmentPoints: AttachmentPoint[] = [];
+    attachmentData: { attachment: AttachmentPoint; offsets: OffsetInfo[] }[] = [];
+
     constructor(model: Model) {
         this._model = model;
-        const points = this._model.WaitForChild("apoints") as Folder;
-        for (const child of points.GetChildren() as Part[]) {
-            this.attachmentPoints.push(
-                {
-                    part: child,
-                    point: child.CFrame,
-                    hasAttachment: false
-                }
-            )
-        }
-        this.calculatePartOffsets();
+        this.calculateAttachmentOffsets();
     }
 
-    calculatePartOffsets() {
-        const centerPoint = (this._model.WaitForChild("centerPoint") as Part).CFrame;
-    
-        // Calculate position and rotation offsets for internal parts
-        const internalParts = this._model.GetDescendants().filter((v) => !v.IsA("Folder") && !v.IsA("ModuleScript") && !(v.Name === "centerPoint") && v.Parent !== this._model.WaitForChild("apoints"));
-        for (const part of internalParts as Part[]) {
-            const offset = centerPoint.ToObjectSpace(part.CFrame);
-            this.calculatedOffsets.internalParts.push({
-                part,
-                position: offset.Position,
-                rotation: offset.Rotation.ToEulerAnglesXYZ()
-            });
-        }
-    
-        // Calculate position and rotation offsets for attachment points
+    calculateAttachmentOffsets() {
         const attachmentPoints = this._model.WaitForChild("apoints").GetChildren() as Part[];
         for (const attachment of attachmentPoints) {
-            const offset = centerPoint.ToObjectSpace(attachment.CFrame);
-            this.calculatedOffsets.attachments.push({
+            const attachmentInfo: AttachmentPoint = {
                 part: attachment,
-                position: offset.Position,
-                rotation: offset.Rotation.ToEulerAnglesXYZ()
-            });
+                point: attachment.CFrame,
+                hasAttachment: false,
+            };
+            const offsets: OffsetInfo[] = [];
+            const descendants = this._model.GetDescendants().filter((v) => !v.IsA("Folder") && !v.IsA("ModuleScript") && !(v.Name === "centerPoint") && v.Parent !== this._model.WaitForChild("apoints"));
+            for (const part of descendants as Part[]) {
+                const relativeCFrame = attachment.CFrame.Inverse().mul(part.CFrame);
+                offsets.push({
+                    part: part,
+                    position: relativeCFrame.Position,
+                    rotation: relativeCFrame.ToEulerAnglesXYZ(),
+                });
+            }
+            this.attachmentData.push({ attachment: attachmentInfo, offsets: offsets });
         }
     }
 
     applyOffsets() {
-        const centerPoint = (this._model.WaitForChild("centerPoint") as Part).CFrame;
-    
-        // Apply position and rotation offsets for internal parts
-        for (const offset of this.calculatedOffsets.internalParts) {
-            const partCFrame = new CFrame(centerPoint.Position).add(offset.position);
-            offset.part.CFrame = partCFrame.mul(CFrame.Angles(offset.rotation[0], offset.rotation[1], offset.rotation[2]));
-        }
-    
-        // Apply position and rotation offsets for attachment points
-        for (const offset of this.calculatedOffsets.attachments) {
-            const partCFrame = new CFrame(centerPoint.Position).add(offset.position);
-            offset.part.CFrame = partCFrame.mul(CFrame.Angles(offset.rotation[0], offset.rotation[1], offset.rotation[2]));
+        for (const attachment of this.attachmentData) {
+            const attachmentCFrame = attachment.attachment.point;
+            for (const offset of attachment.offsets) {
+                const partCFrame = attachmentCFrame.add(offset.position).mul(CFrame.Angles(offset.rotation[0], offset.rotation[1], offset.rotation[2]));
+                offset.part.CFrame = partCFrame;
+            }
         }
     }
 
     attachTile(tile: Tile, info: TileAttachmentInfo) {
-        const thisAttach = this.attachmentPoints.find((v) => v === info.thisTileAttachment);
-        const otherTile = tile.attachmentPoints.find((v) => v === info.attachmentPoint);
-        if (thisAttach === undefined) throw `Could not find attachment point ${info.thisTileAttachment} on tile ${this._model.Name}`;
-        if (otherTile === undefined) throw `Could not find attachment point ${info.attachmentPoint} on tile ${tile._model.Name}`;
-        if (thisAttach.hasAttachment) throw `Attachment point ${info.thisTileAttachment} already has attachment on tile ${this._model.Name}`;
-        if (otherTile.hasAttachment) throw `Attachment point ${info.attachmentPoint} already has attachment on tile ${tile._model.Name}`;
-        const offsets = {
-            this: this.calculatedOffsets.attachments.find((v) => v.part === thisAttach.part) as OffsetInfo,
-            other: tile.calculatedOffsets.attachments.find((v) => v.part === otherTile.part) as OffsetInfo
+        const thisAttachment = this.attachmentData.find((data) => data.attachment === info.thisTileAttachment);
+        const otherAttachment = tile.attachmentData.find((data) => data.attachment === info.attachmentPoint);
+        if (!thisAttachment || !otherAttachment) throw `Attachment points not found.`;
+
+        // Apply the position and rotation offsets from otherAttachment to thisAttachment
+        const thisCenter = thisAttachment.attachment.point.Position;
+        const otherCenter = otherAttachment.attachment.point.Position;
+        const offsetVector = otherCenter.sub(thisCenter);
+
+        for (const offsetInfo of thisAttachment.offsets) {
+            const newPosition = offsetVector.add(offsetInfo.position);
+            const newRotation = offsetInfo.rotation;
+            offsetInfo.part.CFrame = new CFrame(newPosition).mul(CFrame.Angles(newRotation[0], newRotation[1], newRotation[2]));
         }
-        const otherCenter = tile._model.WaitForChild("centerPoint") as Part;
-        otherCenter.Position = thisAttach.part.Position.sub(offsets.other.position);
+
+        // Update attachment status
+        thisAttachment.attachment.hasAttachment = true;
+        otherAttachment.attachment.hasAttachment = true;
+
         tile.applyOffsets();
-        this.attachmentPoints = this.attachmentPoints.map((v) => {
-            if (v.part === thisAttach.part) {
-                const copy = v;
-                copy.hasAttachment = true;
-                return copy;
-            }
-            return v;
-        })
-        tile.attachmentPoints = tile.attachmentPoints.map((v) => {
-            if (v.part === otherTile.part) {
-                const copy = v;
-                copy.hasAttachment = true;
-                return copy;
-            }
-            return v;
-        })
     }
 }
