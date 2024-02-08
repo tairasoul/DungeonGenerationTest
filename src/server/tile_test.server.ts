@@ -26,7 +26,7 @@ const tiles = new TileRandomizer(folder);
 
 const random = new RandomTileAttacher(folder);
 
-const baseTile = random.attachRandomTile(getRandom(children) as Part) as Model;
+const baseTile = random.attachTileToPoint(getRandom(children) as Part, "Hallway") as Model;
 
 const tc = new Tile(baseTile);
 const tile2 = tiles.getTileOfType("Room") as Model;
