@@ -4,7 +4,7 @@ export default class FolderMerger {
         this._folder = folder;
     }
 
-    merge(folders: Folder[]) {
+    merge(...folders: Folder[]) {
         for (const folder of folders) {
             for (const child of folder.GetChildren()) {
                 child.Parent = this._folder;
