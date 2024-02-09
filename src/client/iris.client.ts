@@ -1,5 +1,6 @@
 import { remotes } from "shared/remotes";
 import iris from "@rbxts/iris";
+import { getRandom } from "shared/utils";
 
 type tiles = "Hallway" | "Room";
 
@@ -26,6 +27,10 @@ iris.Connect(() => {
             if (iris.Button([`generate ${currentTile.lower()} at current position`]).clicked()) {
                 print("generating tile");
                 remotes.generateRoom.fire(currentTile);
+            }
+            if (iris.Button(["generate random tile at current location"]).clicked()) {
+                print("generating random tile");
+                remotes.generateRoom.fire(getRandom(TileTypes.filter(() => true)) as tiles);
             }
         iris.End();
         iris.Tree(["generation with depth"])

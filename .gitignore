@@ -1,2 +1,6 @@
 node_modules/
-out/*
+out/
+out/client
+out/server
+out/shared
+out/tsconfig.tsbuildinfo
