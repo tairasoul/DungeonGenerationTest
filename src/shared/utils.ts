@@ -28,7 +28,7 @@ export function cframeFromComponents(xyz: Vector3, components: LuaTuple<[number,
 
 export function CFrameComponentsSub(components1: LuaTuple<[number, number, number, number, number, number, number, number, number, number, number, number]>, components2: LuaTuple<[number, number, number, number, number, number, number, number, number, number, number, number]>) {
     const newOffset: number[] = [];
-    for (let i = 0; i < components1.length; i++) {
+    for (let i = 0; i < components1.size(); i++) {
         newOffset[i] = components1[i] - components2[i];
     }
     return new CFrame(newOffset[0], newOffset[1], newOffset[2], newOffset[3], newOffset[4], newOffset[5], newOffset[6], newOffset[7], newOffset[8], newOffset[9], newOffset[10], newOffset[11])
@@ -36,8 +36,25 @@ export function CFrameComponentsSub(components1: LuaTuple<[number, number, numbe
 
 export function CFrameComponentsAdd(components1: LuaTuple<[number, number, number, number, number, number, number, number, number, number, number, number]>, components2: LuaTuple<[number, number, number, number, number, number, number, number, number, number, number, number]>) {
     const newOffset: number[] = [];
-    for (let i = 0; i < components1.length; i++) {
+    for (let i = 0; i < components1.size(); i++) {
         newOffset[i] = components1[i] + components2[i];
     }
     return new CFrame(newOffset[0], newOffset[1], newOffset[2], newOffset[3], newOffset[4], newOffset[5], newOffset[6], newOffset[7], newOffset[8], newOffset[9], newOffset[10], newOffset[11])
+}
+
+export function applyOffsetRelativeToPart(part: BasePart, offsetVector: Vector3): Vector3 {
+    // Get the part's orientation vector
+    const orientationVector = part.CFrame.LookVector;
+
+    // Scale the offset vector by the magnitudes of the part's orientation vectors
+    const scaledOffsetVector = new Vector3(
+        offsetVector.X * orientationVector.X,
+        offsetVector.Y * orientationVector.Y,
+        offsetVector.Z * orientationVector.Z
+    );
+
+    // Calculate the new position by adding the scaled offset to the part's position
+    const newPosition = part.Position.add(scaledOffsetVector);
+
+    return newPosition;
 }

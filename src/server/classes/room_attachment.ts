@@ -1,6 +1,6 @@
 import { Tile } from "server/interfaces/parser";
 import { PartOffset } from "server/interfaces/attachment";
-import { getDistance } from "shared/utils";
+import { getDistance, applyOffsetRelativeToPart } from "shared/utils";
 import { AttachmentPoint } from "server/interfaces/room";
 
 export default class RoomAttachment {
@@ -47,8 +47,14 @@ export default class RoomAttachment {
         const offset = this.attachmentOffsets.find((v) => v.part === point?.part);
         if (offset === undefined || point === undefined) return;
         const center = this._tile.originModel;
-        center.MoveTo(part.Position.add(offset.offset));
-        this.applyOffsets();
+        const pos = offset.offset;
+        const lookVector = part.CFrame.LookVector;
+        const newPos = new Vector3(pos.X, 0, pos.X).add(new Vector3(pos.Z, 0, pos.Z));
+        print(lookVector.mul(newPos));
+        print(part.GetPivot());
+        print(part.GetPivot().sub(lookVector.mul(newPos)).sub(new Vector3(0, 3, 0)))
+        center.PivotTo(part.GetPivot().sub(lookVector.mul(newPos)).sub(new Vector3(0, 3, 0)));
+        //this.applyOffsets();
         point.part.Destroy();
     }
 }

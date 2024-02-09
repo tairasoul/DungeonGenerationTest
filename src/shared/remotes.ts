@@ -5,6 +5,6 @@ export const remotes = createRemotes(
         generateRoom: remote<Server>(),
         generateRoomWithDepth: remote<Server, [depth: number]>(),
         clearTiles: remote<Server>(),
-        applyOffsets: remote<Server>()
+        test: remote<Server>()
     }
 )

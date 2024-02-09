@@ -1,4 +1,6 @@
 -- Compiled with roblox-ts v2.1.0
+local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
+local CFrameComponentsSub = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").CFrameComponentsSub
 local Tile
 do
 	Tile = setmetatable({}, {
@@ -12,10 +14,7 @@ do
 		return self:constructor(...) or self
 	end
 	function Tile:constructor(model)
-		self.calculatedOffsets = {
-			internalParts = {},
-			attachments = {},
-		}
+		self.calculatedOffsets = {}
 		self.attachmentPoints = {}
 		self._model = model
 		local points = self._model:WaitForChild("apoints")
@@ -31,19 +30,122 @@ do
 		self:calculatePartOffsets()
 	end
 	function Tile:calculatePartOffsets()
+		local _exp = self._model:GetDescendants()
+		local _arg0 = function(v)
+			return v:IsA("Part") and v.Name == "Doorway"
+		end
+		-- ▼ ReadonlyArray.filter ▼
+		local _newValue = {}
+		local _length = 0
+		for _k, _v in _exp do
+			if _arg0(_v, _k - 1, _exp) == true then
+				_length += 1
+				_newValue[_length] = _v
+			end
+		end
+		-- ▲ ReadonlyArray.filter ▲
+		local attachments = _newValue
+		local _exp_1 = self._model:GetDescendants()
+		local _arg0_1 = function(v)
+			return v:IsA("Part")
+		end
+		-- ▼ ReadonlyArray.filter ▼
+		local _newValue_1 = {}
+		local _length_1 = 0
+		for _k, _v in _exp_1 do
+			if _arg0_1(_v, _k - 1, _exp_1) == true then
+				_length_1 += 1
+				_newValue_1[_length_1] = _v
+			end
+		end
+		-- ▲ ReadonlyArray.filter ▲
+		local parts = _newValue_1
+		for _, attachment in attachments do
+			for _1, part in parts do
+				-- Get the difference in CFrames between attachment and part
+				local offset = CFrameComponentsSub({ attachment.CFrame:GetComponents() }, { part.CFrame:GetComponents() })
+				local _calculatedOffsets = self.calculatedOffsets
+				local _object = {
+					part = part,
+					CFrameOffset = offset,
+				}
+				local _left = "from"
+				local _attachmentPoints = self.attachmentPoints
+				local _arg0_2 = function(v)
+					return v.part == attachment
+				end
+				-- ▼ ReadonlyArray.find ▼
+				local _result
+				for _i, _v in _attachmentPoints do
+					if _arg0_2(_v, _i - 1, _attachmentPoints) == true then
+						_result = _v
+						break
+					end
+				end
+				-- ▲ ReadonlyArray.find ▲
+				_object[_left] = _result
+				table.insert(_calculatedOffsets, _object)
+			end
+		end
+		--[[
+			const centerPoint = (this._model.WaitForChild("centerPoint") as Part).CFrame;
+			// Calculate position and rotation offsets for internal parts
+			const internalParts = this._model.GetDescendants().filter((v) => !(v.Name === "centerPoint") && v.Parent !== this._model.WaitForChild("apoints") && v.IsA("Part"));
+			for (const part of internalParts as Part[]) {
+			const offset = centerPoint.ToObjectSpace(part.CFrame);
+			this.calculatedOffsets.internalParts.push({
+			part,
+			position: offset.Position,
+			rotation: offset.Rotation.ToEulerAnglesXYZ()
+			});
+			}
+			// Calculate position and rotation offsets for attachment points
+			const attachmentPoints = this._model.WaitForChild("apoints").GetChildren() as Part[];
+			for (const attachment of attachmentPoints) {
+			const offset = centerPoint.ToObjectSpace(attachment.CFrame);
+			this.calculatedOffsets.attachments.push({
+			part: attachment,
+			position: offset.Position,
+			rotation: offset.Rotation.ToEulerAnglesXYZ()
+			});
+			}
+		]]
 	end
-	function Tile:applyOffsets()
-		local centerPoint = (self._model:WaitForChild("centerPoint")).Position
-		-- Apply position and rotation offsets for internal parts
-		for _, offset in self.calculatedOffsets.internalParts do
-			local _position = offset.position
-			offset.part.Position = centerPoint + _position
+	function Tile:applyOffsets(attachment)
+		local _calculatedOffsets = self.calculatedOffsets
+		local _arg0 = function(v)
+			return v.from == attachment
 		end
-		-- Apply position and rotation offsets for attachment points
-		for _, offset in self.calculatedOffsets.attachments do
-			local _position = offset.position
-			offset.part.Position = centerPoint + _position
+		-- ▼ ReadonlyArray.filter ▼
+		local _newValue = {}
+		local _length = 0
+		for _k, _v in _calculatedOffsets do
+			if _arg0(_v, _k - 1, _calculatedOffsets) == true then
+				_length += 1
+				_newValue[_length] = _v
+			end
 		end
+		-- ▲ ReadonlyArray.filter ▲
+		local offsetsForAttachment = _newValue
+		for _, offset in offsetsForAttachment do
+			if offset.part == attachment.part then
+				continue
+			end
+			-- Add offset onto attachment cframe
+			local newPos = offset.CFrameOffset
+			offset.part.CFrame = newPos
+		end
+		--[[
+			const centerPoint = (this._model.WaitForChild("centerPoint") as Part).Position;
+			// Apply position and rotation offsets for internal parts
+			for (const offset of this.calculatedOffsets.internalParts) {
+			offset.part.Position = centerPoint.add(offset.position);
+			}
+			// Apply position and rotation offsets for attachment points
+			for (const offset of this.calculatedOffsets.attachments) {
+			offset.part.Position = centerPoint.add(offset.position);
+			}
+		]]
 	end
 	function Tile:attachTile(tile, info)
 		local _attachmentPoints = self.attachmentPoints
@@ -86,76 +188,65 @@ do
 		if otherTile.hasAttachment then
 			error("Attachment point " .. (tostring(info.attachmentPoint) .. (" already has attachment on tile " .. tile._model.Name)))
 		end
-		local _attachments = self.calculatedOffsets.attachments
+		local _calculatedOffsets = tile.calculatedOffsets
 		local _arg0_2 = function(v)
-			return v.part == thisAttach.part
+			return v.part == otherTile.part
 		end
 		-- ▼ ReadonlyArray.find ▼
 		local _result_2
-		for _i, _v in _attachments do
-			if _arg0_2(_v, _i - 1, _attachments) == true then
+		for _i, _v in _calculatedOffsets do
+			if _arg0_2(_v, _i - 1, _calculatedOffsets) == true then
 				_result_2 = _v
 				break
 			end
 		end
 		-- ▲ ReadonlyArray.find ▲
-		local thisOffset = _result_2
-		local _attachments_1 = tile.calculatedOffsets.attachments
+		local tileOffset = _result_2
+		tileOffset.part.CFrame = thisAttach.part.CFrame
+		tile:applyOffsets(otherTile)
+		--[[
+			const thisOffset = this.calculatedOffsets.attachments.find((v) => v.part === thisAttach.part);
+			const otherOffset = tile.calculatedOffsets.attachments.find((v) => v.part === otherTile.part);
+			if (!thisOffset || !otherOffset) {
+			throw "Offsets not found for attachment points";
+			}
+			const otherCenter = tile._model;
+			const newPosition = thisOffset.part.CFrame.add(otherOffset.position).sub(new Vector3(0, 2, 0));
+			const pos = newPosition.Position;
+			const centerPos = (this._model.WaitForChild("centerPoint") as Part).Position;
+			otherCenter.PivotTo(new CFrame(pos, new Vector3(centerPos.X, pos.Y, centerPos.Z)));
+			//otherCenter.PivotTo();
+			// Apply offsets and update attachment points
+			//tile.applyOffsets();
+		]]
+		local _attachmentPoints_2 = self.attachmentPoints
 		local _arg0_3 = function(v)
-			return v.part == otherTile.part
+			return v == thisAttach
 		end
 		-- ▼ ReadonlyArray.find ▼
 		local _result_3
-		for _i, _v in _attachments_1 do
-			if _arg0_3(_v, _i - 1, _attachments_1) == true then
+		for _i, _v in _attachmentPoints_2 do
+			if _arg0_3(_v, _i - 1, _attachmentPoints_2) == true then
 				_result_3 = _v
 				break
 			end
 		end
 		-- ▲ ReadonlyArray.find ▲
-		local otherOffset = _result_3
-		if not thisOffset or not otherOffset then
-			error("Offsets not found for attachment points")
-		end
-		local otherCenter = tile._model
-		local _cFrame = thisOffset.part.CFrame
-		local _position = otherOffset.position
-		local _vector3 = Vector3.new(0, 2, 0)
-		local newPosition = _cFrame + _position - _vector3
-		local pos = newPosition.Position
-		local centerPos = (self._model:WaitForChild("centerPoint")).Position
-		otherCenter:PivotTo(CFrame.new(pos, Vector3.new(centerPos.X, pos.Y, centerPos.Z)))
-		-- otherCenter.PivotTo();
-		-- Apply offsets and update attachment points
-		-- tile.applyOffsets();
-		local _attachmentPoints_2 = self.attachmentPoints
+		_result_3.hasAttachment = true
+		local _attachmentPoints_3 = tile.attachmentPoints
 		local _arg0_4 = function(v)
-			return v == thisAttach
+			return v == otherTile
 		end
 		-- ▼ ReadonlyArray.find ▼
 		local _result_4
-		for _i, _v in _attachmentPoints_2 do
-			if _arg0_4(_v, _i - 1, _attachmentPoints_2) == true then
+		for _i, _v in _attachmentPoints_3 do
+			if _arg0_4(_v, _i - 1, _attachmentPoints_3) == true then
 				_result_4 = _v
 				break
 			end
 		end
 		-- ▲ ReadonlyArray.find ▲
 		_result_4.hasAttachment = true
-		local _attachmentPoints_3 = tile.attachmentPoints
-		local _arg0_5 = function(v)
-			return v == otherTile
-		end
-		-- ▼ ReadonlyArray.find ▼
-		local _result_5
-		for _i, _v in _attachmentPoints_3 do
-			if _arg0_5(_v, _i - 1, _attachmentPoints_3) == true then
-				_result_5 = _v
-				break
-			end
-		end
-		-- ▲ ReadonlyArray.find ▲
-		_result_5.hasAttachment = true
 	end
 	function Tile:setPosition(position, rotation)
 		local point = self._model:WaitForChild("centerPoint")
@@ -163,7 +254,7 @@ do
 		if rotation then
 			point.Rotation = rotation
 		end
-		self:applyOffsets()
+		-- this.applyOffsets();
 	end
 end
 return {

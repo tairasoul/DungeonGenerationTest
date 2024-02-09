@@ -41,7 +41,7 @@ local function cframeFromComponents(xyz, components)
 	local cframe = CFrame.new(xyz.X, xyz.Y, xyz.Z, components[4], components[5], components[6], components[7], components[8], components[9], components[10], components[11], components[12])
 	return cframe
 end
-local function CFRameComponentOffset(components1, components2)
+local function CFrameComponentsSub(components1, components2)
 	local newOffset = {}
 	do
 		local i = 0
@@ -52,7 +52,7 @@ local function CFRameComponentOffset(components1, components2)
 			else
 				_shouldIncrement = true
 			end
-			if not (i < components1.length) then
+			if not (i < #components1) then
 				break
 			end
 			newOffset[i + 1] = components1[i + 1] - components2[i + 1]
@@ -60,11 +60,41 @@ local function CFRameComponentOffset(components1, components2)
 	end
 	return CFrame.new(newOffset[1], newOffset[2], newOffset[3], newOffset[4], newOffset[5], newOffset[6], newOffset[7], newOffset[8], newOffset[9], newOffset[10], newOffset[11], newOffset[12])
 end
+local function CFrameComponentsAdd(components1, components2)
+	local newOffset = {}
+	do
+		local i = 0
+		local _shouldIncrement = false
+		while true do
+			if _shouldIncrement then
+				i += 1
+			else
+				_shouldIncrement = true
+			end
+			if not (i < #components1) then
+				break
+			end
+			newOffset[i + 1] = components1[i + 1] + components2[i + 1]
+		end
+	end
+	return CFrame.new(newOffset[1], newOffset[2], newOffset[3], newOffset[4], newOffset[5], newOffset[6], newOffset[7], newOffset[8], newOffset[9], newOffset[10], newOffset[11], newOffset[12])
+end
+local function applyOffsetRelativeToPart(part, offsetVector)
+	-- Get the part's orientation vector
+	local orientationVector = part.CFrame.LookVector
+	-- Scale the offset vector by the magnitudes of the part's orientation vectors
+	local scaledOffsetVector = Vector3.new(offsetVector.X * orientationVector.X, offsetVector.Y * orientationVector.Y, offsetVector.Z * orientationVector.Z)
+	-- Calculate the new position by adding the scaled offset to the part's position
+	local newPosition = part.Position + scaledOffsetVector
+	return newPosition
+end
 return {
 	getRandom = getRandom,
 	getDistance = getDistance,
 	guid = guid,
 	eulerToVector = eulerToVector,
 	cframeFromComponents = cframeFromComponents,
-	CFRameComponentOffset = CFRameComponentOffset,
+	CFrameComponentsSub = CFrameComponentsSub,
+	CFrameComponentsAdd = CFrameComponentsAdd,
+	applyOffsetRelativeToPart = applyOffsetRelativeToPart,
 }

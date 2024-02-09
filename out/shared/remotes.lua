@@ -7,7 +7,7 @@ local remotes = createRemotes({
 	generateRoom = remote(),
 	generateRoomWithDepth = remote(),
 	clearTiles = remote(),
-	applyOffsets = remote(),
+	test = remote(),
 })
 return {
 	remotes = remotes,

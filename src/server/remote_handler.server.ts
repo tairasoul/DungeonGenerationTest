@@ -6,6 +6,7 @@ import TileRandomizer from "./classes/randomised.tiles";
 import { getRandom } from "shared/utils";
 import { TileAttachmentInfo } from "./interfaces/tile";
 import { tiles as tileStorage } from "shared/vars/folders";
+import make from "@rbxts/make";
 
 const folder = ServerScriptService.WaitForChild("tiles") as Folder;
 
@@ -53,10 +54,12 @@ remotes.clearTiles.connect(() => {
     tStorage.clear();
 })
 
-remotes.applyOffsets.connect(() => {
-    print("re-applying offsets");
-    for (const tile of tStorage) {
-        print(`applying offset for tile ${tile._model.Name}`)
-        tile.applyOffsets();
-    }
+remotes.test.connect((player) => {
+    print("test remote called");
+    const char = player.Character ?? player.CharacterAdded.Wait()[0];
+    const hrp = char.WaitForChild("HumanoidRootPart") as Part;
+    const part = make("Part", {Anchored: true, Parent: tileStorage});
+    const lookVector = hrp.CFrame.LookVector;
+    const offset = new Vector3(10, 0, 20);
+    part.Position = hrp.Position.add(lookVector.mul(offset));
 });

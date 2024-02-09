@@ -103,11 +103,23 @@ do
 			return nil
 		end
 		local center = self._tile.originModel
+		local pos = offset.offset
+		local lookVector = part.CFrame.LookVector
+		local _vector3 = Vector3.new(pos.X, 0, pos.X)
+		local _vector3_1 = Vector3.new(pos.Z, 0, pos.Z)
+		local newPos = _vector3 + _vector3_1
+		print(lookVector * newPos)
+		print(part:GetPivot())
+		local _exp = part:GetPivot()
+		local _arg0_2 = lookVector * newPos
+		local _vector3_2 = Vector3.new(0, 3, 0)
+		print(_exp - _arg0_2 - _vector3_2)
 		local _fn = center
-		local _position = part.Position
-		local _offset = offset.offset
-		_fn:MoveTo(_position + _offset)
-		self:applyOffsets()
+		local _exp_1 = part:GetPivot()
+		local _arg0_3 = lookVector * newPos
+		local _vector3_3 = Vector3.new(0, 3, 0)
+		_fn:PivotTo(_exp_1 - _arg0_3 - _vector3_3)
+		-- this.applyOffsets();
 		point.part:Destroy()
 	end
 end

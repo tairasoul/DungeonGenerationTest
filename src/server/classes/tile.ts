@@ -28,7 +28,6 @@ export default class Tile {
             for (const part of parts as Part[]) {
                 // Get the difference in CFrames between attachment and part
                 const offset = CFrameComponentsSub(attachment.CFrame.GetComponents(), part.CFrame.GetComponents());
-                print(offset);
                 this.calculatedOffsets.push(
                     {
                         part,
@@ -68,7 +67,7 @@ export default class Tile {
         for (const offset of offsetsForAttachment) {
             if (offset.part === attachment.part) continue; // Skip over attachment part
             // Add offset onto attachment cframe
-            const newPos = CFrameComponentsAdd(offset.from.part.CFrame.GetComponents(), offset.CFrameOffset.GetComponents());
+            const newPos = offset.CFrameOffset
             offset.part.CFrame = newPos;
         }
         /*const centerPoint = (this._model.WaitForChild("centerPoint") as Part).Position;
