@@ -15,8 +15,21 @@ do
 		self._model = model
 	end
 	function TileParser:getTileData()
-		local folder = self._model:WaitForChild("apoints")
-		local children = folder:GetChildren()
+		local _exp = self._model:GetDescendants()
+		local _arg0 = function(v)
+			return v:IsA("Part") and v.Name == "Doorway"
+		end
+		-- ▼ ReadonlyArray.filter ▼
+		local _newValue = {}
+		local _length = 0
+		for _k, _v in _exp do
+			if _arg0(_v, _k - 1, _exp) == true then
+				_length += 1
+				_newValue[_length] = _v
+			end
+		end
+		-- ▲ ReadonlyArray.filter ▲
+		local children = _newValue
 		local roomInfo = require(self._model:FindFirstChild("room.info"))
 		local tileData = {
 			attachmentPoints = {},

@@ -8,8 +8,8 @@ export default class Tile {
     public attachmentPoints: AttachmentPoint[] = [];
     constructor(model: Model) {
         this._model = model;
-        const points = this._model.WaitForChild("apoints") as Folder;
-        for (const child of points.GetChildren() as Part[]) {
+        //const points = this._model.WaitForChild("apoints") as Folder;
+        for (const child of this._model.GetDescendants().filter((v) => v.IsA("Part") && v.Name === "Doorway") as Part[]) {
             this.attachmentPoints.push(
                 {
                     part: child,
@@ -93,9 +93,25 @@ export default class Tile {
 
         const tileOffset = tile.calculatedOffsets.find((v) => v.part === otherTile.part) as OffsetInfo;
 
-        tileOffset.part.CFrame = thisAttach.part.CFrame;
+        //tileOffset.part.CFrame = thisAttach.part.CFrame;
 
-        tile.applyOffsets(otherTile);
+        /*
+        
+        const pos = offset.offset;
+        const lookVector = part.CFrame.LookVector;
+        const newPos = new Vector3(pos.X, 0, pos.X).add(new Vector3(pos.Z, 0, pos.Z));
+        print(lookVector.mul(newPos));
+        print(part.GetPivot());
+        print(part.GetPivot().sub(lookVector.mul(newPos)).sub(new Vector3(0, 3, 0)))
+        center.PivotTo(part.GetPivot().sub(lookVector.mul(newPos)).sub(new Vector3(0, 3, 0)));
+        */
+
+        const pos = tileOffset.CFrameOffset.Position;
+        const lookVector = thisAttach.part.CFrame.LookVector;
+        const newPos = new Vector3(pos.X > pos.Z ? pos.X : pos.Z, 0, pos.X > pos.Z ? pos.X : pos.Z)//.add(new Vector3(pos.Z, 0, pos.Z));
+        tile._model.PivotTo(info.thisTileAttachment.part.GetPivot().sub(lookVector.mul(newPos)).sub(new Vector3(0, 1, 0)));
+
+        //tile.applyOffsets(otherTile);
         
         /*const thisOffset = this.calculatedOffsets.attachments.find((v) => v.part === thisAttach.part);
         const otherOffset = tile.calculatedOffsets.attachments.find((v) => v.part === otherTile.part);

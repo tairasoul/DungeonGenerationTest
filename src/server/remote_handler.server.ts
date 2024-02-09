@@ -16,10 +16,10 @@ const tiles = new TileRandomizer(folder);
 
 const tStorage: Tile[] = [];
 
-remotes.generateRoom.connect((player) => {
+remotes.generateRoom.connect((player, roomT) => {
     print("received request to generate tile, generating");
     const character = player.Character ?? player.CharacterAdded.Wait()[0];
-    tStorage.push(new Tile(randomizer.attachRandomTile(character.WaitForChild("Torso") as Part) as Model));
+    tStorage.push(new Tile(randomizer.attachTileToPoint(character.WaitForChild("Torso") as Part, roomT) as Model));
 });
 
 remotes.generateRoomWithDepth.connect((player, depth) => {

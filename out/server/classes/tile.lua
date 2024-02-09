@@ -17,15 +17,29 @@ do
 		self.calculatedOffsets = {}
 		self.attachmentPoints = {}
 		self._model = model
-		local points = self._model:WaitForChild("apoints")
-		for _, child in points:GetChildren() do
+		-- const points = this._model.WaitForChild("apoints") as Folder;
+		local _exp = self._model:GetDescendants()
+		local _arg0 = function(v)
+			return v:IsA("Part") and v.Name == "Doorway"
+		end
+		-- ▼ ReadonlyArray.filter ▼
+		local _newValue = {}
+		local _length = 0
+		for _k, _v in _exp do
+			if _arg0(_v, _k - 1, _exp) == true then
+				_length += 1
+				_newValue[_length] = _v
+			end
+		end
+		-- ▲ ReadonlyArray.filter ▲
+		for _, child in _newValue do
 			local _attachmentPoints = self.attachmentPoints
-			local _arg0 = {
+			local _arg0_1 = {
 				part = child,
 				point = child.CFrame,
 				hasAttachment = false,
 			}
-			table.insert(_attachmentPoints, _arg0)
+			table.insert(_attachmentPoints, _arg0_1)
 		end
 		self:calculatePartOffsets()
 	end
@@ -202,8 +216,25 @@ do
 		end
 		-- ▲ ReadonlyArray.find ▲
 		local tileOffset = _result_2
-		tileOffset.part.CFrame = thisAttach.part.CFrame
-		tile:applyOffsets(otherTile)
+		-- tileOffset.part.CFrame = thisAttach.part.CFrame;
+		--[[
+			const pos = offset.offset;
+			const lookVector = part.CFrame.LookVector;
+			const newPos = new Vector3(pos.X, 0, pos.X).add(new Vector3(pos.Z, 0, pos.Z));
+			print(lookVector.mul(newPos));
+			print(part.GetPivot());
+			print(part.GetPivot().sub(lookVector.mul(newPos)).sub(new Vector3(0, 3, 0)))
+			center.PivotTo(part.GetPivot().sub(lookVector.mul(newPos)).sub(new Vector3(0, 3, 0)));
+		]]
+		local pos = tileOffset.CFrameOffset.Position
+		local lookVector = thisAttach.part.CFrame.LookVector
+		local newPos = Vector3.new(if pos.X > pos.Z then pos.X else pos.Z, 0, if pos.X > pos.Z then pos.X else pos.Z)
+		local _fn = tile._model
+		local _exp = info.thisTileAttachment.part:GetPivot()
+		local _arg0_3 = lookVector * newPos
+		local _vector3 = Vector3.new(0, 1, 0)
+		_fn:PivotTo(_exp - _arg0_3 - _vector3)
+		-- tile.applyOffsets(otherTile);
 		--[[
 			const thisOffset = this.calculatedOffsets.attachments.find((v) => v.part === thisAttach.part);
 			const otherOffset = tile.calculatedOffsets.attachments.find((v) => v.part === otherTile.part);
@@ -220,13 +251,13 @@ do
 			//tile.applyOffsets();
 		]]
 		local _attachmentPoints_2 = self.attachmentPoints
-		local _arg0_3 = function(v)
+		local _arg0_4 = function(v)
 			return v == thisAttach
 		end
 		-- ▼ ReadonlyArray.find ▼
 		local _result_3
 		for _i, _v in _attachmentPoints_2 do
-			if _arg0_3(_v, _i - 1, _attachmentPoints_2) == true then
+			if _arg0_4(_v, _i - 1, _attachmentPoints_2) == true then
 				_result_3 = _v
 				break
 			end
@@ -234,13 +265,13 @@ do
 		-- ▲ ReadonlyArray.find ▲
 		_result_3.hasAttachment = true
 		local _attachmentPoints_3 = tile.attachmentPoints
-		local _arg0_4 = function(v)
+		local _arg0_5 = function(v)
 			return v == otherTile
 		end
 		-- ▼ ReadonlyArray.find ▼
 		local _result_4
 		for _i, _v in _attachmentPoints_3 do
-			if _arg0_4(_v, _i - 1, _attachmentPoints_3) == true then
+			if _arg0_5(_v, _i - 1, _attachmentPoints_3) == true then
 				_result_4 = _v
 				break
 			end

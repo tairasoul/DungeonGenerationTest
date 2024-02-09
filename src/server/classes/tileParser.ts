@@ -8,8 +8,7 @@ export default class TileParser {
     }
 
     getTileData() {
-        const folder = this._model.WaitForChild("apoints") as Folder;
-        const children = folder.GetChildren();
+        const children = this._model.GetDescendants().filter((v) => v.IsA("Part") && v.Name === "Doorway");
         const roomInfo = require(this._model.FindFirstChild("room.info") as ModuleScript) as {
             "types": RoomTypes[]
         }

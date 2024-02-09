@@ -1,6 +1,6 @@
 import { Tile } from "server/interfaces/parser";
 import { PartOffset } from "server/interfaces/attachment";
-import { getDistance, applyOffsetRelativeToPart } from "shared/utils";
+import { getDistance } from "shared/utils";
 import { AttachmentPoint } from "server/interfaces/room";
 
 export default class RoomAttachment {
