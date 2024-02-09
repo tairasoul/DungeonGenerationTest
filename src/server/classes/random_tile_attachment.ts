@@ -19,7 +19,6 @@ export default class RandomTileAttacher {
         const parser = new TileParser(clone);
         const tileData = parser.getTileData();
         const attachment = new RoomAttachment(tileData);
-        attachment.calculateOffsets();
         const point = getRandom(tileData.attachmentPoints);
         if (point === undefined) return;
         attachment.attachToPart(part, point);
@@ -34,7 +33,6 @@ export default class RandomTileAttacher {
         const parser = new TileParser(clone);
         const tileData = parser.getTileData();
         const attachment = new RoomAttachment(tileData);
-        attachment.calculateOffsets();
         const point = getRandom(tileData.attachmentPoints);
         if (point === undefined) return;
         attachment.attachToPart(part, point);

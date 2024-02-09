@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -11,9 +11,21 @@ dependencies:
   '@rbxts/bridgenet':
     specifier: 2.0.0-rc4
     version: 2.0.0-rc4
+  '@rbxts/builders':
+    specifier: ^1.0.2
+    version: 1.0.2
   '@rbxts/character-promise':
     specifier: ^1.0.2
     version: 1.0.2
+  '@rbxts/character-viewport':
+    specifier: ^1.0.1
+    version: 1.0.1
+  '@rbxts/cmdr':
+    specifier: ^1.12.1
+    version: 1.12.1
+  '@rbxts/commander':
+    specifier: ^0.1.0
+    version: 0.1.0(@rbxts/flipper@2.0.1)
   '@rbxts/dispatcher':
     specifier: ^1.3.0
     version: 1.3.0
@@ -23,12 +35,18 @@ dependencies:
   '@rbxts/faker':
     specifier: ^0.2.8
     version: 0.2.8
+  '@rbxts/flow':
+    specifier: 1.0.0-ts.4
+    version: 1.0.0-ts.4
   '@rbxts/ghostevents':
     specifier: ^1.0.0
     version: 1.0.0
   '@rbxts/horseman':
     specifier: ^1.1.7
     version: 1.1.7(@rbxts/flipper@2.0.1)(@rbxts/types@1.0.749)
+  '@rbxts/inspect':
+    specifier: ^1.0.1
+    version: 1.0.1
   '@rbxts/instance-utils':
     specifier: ^1.1.1
     version: 1.1.1
@@ -41,12 +59,21 @@ dependencies:
   '@rbxts/lazy':
     specifier: ^1.0.1
     version: 1.0.1
+  '@rbxts/lua-table-utils':
+    specifier: ^1.2.0
+    version: 1.2.0
+  '@rbxts/luau-thread':
+    specifier: ^1.0.1
+    version: 1.0.1
   '@rbxts/make':
     specifier: ^1.0.6
     version: 1.0.6
   '@rbxts/math':
     specifier: ^1.1.0
     version: 1.1.0
+  '@rbxts/matter':
+    specifier: ^0.7.1
+    version: 0.7.1
   '@rbxts/messages':
     specifier: ^1.0.3
     version: 1.0.3
@@ -56,12 +83,18 @@ dependencies:
   '@rbxts/must':
     specifier: ^1.0.5
     version: 1.0.5
+  '@rbxts/nextcast':
+    specifier: 0.1.1-debug
+    version: 0.1.1-debug
   '@rbxts/object-pool':
     specifier: ^1.1.0
     version: 1.1.0
   '@rbxts/objecthighlighter':
     specifier: ^2.0.2
     version: 2.0.2
+  '@rbxts/open-skill':
+    specifier: ^1.0.3
+    version: 1.0.3
   '@rbxts/plasma':
     specifier: ^0.4.4
     version: 0.4.4
@@ -142,14 +175,46 @@ packages:
     resolution: {integrity: sha512-445/oFvf8ozT5SlHUfTL3EIGJjwwE/c9SvbKJ2DUM5Erx1b8rx96u6Lopa2N3bo7hRm2t8kDghsrEHm2UGcBcA==}
     dev: false
 
+  /@rbxts/builders@1.0.2:
+    resolution: {integrity: sha512-q/Byk3xJne36TknSwB6119Y094NqbOnTcITcLWY1FqKeqV/8NAwIcmfztbGWDMMqL/FIiWnfzm8Z/MyY3Z/o0w==}
+    dev: false
+
   /@rbxts/character-promise@1.0.2:
     resolution: {integrity: sha512-5RYqcCywWqTrSAvkE2mrNWnLoqoOfmZGZn7+50pcAulbXbZd4svgHDY7+yUbevVIcQDa5meEKrVkt7sC0YBBVw==}
     dependencies:
       '@rbxts/validate-tree': 2.0.2
     dev: false
 
+  /@rbxts/character-viewport@1.0.1:
+    resolution: {integrity: sha512-QWE2DmWaourKYJ/dR/far1OpQkcFENlyE5d+I5sXHRBvCkZtQI5N9piiIPkL64t3cY1qzXnc+mWqFki+YMwHOw==}
+    dependencies:
+      '@rbxts/roact': 1.3.0-ts.15
+    dev: false
+
+  /@rbxts/cmdr@1.12.1:
+    resolution: {integrity: sha512-1I/Wnz4hY5fv6Eup7RZ2xGwog4X28dk5zUKYGc/Uo0ENfhwg344c2yf8Sn4CkimLOE2jpLYHq0p8IJ1i1AQg6g==}
+    dev: false
+
   /@rbxts/colour-utils@1.4.1:
     resolution: {integrity: sha512-eIBRRj9BOXh9DoOnuTi/E5IV+7diI5IxasV/GLwzgLRs+ti/8lB36d+Z2nZ3/DQ7RhlBas7vfiVhwDmo+VI6ZQ==}
+    dev: false
+
+  /@rbxts/commander@0.1.0(@rbxts/flipper@2.0.1):
+    resolution: {integrity: sha512-BzFikENrgIY2Ib8HiyfxsEiJ9aNh0XRtJZdfAbC5HR4v5GKhwVzeI8xQevmMnvGDsh/pFO/D01XTB7VTUFBRsA==}
+    dependencies:
+      '@rbxts/pretty-react-hooks': 0.3.3(@rbxts/flipper@2.0.1)(@rbxts/react-roblox@0.2.0)(@rbxts/react-ts@1.0.1)
+      '@rbxts/react-reflex': 0.2.0(@rbxts/react-ts@1.0.1)(@rbxts/reflex@4.3.1)
+      '@rbxts/react-roblox': 0.2.0
+      '@rbxts/reflex': 4.3.1
+      '@rbxts/remo': 1.3.1
+      '@rbxts/ripple': 0.8.1
+      '@rbxts/roact': /@rbxts/react-ts@1.0.1
+      '@rbxts/rust-classes': 0.12.0
+      '@rbxts/services': 1.5.3
+      '@rbxts/sift': 0.0.8
+      '@rbxts/t': 3.1.1
+    transitivePeerDependencies:
+      - '@rbxts/flipper'
     dev: false
 
   /@rbxts/compiler-types@1.2.3-types.1:
@@ -192,6 +257,12 @@ packages:
 
   /@rbxts/flipper@2.0.1:
     resolution: {integrity: sha512-kxb5AZizP05XSmo3waS/QkcfNMD5b6HX4gGwyHOyBow260R5MIT4L/ZUPLvleXXyb9b67X4NVmHoac1tPXOLNA==}
+    dev: false
+
+  /@rbxts/flow@1.0.0-ts.4:
+    resolution: {integrity: sha512-TIPcf7BDQrHTlvecEg3EDpQPZczlHzJmsPBbyCJ/IMsYS5yc57xVWRv7C2L6bzGF4anDFzT9y1fVGAFHq26EcA==}
+    dependencies:
+      '@rbxts/luau-polyfill-internal': 1.2.3-ts.0
     dev: false
 
   /@rbxts/geom@1.1.20:
@@ -240,6 +311,10 @@ packages:
     resolution: {integrity: sha512-NwEBp3GmBfcEHTLx1U4dQtNjstoYlWs86n4BeEKY23x5rSjfxOQtoKwEsoTkcxZuodQG2rFQz5IGT/OKqWAgOg==}
     dev: false
 
+  /@rbxts/inspect@1.0.1:
+    resolution: {integrity: sha512-O+fbpjl0iKWfVSILrgBRoZcCUzYSbRIOrgW8RrLWNBLFzoxIBu9uydx4RavYgT2RsmRm5zK2aM3MakEZ2z+jlQ==}
+    dev: false
+
   /@rbxts/instance-utils@1.1.1:
     resolution: {integrity: sha512-37Ue8RhvZ2bBBn3Ecc9DHo1eyyFUiXS0NxMKiJCqstB53h8NX/1rmAkXPGg2rT8UfU7SOLHkMi3Nbj7FD9BJYw==}
     dev: false
@@ -269,6 +344,18 @@ packages:
       '@rbxts/testez': 0.3.1-ts.7
     dev: false
 
+  /@rbxts/lua-table-utils@1.2.0:
+    resolution: {integrity: sha512-ZOuUvhEO6kSlWyqs+OKGGP4VxXHeTvWyEocUyfXvpFd9KzG7eJxONUq2c7s89Gvw68Q+VusCF9QIMYXJMCpGTw==}
+    dev: false
+
+  /@rbxts/luau-polyfill-internal@1.2.3-ts.0:
+    resolution: {integrity: sha512-LG1h4uf+MpMxu6RfOLowRe+NOs2SWXzCmYd49WvfR8ZKVUNHvT0BeVIL9rS9q//mTlz8BXDyl5EVIyjnKgsekA==}
+    dev: false
+
+  /@rbxts/luau-thread@1.0.1:
+    resolution: {integrity: sha512-wrkfXDyZKIQuLxbFY9bEa3N/obhB4gFRHpLR2qi8+TD52WutgFGvWRBj8778ogChxmwzwWn8WqQSXQ/0bEnrNw==}
+    dev: false
+
   /@rbxts/maid@1.1.0:
     resolution: {integrity: sha512-bVWXZ0p2M3OJzPzvN5fY0T4s37ezUMY7EX31Xspp7Ds4C/K9yE4MHMRXjtlNvsYVPmoc5tdhAbpZY02Veix5lg==}
     dev: false
@@ -282,6 +369,10 @@ packages:
 
   /@rbxts/math@1.1.0:
     resolution: {integrity: sha512-fd+EYnQ2bCGkA9TXdBCi4aTJBjGmMsq4qNe/KB/HVtARBuvjtWLsTegi2aU4WBqS960CZW7K9KpGf9xBc1aw4A==}
+    dev: false
+
+  /@rbxts/matter@0.7.1:
+    resolution: {integrity: sha512-6GNBemopKCoLHmp1eiqVOYfwvtP7LelzCg3DGF2w0FOzJ85TrGeYVToH8MUZUmQzo8Founw+nCXfYnMaB6EM4A==}
     dev: false
 
   /@rbxts/messages@1.0.3:
@@ -300,6 +391,10 @@ packages:
       '@rbxts/testez': 0.3.1-ts.7
     dev: false
 
+  /@rbxts/nextcast@0.1.1-debug:
+    resolution: {integrity: sha512-RwQyAQ4ocFXqkMyitxyO0u3YOuk2XxLW5zOvjZaLur2Lvevx70OwnNJiww9a+4US+imLX6zvFREriQnKvICL5g==}
+    dev: false
+
   /@rbxts/object-pool@1.1.0:
     resolution: {integrity: sha512-IEYbRFu/+x7+bVPa5j5iJjWKiavhTImfDcJvIB0x01sRX5CdUHmZHABJCnE0M2oPa8jFBlebH4TYf9p2q21cFA==}
     dependencies:
@@ -314,12 +409,30 @@ packages:
     resolution: {integrity: sha512-FFQU38iaIcmJdUfcDlE/OtPkSnbPpeHpTvuz81wtkbvfVcdoRtj16TdnSHXF7StdCVH1bj3DVU8N5hMFpC09wA==}
     dev: false
 
+  /@rbxts/open-skill@1.0.3:
+    resolution: {integrity: sha512-81tn0sBmRTsX7wmwQcJuBpv3T5i+TJCK1R1ofyse/IFXS46ALLiV7pDvZsBmx7lN9sxTfIuG0Kmq9yTyltTk/w==}
+    dev: false
+
   /@rbxts/plasma@0.4.4:
     resolution: {integrity: sha512-4DLepe0kHhs3gk1ShXzrjcTUhCfZhnFaqxjB0W7mWy1gG2Ap7mr/P/S2K3Ozs98OPhHBNN6P4uoUiYDlewJ7Zg==}
     dev: false
 
   /@rbxts/precomputed@1.0.2:
     resolution: {integrity: sha512-bc7QohqNCVr0sxH5CXnobSkQvxhqOtAeVMZ7nCasf/kcXqdX2eJpg3SSxqhXwC6tfBCp0yQpKFiuHt1o9azEmw==}
+    dev: false
+
+  /@rbxts/pretty-react-hooks@0.3.3(@rbxts/flipper@2.0.1)(@rbxts/react-roblox@0.2.0)(@rbxts/react-ts@1.0.1):
+    resolution: {integrity: sha512-vcphO7E7pPl/3qmaVquKwnDvAhaPy62wwP0MIUskddpMH3++wk3bZvZq/nXGxlwV+fqQyvhl59yTHBNzik1A8g==}
+    peerDependencies:
+      '@rbxts/flipper': ^2.0.1
+      '@rbxts/react-roblox': '*'
+      '@rbxts/roact': '*'
+    dependencies:
+      '@rbxts/flipper': 2.0.1
+      '@rbxts/react-roblox': 0.2.0
+      '@rbxts/roact': /@rbxts/react-ts@1.0.1
+      '@rbxts/services': 1.5.3
+      '@rbxts/set-timeout': 1.1.2
     dev: false
 
   /@rbxts/pretty-roact-hooks@3.2.1(@rbxts/flipper@2.0.1)(@rbxts/roact-hooked@2.6.2)(@rbxts/roact@1.4.4-ts.0):
@@ -351,6 +464,60 @@ packages:
     resolution: {integrity: sha512-+PPl1xf8dpvU1/3QBxx+zBYoz4iyu/uTtPMLCGu/N4acJ3UaX0y2u6kqbfsGaGokpYW3kRS3iRDhTogO6NbHug==}
     dev: false
 
+  /@rbxts/react-internal@0.2.2:
+    resolution: {integrity: sha512-/34bcOntTzucAwMvo2OtSJT05zfH88kjR0UKyBcADbbZ71KgMKai2Q8ccKKt7IuoPJDzP14dCHd5pXL44M2rkw==}
+    dependencies:
+      '@rbxts/luau-polyfill-internal': 1.2.3-ts.0
+      '@rbxts/shared-internal': 0.2.1
+    dev: false
+
+  /@rbxts/react-reconciler-internal@0.2.1:
+    resolution: {integrity: sha512-+1iF6id3YuhChfJguBFqzDtYvruGFhkLz9Wr8T0ekp7RlGe4l7d7KLUg5l8GRPj9FbmjQFc0UufBHWmKkrJ2qQ==}
+    dependencies:
+      '@rbxts/luau-polyfill-internal': 1.2.3-ts.0
+      '@rbxts/promise-forward': 1.0.5
+      '@rbxts/react-internal': 0.2.2
+      '@rbxts/scheduler-internal': 0.2.1
+      '@rbxts/shared-internal': 0.2.1
+    dev: false
+
+  /@rbxts/react-reflex@0.2.0(@rbxts/react-ts@1.0.1)(@rbxts/reflex@4.3.1):
+    resolution: {integrity: sha512-pPrRpIwl8Qzz7GryoP9KrZCQyJCy6ohjlboFIMhe+DcRtqoO2nV7bboifozE7sq3vK0T7UP7fPjIFmaJzZeJIA==}
+    peerDependencies:
+      '@rbxts/reflex': ^4.0.0
+      '@rbxts/roact': '*'
+    dependencies:
+      '@rbxts/reflex': 4.3.1
+      '@rbxts/roact': /@rbxts/react-ts@1.0.1
+    dev: false
+
+  /@rbxts/react-roblox@0.1.2:
+    resolution: {integrity: sha512-74R0iemEWSgrE8f98JMfdQFSE+VpJTqo91aaZoBbskqHdeWX+kvVxjkiE5nMOkjIfptVHlZvD7P18hOTe2lwog==}
+    dependencies:
+      '@rbxts/luau-polyfill-internal': 1.2.3-ts.0
+      '@rbxts/react-internal': 0.2.2
+      '@rbxts/react-reconciler-internal': 0.2.1
+      '@rbxts/scheduler-internal': 0.2.1
+      '@rbxts/shared-internal': 0.2.1
+    dev: false
+
+  /@rbxts/react-roblox@0.2.0:
+    resolution: {integrity: sha512-HTdJ7HSVfkyH+ow78paMS4aVz4C87mXEDDeDeQxhw17xQOANFl3cnoSKJ8ldmNgjoSMEgh5KacdoxjRGoF8wZg==}
+    dependencies:
+      '@rbxts/luau-polyfill-internal': 1.2.3-ts.0
+      '@rbxts/react-internal': 0.2.2
+      '@rbxts/react-reconciler-internal': 0.2.1
+      '@rbxts/scheduler-internal': 0.2.1
+      '@rbxts/shared-internal': 0.2.1
+    dev: false
+
+  /@rbxts/react-ts@1.0.1:
+    resolution: {integrity: sha512-u/QsFkjWwEbr502xRfCNGjtMfOjqRiVGF5gb3Ox9Z94ymHPXniVsopmT582QpTZLuEcfB5TKvsvpFzFSQ14edg==}
+    dependencies:
+      '@rbxts/react-internal': 0.2.2
+      '@rbxts/roact-compat-internal': 0.3.1
+    dev: false
+
   /@rbxts/reflex@4.3.1:
     resolution: {integrity: sha512-S5MbEpHKeRh9NWhwGJ789WbUsmlAlpQziWaNK4+kz1EpaaQ7uHQMZAuN1DYl4+QkqmOSuPlj04COwmArBGWH1Q==}
     dev: false
@@ -369,6 +536,19 @@ packages:
 
   /@rbxts/ripple@0.7.1:
     resolution: {integrity: sha512-m8oJtsfDl1pJArSxz41AdrLGvC6e4zM/biUHdrsqpfPaouhkxSoAvExYwWV9oduDBRb03U5gyEnRpXUOERqiFA==}
+    dev: false
+
+  /@rbxts/ripple@0.8.1:
+    resolution: {integrity: sha512-3zQznIQcuXKb6Q0jZpKvhYRdWjQ+sMOBQt3KlQ7as4URiiQyXQCBGx7oWupVwJHuWi4CnpfQVkB2VFDWAmH20Q==}
+    dev: false
+
+  /@rbxts/roact-compat-internal@0.3.1:
+    resolution: {integrity: sha512-euje2jF3S83VNMtNvrjDgO3XpMibyIYcstCKsvLfIDASfCArtltwQRnjk3ewq20b2hOfy4wneQ8iXu2Di7J8rw==}
+    dependencies:
+      '@rbxts/luau-polyfill-internal': 1.2.3-ts.0
+      '@rbxts/react-internal': 0.2.2
+      '@rbxts/react-roblox': 0.1.2
+      '@rbxts/shared-internal': 0.2.1
     dev: false
 
   /@rbxts/roact-hooked-plus@1.8.1(@rbxts/roact-hooked@2.6.2)(@rbxts/roact@1.4.4-ts.0):
@@ -419,6 +599,10 @@ packages:
       '@rbxts/types': 1.0.749
     dev: false
 
+  /@rbxts/roact@1.3.0-ts.15:
+    resolution: {integrity: sha512-zjaT4jgJWXulUCORH0AK+uawK1W57nnZLykRU1rKjSL+MWg/wx+EbF7/CVQnrg72xDwujtExaku15vElyjnoIg==}
+    dev: false
+
   /@rbxts/roact@1.4.4-ts.0:
     resolution: {integrity: sha512-gn9mBoGG/Clzgv2kyOvLNVd9dh5t6z+jukC3ITv2HnfPqvf/sMbz/VMaBoiB7t5umuiIe0LjW0ctZrkrS+uTOA==}
     dev: false
@@ -433,6 +617,17 @@ packages:
       '@rbxts/object-utils': 1.0.4
       '@rbxts/roact': 1.4.4-ts.0
       '@rbxts/roact-hooked': 2.6.2(@rbxts/roact@1.4.4-ts.0)
+    dev: false
+
+  /@rbxts/rust-classes@0.12.0:
+    resolution: {integrity: sha512-Ibk532/9tHswqU9AdJlLGDjb3fD+tisI0WzTvzsbFcndcdRfEmpBqXC0JZ+4+lIfSERJmL4zRXZQNN//nJ4rmw==}
+    dev: false
+
+  /@rbxts/scheduler-internal@0.2.1:
+    resolution: {integrity: sha512-9CVi2ZJMH+T4blfDd0t7bScBLWi49eD99eJ3Ie/Cv3WxQ5iYsZLSeSxzut5Yzkb83cYGb/alUGM/gzx0B19KQw==}
+    dependencies:
+      '@rbxts/luau-polyfill-internal': 1.2.3-ts.0
+      '@rbxts/shared-internal': 0.2.1
     dev: false
 
   /@rbxts/services@1.5.3:
@@ -454,6 +649,12 @@ packages:
       '@rbxts/signal': 1.1.1
       '@rbxts/t': 3.1.1
       rbxts-transformer-t-new: 1.1.5
+    dev: false
+
+  /@rbxts/shared-internal@0.2.1:
+    resolution: {integrity: sha512-HWLFesx5u8NTyDMTNXEkskGT6nE5VLaEnnnq852ixiBtdfIdN/sGCgNnkwbHAq9P9cgX52V3EB5GdVeWcwJzkA==}
+    dependencies:
+      '@rbxts/luau-polyfill-internal': 1.2.3-ts.0
     dev: false
 
   /@rbxts/sift@0.0.8:

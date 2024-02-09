@@ -14,61 +14,26 @@ do
 		return self:constructor(...) or self
 	end
 	function RoomAttachment:constructor(tile)
-		self.offsets = {}
 		self.attachmentOffsets = {}
 		self._tile = tile
+		self:calculateOffsets()
 	end
 	function RoomAttachment:calculateOffsets()
-		local _exp = self._tile.originModel:GetDescendants()
-		local _arg0 = function(v)
-			return not v:IsA("Folder") and (not v:IsA("ModuleScript") and not (v.Name == "CenterPoint"))
-		end
-		-- ▼ ReadonlyArray.filter ▼
-		local _newValue = {}
-		local _length = 0
-		for _k, _v in _exp do
-			if _arg0(_v, _k - 1, _exp) == true then
-				_length += 1
-				_newValue[_length] = _v
-			end
-		end
-		-- ▲ ReadonlyArray.filter ▲
-		local descendants = _newValue
 		local centerPoint = self._tile.centerPoint.Position
-		for _, descendant in descendants do
-			local _offsets = self.offsets
-			local _arg0_1 = {
-				part = descendant,
-				offset = getDistance(centerPoint, descendant.Position),
-			}
-			table.insert(_offsets, _arg0_1)
-		end
 		for _, attachment in self._tile.attachmentPoints do
 			local offset = getDistance(centerPoint, attachment.point.Position)
 			local _attachmentOffsets = self.attachmentOffsets
-			local _arg0_1 = {
+			local _arg0 = {
 				part = attachment.part,
 				offset = offset,
 			}
-			table.insert(_attachmentOffsets, _arg0_1)
-		end
-	end
-	function RoomAttachment:applyOffsets()
-		for _, offset in self.offsets do
-			local _position = self._tile.centerPoint.Position
-			local _offset = offset.offset
-			offset.part.Position = _position - _offset
-		end
-		for _, attachment in self.attachmentOffsets do
-			local _position = self._tile.centerPoint.Position
-			local _offset = attachment.offset
-			attachment.part.Position = _position - _offset
+			table.insert(_attachmentOffsets, _arg0)
 		end
 	end
 	function RoomAttachment:attachToPart(part, attachment)
 		local _attachmentPoints = self._tile.attachmentPoints
 		local _arg0 = function(v)
-			return v == attachment
+			return v.part == attachment.part
 		end
 		-- ▼ ReadonlyArray.find ▼
 		local _result
@@ -108,17 +73,12 @@ do
 		local _vector3 = Vector3.new(pos.X, 0, pos.X)
 		local _vector3_1 = Vector3.new(pos.Z, 0, pos.Z)
 		local newPos = _vector3 + _vector3_1
-		print(lookVector * newPos)
-		print(part:GetPivot())
+		print(lookVector)
+		local _fn = center
 		local _exp = part:GetPivot()
 		local _arg0_2 = lookVector * newPos
-		local _vector3_2 = Vector3.new(0, 3, 0)
-		print(_exp - _arg0_2 - _vector3_2)
-		local _fn = center
-		local _exp_1 = part:GetPivot()
-		local _arg0_3 = lookVector * newPos
-		local _vector3_3 = Vector3.new(0, 3, 0)
-		_fn:PivotTo(_exp_1 - _arg0_3 - _vector3_3)
+		local _vector3_2 = Vector3.new(0, 1, 0)
+		_fn:PivotTo(_exp - _arg0_2 - _vector3_2)
 		-- this.applyOffsets();
 		point.part:Destroy()
 	end

@@ -30,7 +30,6 @@ do
 		local parser = TileParser.new(clone)
 		local tileData = parser:getTileData()
 		local attachment = RoomAttachment.new(tileData)
-		attachment:calculateOffsets()
 		local point = getRandom(tileData.attachmentPoints)
 		if point == nil then
 			return nil
@@ -48,7 +47,6 @@ do
 		local parser = TileParser.new(clone)
 		local tileData = parser:getTileData()
 		local attachment = RoomAttachment.new(tileData)
-		attachment:calculateOffsets()
 		local point = getRandom(tileData.attachmentPoints)
 		if point == nil then
 			return nil
