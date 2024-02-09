@@ -31,45 +31,6 @@ do
 		self:calculatePartOffsets()
 	end
 	function Tile:calculatePartOffsets()
-		local centerPoint = (self._model:WaitForChild("centerPoint")).CFrame
-		-- Calculate position and rotation offsets for internal parts
-		local _exp = self._model:GetDescendants()
-		local _arg0 = function(v)
-			return not (v.Name == "centerPoint") and (v.Parent ~= self._model:WaitForChild("apoints") and v:IsA("Part"))
-		end
-		-- ▼ ReadonlyArray.filter ▼
-		local _newValue = {}
-		local _length = 0
-		for _k, _v in _exp do
-			if _arg0(_v, _k - 1, _exp) == true then
-				_length += 1
-				_newValue[_length] = _v
-			end
-		end
-		-- ▲ ReadonlyArray.filter ▲
-		local internalParts = _newValue
-		for _, part in internalParts do
-			local offset = centerPoint:ToObjectSpace(part.CFrame)
-			local _internalParts = self.calculatedOffsets.internalParts
-			local _arg0_1 = {
-				part = part,
-				position = offset.Position,
-				rotation = { offset.Rotation:ToEulerAnglesXYZ() },
-			}
-			table.insert(_internalParts, _arg0_1)
-		end
-		-- Calculate position and rotation offsets for attachment points
-		local attachmentPoints = self._model:WaitForChild("apoints"):GetChildren()
-		for _, attachment in attachmentPoints do
-			local offset = centerPoint:ToObjectSpace(attachment.CFrame)
-			local _attachments = self.calculatedOffsets.attachments
-			local _arg0_1 = {
-				part = attachment,
-				position = offset.Position,
-				rotation = { offset.Rotation:ToEulerAnglesXYZ() },
-			}
-			table.insert(_attachments, _arg0_1)
-		end
 	end
 	function Tile:applyOffsets()
 		local centerPoint = (self._model:WaitForChild("centerPoint")).Position

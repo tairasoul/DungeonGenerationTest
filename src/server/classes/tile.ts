@@ -1,16 +1,10 @@
 import { AttachmentPoint } from "server/interfaces/room";
 import { OffsetInfo, TileAttachmentInfo } from "server/interfaces/tile";
-import { cframeFromComponents, eulerToVector } from "shared/utils";
+import { CFrameComponentsAdd, CFrameComponentsSub } from "shared/utils";
 
 export default class Tile {
     _model: Model;
-    private calculatedOffsets: {
-        internalParts: OffsetInfo[],
-        attachments: OffsetInfo[]
-    } = {
-        internalParts: [],
-        attachments: []
-    };
+    private calculatedOffsets: OffsetInfo[] = [];
     public attachmentPoints: AttachmentPoint[] = [];
     constructor(model: Model) {
         this._model = model;
@@ -28,7 +22,23 @@ export default class Tile {
     }
 
     calculatePartOffsets() {
-        const centerPoint = (this._model.WaitForChild("centerPoint") as Part).CFrame;
+        const attachments = this._model.GetDescendants().filter((v) => v.IsA("Part") && v.Name === "Doorway");
+        const parts = this._model.GetDescendants().filter((v) => v.IsA("Part"));
+        for (const attachment of attachments as Part[]) {
+            for (const part of parts as Part[]) {
+                // Get the difference in CFrames between attachment and part
+                const offset = CFrameComponentsSub(attachment.CFrame.GetComponents(), part.CFrame.GetComponents());
+                print(offset);
+                this.calculatedOffsets.push(
+                    {
+                        part,
+                        CFrameOffset: offset,
+                        from: this.attachmentPoints.find((v) => v.part === attachment) as AttachmentPoint
+                    }
+                )
+            }
+        }
+        /*const centerPoint = (this._model.WaitForChild("centerPoint") as Part).CFrame;
     
         // Calculate position and rotation offsets for internal parts
         const internalParts = this._model.GetDescendants().filter((v) => !(v.Name === "centerPoint") && v.Parent !== this._model.WaitForChild("apoints") && v.IsA("Part"));
@@ -50,11 +60,18 @@ export default class Tile {
                 position: offset.Position,
                 rotation: offset.Rotation.ToEulerAnglesXYZ()
             });
-        }
+        }*/
     }
 
-    applyOffsets() {
-        const centerPoint = (this._model.WaitForChild("centerPoint") as Part).Position;
+    applyOffsets(attachment: AttachmentPoint) {
+        const offsetsForAttachment = this.calculatedOffsets.filter((v) => v.from === attachment);
+        for (const offset of offsetsForAttachment) {
+            if (offset.part === attachment.part) continue; // Skip over attachment part
+            // Add offset onto attachment cframe
+            const newPos = CFrameComponentsAdd(offset.from.part.CFrame.GetComponents(), offset.CFrameOffset.GetComponents());
+            offset.part.CFrame = newPos;
+        }
+        /*const centerPoint = (this._model.WaitForChild("centerPoint") as Part).Position;
     
         // Apply position and rotation offsets for internal parts
         for (const offset of this.calculatedOffsets.internalParts) {
@@ -64,7 +81,7 @@ export default class Tile {
         // Apply position and rotation offsets for attachment points
         for (const offset of this.calculatedOffsets.attachments) {
             offset.part.Position = centerPoint.add(offset.position);
-        }
+        }*/
     }
 
     attachTile(tile: Tile, info: TileAttachmentInfo) {
@@ -74,8 +91,14 @@ export default class Tile {
         if (otherTile === undefined) throw `Could not find attachment point ${info.attachmentPoint} on tile ${tile._model.Name}`;
         if (thisAttach.hasAttachment) throw `Attachment point ${info.thisTileAttachment} already has attachment on tile ${this._model.Name}`;
         if (otherTile.hasAttachment) throw `Attachment point ${info.attachmentPoint} already has attachment on tile ${tile._model.Name}`;
+
+        const tileOffset = tile.calculatedOffsets.find((v) => v.part === otherTile.part) as OffsetInfo;
+
+        tileOffset.part.CFrame = thisAttach.part.CFrame;
+
+        tile.applyOffsets(otherTile);
         
-        const thisOffset = this.calculatedOffsets.attachments.find((v) => v.part === thisAttach.part);
+        /*const thisOffset = this.calculatedOffsets.attachments.find((v) => v.part === thisAttach.part);
         const otherOffset = tile.calculatedOffsets.attachments.find((v) => v.part === otherTile.part);
         if (!thisOffset || !otherOffset) {
             throw "Offsets not found for attachment points";
@@ -88,7 +111,7 @@ export default class Tile {
         //otherCenter.PivotTo();
         
         // Apply offsets and update attachment points
-        //tile.applyOffsets();
+        //tile.applyOffsets();*/
         (this.attachmentPoints.find((v) => v === thisAttach) as AttachmentPoint).hasAttachment = true;
         (tile.attachmentPoints.find((v) => v === otherTile) as AttachmentPoint).hasAttachment = true;
     }
@@ -98,6 +121,6 @@ export default class Tile {
         point.Position = position;
         if (rotation)
             point.Rotation = rotation;
-        this.applyOffsets();
+        //this.applyOffsets();
     }
 }

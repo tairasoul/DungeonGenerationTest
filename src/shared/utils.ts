@@ -25,3 +25,19 @@ export function cframeFromComponents(xyz: Vector3, components: LuaTuple<[number,
     const cframe = new CFrame(xyz.X, xyz.Y, xyz.Z, components[3], components[4], components[5], components[6], components[7], components[8], components[9], components[10], components[11])
     return cframe;
 }
+
+export function CFrameComponentsSub(components1: LuaTuple<[number, number, number, number, number, number, number, number, number, number, number, number]>, components2: LuaTuple<[number, number, number, number, number, number, number, number, number, number, number, number]>) {
+    const newOffset: number[] = [];
+    for (let i = 0; i < components1.length; i++) {
+        newOffset[i] = components1[i] - components2[i];
+    }
+    return new CFrame(newOffset[0], newOffset[1], newOffset[2], newOffset[3], newOffset[4], newOffset[5], newOffset[6], newOffset[7], newOffset[8], newOffset[9], newOffset[10], newOffset[11])
+}
+
+export function CFrameComponentsAdd(components1: LuaTuple<[number, number, number, number, number, number, number, number, number, number, number, number]>, components2: LuaTuple<[number, number, number, number, number, number, number, number, number, number, number, number]>) {
+    const newOffset: number[] = [];
+    for (let i = 0; i < components1.length; i++) {
+        newOffset[i] = components1[i] + components2[i];
+    }
+    return new CFrame(newOffset[0], newOffset[1], newOffset[2], newOffset[3], newOffset[4], newOffset[5], newOffset[6], newOffset[7], newOffset[8], newOffset[9], newOffset[10], newOffset[11])
+}

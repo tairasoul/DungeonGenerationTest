@@ -41,10 +41,30 @@ local function cframeFromComponents(xyz, components)
 	local cframe = CFrame.new(xyz.X, xyz.Y, xyz.Z, components[4], components[5], components[6], components[7], components[8], components[9], components[10], components[11], components[12])
 	return cframe
 end
+local function CFRameComponentOffset(components1, components2)
+	local newOffset = {}
+	do
+		local i = 0
+		local _shouldIncrement = false
+		while true do
+			if _shouldIncrement then
+				i += 1
+			else
+				_shouldIncrement = true
+			end
+			if not (i < components1.length) then
+				break
+			end
+			newOffset[i + 1] = components1[i + 1] - components2[i + 1]
+		end
+	end
+	return CFrame.new(newOffset[1], newOffset[2], newOffset[3], newOffset[4], newOffset[5], newOffset[6], newOffset[7], newOffset[8], newOffset[9], newOffset[10], newOffset[11], newOffset[12])
+end
 return {
 	getRandom = getRandom,
 	getDistance = getDistance,
 	guid = guid,
 	eulerToVector = eulerToVector,
 	cframeFromComponents = cframeFromComponents,
+	CFRameComponentOffset = CFRameComponentOffset,
 }

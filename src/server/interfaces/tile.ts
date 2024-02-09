@@ -7,6 +7,6 @@ export type TileAttachmentInfo = {
 
 export type OffsetInfo = {
     part: Part;
-    position: Vector3;
-    rotation: LuaTuple<[number, number, number]>;
+    CFrameOffset: CFrame
+    from: AttachmentPoint;
 }
