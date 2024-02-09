@@ -1,11 +1,10 @@
 import { AttachmentPoint } from "server/interfaces/room";
-import { OffsetInfo, TileAttachmentInfo } from "server/interfaces/tile";
+import { TileAttachmentInfo } from "server/interfaces/tile";
 import TileParser from "./tileParser";
 import RoomAttachment from "./room_attachment";
 
 export default class Tile {
     _model: Model;
-    private calculatedOffsets: OffsetInfo[] = [];
     public attachmentPoints: AttachmentPoint[] = [];
     constructor(model: Model) {
         this._model = model;
@@ -26,6 +25,7 @@ export default class Tile {
         const tInfo = parser.getTileData();
         const attach = new RoomAttachment(tInfo);
         attach.attachToPart(info.thisTileAttachment.part, info.attachmentPoint);
+        (this.attachmentPoints.find((v) => v === info.thisTileAttachment) as AttachmentPoint).hasAttachment = true;
         /*const thisAttach = this.attachmentPoints.find((v) => v === info.thisTileAttachment);
         const otherTile = tile.attachmentPoints.find((v) => v === info.attachmentPoint);
         if (thisAttach === undefined) throw `Could not find attachment point ${info.thisTileAttachment} on tile ${this._model.Name}`;

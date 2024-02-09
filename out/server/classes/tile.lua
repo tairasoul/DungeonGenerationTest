@@ -15,7 +15,6 @@ do
 		return self:constructor(...) or self
 	end
 	function Tile:constructor(model)
-		self.calculatedOffsets = {}
 		self.attachmentPoints = {}
 		self._model = model
 		-- const points = this._model.WaitForChild("apoints") as Folder;
@@ -48,6 +47,20 @@ do
 		local tInfo = parser:getTileData()
 		local attach = RoomAttachment.new(tInfo)
 		attach:attachToPart(info.thisTileAttachment.part, info.attachmentPoint)
+		local _attachmentPoints = self.attachmentPoints
+		local _arg0 = function(v)
+			return v == info.thisTileAttachment
+		end
+		-- ▼ ReadonlyArray.find ▼
+		local _result
+		for _i, _v in _attachmentPoints do
+			if _arg0(_v, _i - 1, _attachmentPoints) == true then
+				_result = _v
+				break
+			end
+		end
+		-- ▲ ReadonlyArray.find ▲
+		_result.hasAttachment = true
 		--[[
 			const thisAttach = this.attachmentPoints.find((v) => v === info.thisTileAttachment);
 			const otherTile = tile.attachmentPoints.find((v) => v === info.attachmentPoint);
