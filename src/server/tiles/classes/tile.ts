@@ -1,6 +1,6 @@
 import TileParser from "./tileParser";
 import RoomAttachment from "./room_attachment";
-import { RoomTypes } from "../interfaces/room";
+import { RoomInfo } from "../interfaces/room";
 import { Tile as parserData } from "../interfaces/parser";
 
 export default class Tile {
@@ -8,8 +8,10 @@ export default class Tile {
     public attachmentPoints: Part[] = [];
     attach: Part;
     TileData: parserData;
-    constructor(model: Model) {
+    info: RoomInfo
+    constructor(model: Model, info: RoomInfo) {
         this._model = model;
+        this.info = info;
         const parser = new TileParser(this._model);
         this.TileData = parser.getTileData();
         //const points = this._model.WaitForChild("apoints") as Folder;

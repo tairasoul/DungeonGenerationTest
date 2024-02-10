@@ -8,7 +8,6 @@ local TileRandomizer = TS.import(script, game:GetService("ServerScriptService"),
 local getRandom = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getRandom
 local tileStorage = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "vars", "folders").tiles
 local make = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "make")
-local TileParser = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tileParser").default
 local folder = ServerStorage:WaitForChild("tiles")
 local randomizer = RandomTileAttacher.new(folder)
 local tiles = TileRandomizer.new(folder)
@@ -16,15 +15,18 @@ local tStorage = {}
 remotes.generateRoom:connect(function(player, roomT)
 	print("received request to generate tile, generating")
 	local character = player.Character or (player.CharacterAdded:Wait())
-	local _tile = Tile.new(randomizer:attachTileToPoint(character:WaitForChild("HumanoidRootPart"), roomT))
+	local tile = randomizer:attachTileToPoint(character:WaitForChild("HumanoidRootPart"), roomT)
+	local _tile = Tile.new(tile.roomModel, tile)
 	table.insert(tStorage, _tile)
 end)
-local allowedTilesFilter = { "Room" }
+-- todo:
+-- make it so this can't generate anywhere behind the initial tile
+-- otherwise it has a chance to have the first tile also be connected to a tile behind it
 remotes.generateRoomWithDepth:connect(function(player, depth)
 	print("received request to generate with depth " .. (tostring(depth) .. ", generating"))
 	local character = player.Character or (player.CharacterAdded:Wait())
 	local baseModel = randomizer:attachRandomTile(character:WaitForChild("Torso"))
-	local tile = Tile.new(baseModel)
+	local tile = Tile.new(baseModel.roomModel, baseModel)
 	local _tile = tile
 	table.insert(tStorage, _tile)
 	do
@@ -39,22 +41,40 @@ remotes.generateRoomWithDepth:connect(function(player, depth)
 			if not (i < depth) then
 				break
 			end
-			local parser = TileParser.new(tile._model)
-			local info = parser:getTileData()
-			local randomized = tiles:getTileOfTypes(info.types)
+			local randomized = tiles:getTileOfTypes(tile.TileData.types)
 			if randomized == nil then
 				continue
 			end
 			local clone = randomized.roomModel:Clone()
 			clone.Parent = tileStorage
-			local tc = Tile.new(clone)
+			local tc = Tile.new(clone, randomized)
 			local randomThis = getRandom(tile.attachmentPoints, function(inst)
 				return not inst:FindFirstChild("HasAttachment")
 			end)
 			if randomThis == nil then
+				if tc.info.roomType == "Room" then
+					clone:ClearAllChildren()
+					clone.Parent = nil
+					local random = tiles:getTileOfTypes({ "Hallway" })
+					if random == nil then
+						continue
+					end
+					local clone1 = random.roomModel:Clone()
+					clone1.Parent = tileStorage
+					tc = Tile.new(clone1, random)
+				else
+					clone:ClearAllChildren()
+					clone.Parent = nil
+					local random = tiles:getTileOfTypes({ "Room" })
+					if random == nil then
+						continue
+					end
+					local clone1 = random.roomModel:Clone()
+					clone1.Parent = tileStorage
+					tc = Tile.new(clone1, random)
+				end
 				local _arg0 = function(v)
-					local _name = v._model.Name
-					return table.find(allowedTilesFilter, _name) ~= nil
+					return v.info.roomType ~= tc.info.roomType
 				end
 				-- ▼ ReadonlyArray.filter ▼
 				local _newValue = {}
@@ -103,7 +123,8 @@ remotes.generateRoomWithDepth:connect(function(player, depth)
 			end
 			if tile:attachTile(tc, randomThis) then
 				tile = tc
-				table.insert(tStorage, tc)
+				local _tile_1 = tile
+				table.insert(tStorage, _tile_1)
 			else
 				clone:ClearAllChildren()
 				clone.Parent = nil

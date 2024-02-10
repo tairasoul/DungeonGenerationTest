@@ -30,7 +30,10 @@ do
 		local tileData = parser:getTileData()
 		local attachment = RoomAttachment.new(tileData)
 		attachment:attachToPart(part)
-		return clone
+		return {
+			roomType = tile.roomType,
+			roomModel = clone,
+		}
 	end
 	function RandomTileAttacher:attachRandomTile(part)
 		local tile = self.tileRandomiser:getRandomTile()
@@ -43,7 +46,10 @@ do
 		local tileData = parser:getTileData()
 		local attachment = RoomAttachment.new(tileData)
 		attachment:attachToPart(part)
-		return clone
+		return {
+			roomType = tile.roomType,
+			roomModel = clone,
+		}
 	end
 end
 return {

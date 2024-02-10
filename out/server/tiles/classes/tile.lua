@@ -14,9 +14,10 @@ do
 		local self = setmetatable({}, Tile)
 		return self:constructor(...) or self
 	end
-	function Tile:constructor(model)
+	function Tile:constructor(model, info)
 		self.attachmentPoints = {}
 		self._model = model
+		self.info = info
 		local parser = TileParser.new(self._model)
 		self.TileData = parser:getTileData()
 		-- const points = this._model.WaitForChild("apoints") as Folder;

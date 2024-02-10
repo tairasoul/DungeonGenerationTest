@@ -1,4 +1,4 @@
-import { RoomTypes } from "server/tiles/interfaces/room";
+import { RoomInfo, RoomTypes } from "server/tiles/interfaces/room";
 import TileRandomizer from "./randomised.tiles";
 import TileParser from "./tileParser";
 import RoomAttachment from "./room_attachment";
@@ -10,7 +10,7 @@ export default class RandomTileAttacher {
         this.tileRandomiser = new TileRandomizer(folder);
     }
 
-    attachTileToPoint(part: Part, tileType: RoomTypes) {
+    attachTileToPoint(part: Part, tileType: RoomTypes): RoomInfo | undefined {
         const tile = this.tileRandomiser.getTileOfType(tileType);
         if (tile === undefined) return;
         const clone = tile.roomModel.Clone();
@@ -19,10 +19,13 @@ export default class RandomTileAttacher {
         const tileData = parser.getTileData();
         const attachment = new RoomAttachment(tileData);
         attachment.attachToPart(part);
-        return clone;
+        return {
+            roomType: tile.roomType,
+            roomModel: clone
+        };
     }
 
-    attachRandomTile(part: Part) {
+    attachRandomTile(part: Part): RoomInfo | undefined {
         const tile = this.tileRandomiser.getRandomTile();
         if (tile === undefined) return;
         const clone = tile.roomModel.Clone();
@@ -31,6 +34,9 @@ export default class RandomTileAttacher {
         const tileData = parser.getTileData();
         const attachment = new RoomAttachment(tileData);
         attachment.attachToPart(part);
-        return clone;
+        return {
+            roomType: tile.roomType,
+            roomModel: clone
+        };
     }
 }
