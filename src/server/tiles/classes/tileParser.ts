@@ -1,5 +1,5 @@
-import { Tile } from "server/interfaces/parser";
-import { AttachmentPoint, RoomTypes } from "server/interfaces/room";
+import { Tile } from "server/tiles/interfaces/parser";
+import { AttachmentPoint, RoomTypes } from "server/tiles/interfaces/room";
 
 export default class TileParser {
     private _model: Model;

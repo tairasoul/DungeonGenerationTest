@@ -1,5 +1,5 @@
-import { AttachmentPoint } from "server/interfaces/room";
-import { TileAttachmentInfo } from "server/interfaces/tile";
+import { AttachmentPoint } from "server/tiles/interfaces/room";
+import { TileAttachmentInfo } from "server/tiles/interfaces/tile";
 import TileParser from "./tileParser";
 import RoomAttachment from "./room_attachment";
 

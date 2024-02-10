@@ -1,4 +1,4 @@
-import { RoomTypes } from "server/interfaces/room";
+import { RoomTypes } from "server/tiles/interfaces/room";
 import TileRandomizer from "./randomised.tiles";
 import TileParser from "./tileParser";
 import RoomAttachment from "./room_attachment";

@@ -1,7 +1,7 @@
-import { Tile } from "server/interfaces/parser";
-import { PartOffset } from "server/interfaces/attachment";
+import { Tile } from "server/tiles/interfaces/parser";
+import { PartOffset } from "server/tiles/interfaces/attachment";
 import { getDistance } from "shared/utils";
-import { AttachmentPoint } from "server/interfaces/room";
+import { AttachmentPoint } from "server/tiles/interfaces/room";
 
 export default class RoomAttachment {
     _tile: Tile;

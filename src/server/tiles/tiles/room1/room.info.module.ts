@@ -1,5 +1,5 @@
 import { ServerStorage } from "@rbxts/services";
-import { RoomInfo } from "server/interfaces/room";
+import { RoomInfo } from "server/tiles/interfaces/room";
 
 const info: RoomInfo = {
     roomType: "Room",
