@@ -1,10 +1,9 @@
-import { ServerScriptService, Workspace } from "@rbxts/services";
+import { ServerScriptService } from "@rbxts/services";
 import { remotes } from "shared/remotes";
 import RandomTileAttacher from "./classes/random_tile_attachment";
 import Tile from "./classes/tile";
 import TileRandomizer from "./classes/randomised.tiles";
 import { getRandom } from "shared/utils";
-import { TileAttachmentInfo } from "./interfaces/tile";
 import { tiles as tileStorage } from "shared/vars/folders";
 import make from "@rbxts/make";
 
@@ -19,7 +18,7 @@ const tStorage: Tile[] = [];
 remotes.generateRoom.connect((player, roomT) => {
     print("received request to generate tile, generating");
     const character = player.Character ?? player.CharacterAdded.Wait()[0];
-    tStorage.push(new Tile(randomizer.attachTileToPoint(character.WaitForChild("Torso") as Part, roomT) as Model));
+    tStorage.push(new Tile(randomizer.attachTileToPoint(character.WaitForChild("HumanoidRootPart") as Part, roomT) as Model));
 });
 
 remotes.generateRoomWithDepth.connect((player, depth) => {
@@ -34,15 +33,9 @@ remotes.generateRoomWithDepth.connect((player, depth) => {
         const clone = randomized.Clone();
         clone.Parent = tileStorage;
         const tc = new Tile(clone);
-        tStorage.push(tc);
-        const randomThis = getRandom(tile.attachmentPoints, (inst) => !inst.hasAttachment);
-        const randomOther = getRandom(tc.attachmentPoints, (inst) => !inst.hasAttachment)
-        if (randomThis === undefined || randomOther === undefined) continue;
-        const points: TileAttachmentInfo = {
-            thisTileAttachment: randomThis,
-            attachmentPoint: randomOther
-        }
-        tile.attachTile(tc, points);
+        const randomThis = getRandom(tile.attachmentPoints, (inst) => !inst.FindFirstChild("HasAttachment"));
+        if (randomThis === undefined) continue;
+        tile.attachTile(tc, randomThis);
         tile = tc;
     }
 })

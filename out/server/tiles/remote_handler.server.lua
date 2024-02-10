@@ -15,7 +15,7 @@ local tStorage = {}
 remotes.generateRoom:connect(function(player, roomT)
 	print("received request to generate tile, generating")
 	local character = player.Character or (player.CharacterAdded:Wait())
-	local _tile = Tile.new(randomizer:attachTileToPoint(character:WaitForChild("Torso"), roomT))
+	local _tile = Tile.new(randomizer:attachTileToPoint(character:WaitForChild("HumanoidRootPart"), roomT))
 	table.insert(tStorage, _tile)
 end)
 remotes.generateRoomWithDepth:connect(function(player, depth)
@@ -44,21 +44,13 @@ remotes.generateRoomWithDepth:connect(function(player, depth)
 			local clone = randomized:Clone()
 			clone.Parent = tileStorage
 			local tc = Tile.new(clone)
-			table.insert(tStorage, tc)
 			local randomThis = getRandom(tile.attachmentPoints, function(inst)
-				return not inst.hasAttachment
+				return not inst:FindFirstChild("HasAttachment")
 			end)
-			local randomOther = getRandom(tc.attachmentPoints, function(inst)
-				return not inst.hasAttachment
-			end)
-			if randomThis == nil or randomOther == nil then
+			if randomThis == nil then
 				continue
 			end
-			local points = {
-				thisTileAttachment = randomThis,
-				attachmentPoint = randomOther,
-			}
-			tile:attachTile(tc, points)
+			tile:attachTile(tc, randomThis)
 			tile = tc
 		end
 	end

@@ -1,8 +1,9 @@
-import { AttachmentPoint, RoomTypes } from "./room"
+import { RoomTypes } from "./room"
 
 export type Tile = {
-    attachmentPoints: AttachmentPoint[];
+    attachmentPoint: Part;
     types: RoomTypes[];
     originModel: Model;
     centerPoint: Part;
+    validPoints: Part[];
 }

@@ -32,18 +32,14 @@ do
 		local children = _newValue
 		local roomInfo = require(self._model:FindFirstChild("room.info"))
 		local tileData = {
-			attachmentPoints = {},
+			attachmentPoint = self._model:WaitForChild("AttachmentPoint"),
 			types = roomInfo.types,
 			originModel = self._model,
 			centerPoint = self._model:WaitForChild("centerPoint"),
+			validPoints = {},
 		}
 		for _, child in children do
-			local attachment = {
-				part = child,
-				point = child.CFrame,
-				hasAttachment = false,
-			}
-			table.insert(tileData.attachmentPoints, attachment)
+			table.insert(tileData.validPoints, child)
 		end
 		return tileData
 	end

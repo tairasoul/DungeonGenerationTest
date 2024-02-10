@@ -3,7 +3,6 @@ local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_incl
 local TileRandomizer = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "randomised.tiles").default
 local TileParser = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tileParser").default
 local RoomAttachment = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "room_attachment").default
-local getRandom = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getRandom
 local tiles = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "vars", "folders").tiles
 local RandomTileAttacher
 do
@@ -30,11 +29,7 @@ do
 		local parser = TileParser.new(clone)
 		local tileData = parser:getTileData()
 		local attachment = RoomAttachment.new(tileData)
-		local point = getRandom(tileData.attachmentPoints)
-		if point == nil then
-			return nil
-		end
-		attachment:attachToPart(part, point)
+		attachment:attachToPart(part)
 		return clone
 	end
 	function RandomTileAttacher:attachRandomTile(part)
@@ -47,11 +42,7 @@ do
 		local parser = TileParser.new(clone)
 		local tileData = parser:getTileData()
 		local attachment = RoomAttachment.new(tileData)
-		local point = getRandom(tileData.attachmentPoints)
-		if point == nil then
-			return nil
-		end
-		attachment:attachToPart(part, point)
+		attachment:attachToPart(part)
 		return clone
 	end
 end

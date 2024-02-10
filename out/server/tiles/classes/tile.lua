@@ -18,6 +18,7 @@ do
 		self.attachmentPoints = {}
 		self._model = model
 		-- const points = this._model.WaitForChild("apoints") as Folder;
+		self.attach = model:WaitForChild("AttachmentPoint")
 		local _exp = self._model:GetDescendants()
 		local _arg0 = function(v)
 			return v:IsA("Part") and v.Name == "Doorway"
@@ -33,34 +34,14 @@ do
 		end
 		-- ▲ ReadonlyArray.filter ▲
 		for _, child in _newValue do
-			local _attachmentPoints = self.attachmentPoints
-			local _arg0_1 = {
-				part = child,
-				point = child.CFrame,
-				hasAttachment = false,
-			}
-			table.insert(_attachmentPoints, _arg0_1)
+			table.insert(self.attachmentPoints, child)
 		end
 	end
-	function Tile:attachTile(tile, info)
+	function Tile:attachTile(tile, point)
 		local parser = TileParser.new(tile._model)
 		local tInfo = parser:getTileData()
 		local attach = RoomAttachment.new(tInfo)
-		attach:attachToPart(info.thisTileAttachment.part, info.attachmentPoint)
-		local _attachmentPoints = self.attachmentPoints
-		local _arg0 = function(v)
-			return v == info.thisTileAttachment
-		end
-		-- ▼ ReadonlyArray.find ▼
-		local _result
-		for _i, _v in _attachmentPoints do
-			if _arg0(_v, _i - 1, _attachmentPoints) == true then
-				_result = _v
-				break
-			end
-		end
-		-- ▲ ReadonlyArray.find ▲
-		_result.hasAttachment = true
+		attach:attachToPart(point)
 		--[[
 			const thisAttach = this.attachmentPoints.find((v) => v === info.thisTileAttachment);
 			const otherTile = tile.attachmentPoints.find((v) => v === info.attachmentPoint);

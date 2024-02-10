@@ -1,31 +1,24 @@
-import { AttachmentPoint } from "server/tiles/interfaces/room";
-import { TileAttachmentInfo } from "server/tiles/interfaces/tile";
 import TileParser from "./tileParser";
 import RoomAttachment from "./room_attachment";
 
 export default class Tile {
     _model: Model;
-    public attachmentPoints: AttachmentPoint[] = [];
+    public attachmentPoints: Part[] = [];
+    attach: Part;
     constructor(model: Model) {
         this._model = model;
         //const points = this._model.WaitForChild("apoints") as Folder;
+        this.attach = model.WaitForChild("AttachmentPoint") as Part;
         for (const child of this._model.GetDescendants().filter((v) => v.IsA("Part") && v.Name === "Doorway") as Part[]) {
-            this.attachmentPoints.push(
-                {
-                    part: child,
-                    point: child.CFrame,
-                    hasAttachment: false
-                }
-            )
+            this.attachmentPoints.push(child)
         }
     }
 
-    attachTile(tile: Tile, info: TileAttachmentInfo) {
+    attachTile(tile: Tile, point: Part) {
         const parser = new TileParser(tile._model);
         const tInfo = parser.getTileData();
         const attach = new RoomAttachment(tInfo);
-        attach.attachToPart(info.thisTileAttachment.part, info.attachmentPoint);
-        (this.attachmentPoints.find((v) => v === info.thisTileAttachment) as AttachmentPoint).hasAttachment = true;
+        attach.attachToPart(point);
         /*const thisAttach = this.attachmentPoints.find((v) => v === info.thisTileAttachment);
         const otherTile = tile.attachmentPoints.find((v) => v === info.attachmentPoint);
         if (thisAttach === undefined) throw `Could not find attachment point ${info.thisTileAttachment} on tile ${this._model.Name}`;

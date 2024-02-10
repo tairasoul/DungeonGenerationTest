@@ -1,5 +1,5 @@
 import { Tile } from "server/tiles/interfaces/parser";
-import { AttachmentPoint, RoomTypes } from "server/tiles/interfaces/room";
+import { RoomTypes } from "server/tiles/interfaces/room";
 
 export default class TileParser {
     private _model: Model;
@@ -13,18 +13,14 @@ export default class TileParser {
             "types": RoomTypes[]
         }
         const tileData: Tile = {
-            attachmentPoints: [],
+            attachmentPoint: this._model.WaitForChild("AttachmentPoint") as Part,
             types: roomInfo.types,
             originModel: this._model,
-            centerPoint: this._model.WaitForChild("centerPoint") as Part
+            centerPoint: this._model.WaitForChild("centerPoint") as Part,
+            validPoints: []
         }
         for (const child of children as Part[]) {
-            const attachment: AttachmentPoint = {
-                part: child,
-                point: child.CFrame,
-                hasAttachment: false
-            }
-            tileData.attachmentPoints.push(attachment);
+            tileData.validPoints.push(child);
         }
         return tileData;
     }
