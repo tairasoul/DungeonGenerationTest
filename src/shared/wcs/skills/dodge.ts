@@ -6,17 +6,24 @@ import healthRegistry from "shared/registries/healthSystem";
 export class Dodge extends Skill {
     protected OnStartServer() {
         const characterModel = this.Character.Instance as Model;
-        const primary = characterModel.WaitForChild("HumanoidRootPart") as BasePart;
         const humanoid = characterModel.WaitForChild("Humanoid") as Humanoid;
         const system = healthRegistry.addHumanoid(humanoid);
         system.canTakeDamage = false;
+        task.wait(0.4);
+        system.canTakeDamage = true;
+        this.ApplyCooldown(1);
+    }
+
+    protected OnStartClient(StarterParams: void) {
+        const characterModel = this.Character.Instance as Model;
+        const primary = characterModel.WaitForChild("HumanoidRootPart") as BasePart;
         primary.Anchored = true;
         const lookVector = primary.CFrame.LookVector;
         const params = new RaycastParams();
         params.FilterType = Enum.RaycastFilterType.Exclude;
         params.FilterDescendantsInstances = characterModel.GetDescendants();
         let distance = new Vector3(-12, 0, -12);
-        const raycastResult = Workspace.Blockcast(characterModel.GetPivot(), characterModel.GetBoundingBox()[1], lookVector.mul(distance), params);
+        const raycastResult = Workspace.Raycast(characterModel.GetPivot().Position, lookVector.mul(distance), params);
         if (raycastResult !== undefined) {
             distance = new Vector3(-raycastResult.Distance, 0, -raycastResult.Distance);
         }
@@ -28,10 +35,6 @@ export class Dodge extends Skill {
 
         tween.Completed.Once(() => { 
             primary.Anchored = false
-            task.wait(0.1);
-            system.canTakeDamage = true;
         });
-
-        this.ApplyCooldown(1);
     }
 }

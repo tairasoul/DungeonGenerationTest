@@ -25,11 +25,43 @@ do
 		super.constructor(self, ...)
 	end
 	function Dodge:OnStartServer()
+		--[[
+			const characterModel = this.Character.Instance as Model;
+			const primary = characterModel.WaitForChild("HumanoidRootPart") as BasePart;
+			const humanoid = characterModel.WaitForChild("Humanoid") as Humanoid;
+			const system = healthRegistry.addHumanoid(humanoid);
+			system.canTakeDamage = false;
+			primary.Anchored = true;
+			const lookVector = primary.CFrame.LookVector;
+			const params = new RaycastParams();
+			params.FilterType = Enum.RaycastFilterType.Exclude;
+			params.FilterDescendantsInstances = characterModel.GetDescendants();
+			let distance = new Vector3(-12, 0, -12);
+			const raycastResult = Workspace.Raycast(characterModel.GetPivot().Position, lookVector.mul(distance), params);
+			if (raycastResult !== undefined) {
+			distance = new Vector3(-raycastResult.Distance, 0, -raycastResult.Distance);
+			}
+			const tweenI = new TweenInfo(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out);
+			const tween = TweenService.Create(primary, tweenI, {CFrame: primary.CFrame.add(lookVector.mul(distance))});
+			tween.Play();
+			tween.Completed.Once(() => {
+			primary.Anchored = false
+			task.wait(0.1);
+			system.canTakeDamage = true;
+			});
+			this.ApplyCooldown(1);
+		]]
 		local characterModel = self.Character.Instance
-		local primary = characterModel:WaitForChild("HumanoidRootPart")
 		local humanoid = characterModel:WaitForChild("Humanoid")
 		local system = healthRegistry:addHumanoid(humanoid)
 		system.canTakeDamage = false
+		task.wait(0.4)
+		system.canTakeDamage = true
+		self:ApplyCooldown(1)
+	end
+	function Dodge:OnStartClient(StarterParams)
+		local characterModel = self.Character.Instance
+		local primary = characterModel:WaitForChild("HumanoidRootPart")
 		primary.Anchored = true
 		local lookVector = primary.CFrame.LookVector
 		local params = RaycastParams.new()
@@ -37,10 +69,9 @@ do
 		params.FilterDescendantsInstances = characterModel:GetDescendants()
 		local distance = Vector3.new(-12, 0, -12)
 		local _fn = Workspace
-		local _exp = characterModel:GetPivot()
-		local _exp_1 = (select(2, characterModel:GetBoundingBox()))
+		local _exp = characterModel:GetPivot().Position
 		local _distance = distance
-		local raycastResult = _fn:Blockcast(_exp, _exp_1, lookVector * _distance, params)
+		local raycastResult = _fn:Raycast(_exp, lookVector * _distance, params)
 		if raycastResult ~= nil then
 			distance = Vector3.new(-raycastResult.Distance, 0, -raycastResult.Distance)
 		end
@@ -56,10 +87,7 @@ do
 		tween:Play()
 		tween.Completed:Once(function()
 			primary.Anchored = false
-			task.wait(0.1)
-			system.canTakeDamage = true
 		end)
-		self:ApplyCooldown(1)
 	end
 	Dodge = SkillDecorator(Dodge) or Dodge
 end
