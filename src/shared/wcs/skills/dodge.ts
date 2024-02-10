@@ -28,6 +28,7 @@ export class Dodge extends Skill {
 
         tween.Completed.Once(() => { 
             primary.Anchored = false
+            task.wait(0.1);
             system.canTakeDamage = true;
         });
 

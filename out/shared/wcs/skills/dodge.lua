@@ -56,6 +56,7 @@ do
 		tween:Play()
 		tween.Completed:Once(function()
 			primary.Anchored = false
+			task.wait(0.1)
 			system.canTakeDamage = true
 		end)
 		self:ApplyCooldown(1)
