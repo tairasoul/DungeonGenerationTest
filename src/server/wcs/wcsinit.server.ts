@@ -11,7 +11,7 @@ server.Start();
 Players.PlayerAdded.Connect((player) => {
     player.CharacterAdded.Connect((model) => {
         const wcs = new Character(model);
-        wcs.ApplySkillsFromMoveset(main);
+        wcs.ApplyMoveset(main);
 
         (model.WaitForChild("Humanoid") as Humanoid).Died.Once(() => wcs.Destroy());
     })

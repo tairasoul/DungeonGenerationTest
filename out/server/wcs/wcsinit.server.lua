@@ -15,7 +15,7 @@ server:Start()
 Players.PlayerAdded:Connect(function(player)
 	player.CharacterAdded:Connect(function(model)
 		local wcs = Character.new(model)
-		wcs:ApplySkillsFromMoveset(main);
+		wcs:ApplyMoveset(main);
 		(model:WaitForChild("Humanoid")).Died:Once(function()
 			return wcs:Destroy()
 		end)
