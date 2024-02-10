@@ -1,12 +1,1 @@
 node_modules/
-out/
-out/client
-out/server
-out/shared
-out/tsconfig.tsbuildinfo
-out/shared/remotes.lua
-out/shared/utils/lua
-out/ts*
-out/*.lua
-out/**/*.lua
-out/**/**/*.lua
