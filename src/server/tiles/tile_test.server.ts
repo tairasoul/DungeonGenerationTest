@@ -3,7 +3,7 @@ import FolderMerger from "./classes/folderMerger";
 import make from "@rbxts/make";
 
 const nonts = ServerScriptService.WaitForChild("tiles.non-ts") as Folder;
-const tsTiles = ServerScriptService.WaitForChild("TS").WaitForChild("tiles") as Folder;
+const tsTiles = ServerScriptService.WaitForChild("TS").WaitForChild("tiles").WaitForChild("tiles") as Folder;
 
 const folder = ServerScriptService.FindFirstChild("tiles") as Folder ?? make("Folder", {Name: "tiles", Parent: ServerScriptService}) as Folder;
 
