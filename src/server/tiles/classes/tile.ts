@@ -22,9 +22,6 @@ export default class Tile {
 
     attachTile(tile: Tile, point: Part) {
         const attach = new RoomAttachment(tile.TileData);
-        if (!attach.attachToPart(point)) {
-            return false;
-        }
-        return true;
+        return attach.attachToPart(point)
     }
 }

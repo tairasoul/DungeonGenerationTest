@@ -17,10 +17,12 @@ do
 	function FolderMerger:merge(...)
 		local folders = { ... }
 		for _, folder in folders do
-			for _1, child in folder:GetChildren() do
-				child.Parent = self._folder
+			if folder ~= nil then
+				for _1, child in folder:GetChildren() do
+					child.Parent = self._folder
+				end
+				folder:Destroy()
 			end
-			folder:Destroy()
 		end
 	end
 end

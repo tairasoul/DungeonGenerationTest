@@ -6,10 +6,12 @@ export default class FolderMerger {
 
     merge(...folders: Folder[]) {
         for (const folder of folders) {
-            for (const child of folder.GetChildren()) {
-                child.Parent = this._folder;
+            if (folder !== undefined) {
+                for (const child of folder.GetChildren()) {
+                    child.Parent = this._folder;
+                }
+                folder.Destroy();
             }
-            folder.Destroy();
         }
     } 
 }

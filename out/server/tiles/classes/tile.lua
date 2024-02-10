@@ -41,10 +41,7 @@ do
 	end
 	function Tile:attachTile(tile, point)
 		local attach = RoomAttachment.new(tile.TileData)
-		if not attach:attachToPart(point) then
-			return false
-		end
-		return true
+		return attach:attachToPart(point)
 	end
 end
 return {
