@@ -13,7 +13,7 @@ export default class RandomTileAttacher {
     attachTileToPoint(part: Part, tileType: RoomTypes) {
         const tile = this.tileRandomiser.getTileOfType(tileType);
         if (tile === undefined) return;
-        const clone = tile.Clone();
+        const clone = tile.roomModel.Clone();
         clone.Parent = tiles;
         const parser = new TileParser(clone);
         const tileData = parser.getTileData();
@@ -25,7 +25,7 @@ export default class RandomTileAttacher {
     attachRandomTile(part: Part) {
         const tile = this.tileRandomiser.getRandomTile();
         if (tile === undefined) return;
-        const clone = tile.Clone();
+        const clone = tile.roomModel.Clone();
         clone.Parent = tiles;
         const parser = new TileParser(clone);
         const tileData = parser.getTileData();

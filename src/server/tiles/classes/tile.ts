@@ -1,12 +1,17 @@
 import TileParser from "./tileParser";
 import RoomAttachment from "./room_attachment";
+import { RoomTypes } from "../interfaces/room";
+import { Tile as parserData } from "../interfaces/parser";
 
 export default class Tile {
     _model: Model;
     public attachmentPoints: Part[] = [];
     attach: Part;
+    TileData: parserData;
     constructor(model: Model) {
         this._model = model;
+        const parser = new TileParser(this._model);
+        this.TileData = parser.getTileData();
         //const points = this._model.WaitForChild("apoints") as Folder;
         this.attach = model.WaitForChild("AttachmentPoint") as Part;
         for (const child of this._model.GetDescendants().filter((v) => v.IsA("Part") && v.Name === "Doorway") as Part[]) {
@@ -15,10 +20,11 @@ export default class Tile {
     }
 
     attachTile(tile: Tile, point: Part) {
-        const parser = new TileParser(tile._model);
-        const tInfo = parser.getTileData();
-        const attach = new RoomAttachment(tInfo);
-        attach.attachToPart(point);
+        const attach = new RoomAttachment(tile.TileData);
+        if (!attach.attachToPart(point)) {
+            return false;
+        }
+        return true;
         /*const thisAttach = this.attachmentPoints.find((v) => v === info.thisTileAttachment);
         const otherTile = tile.attachmentPoints.find((v) => v === info.attachmentPoint);
         if (thisAttach === undefined) throw `Could not find attachment point ${info.thisTileAttachment} on tile ${this._model.Name}`;

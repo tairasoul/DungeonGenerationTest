@@ -2,6 +2,7 @@ import { Tile } from "server/tiles/interfaces/parser";
 import { PartOffset } from "server/tiles/interfaces/attachment";
 import { getDistance } from "shared/utils";
 import make from "@rbxts/make";
+import { Workspace } from "@rbxts/services";
 
 export default class RoomAttachment {
     _tile: Tile;
@@ -26,8 +27,15 @@ export default class RoomAttachment {
         const pos = (offset as PartOffset).offset;
         const lookVector = part.CFrame.LookVector;
         const newPos = new Vector3(pos.X, 0, pos.X).add(new Vector3(pos.Z, 0, pos.Z));
+        const result = Workspace.Raycast(part.GetPivot().sub(lookVector.mul(newPos)).Position, new Vector3(0, -2, 0));
+        print(result);
+        if (result !== undefined) {
+            make("BoolValue", {Parent: part, Value: true, Name: "HasAttachment"});
+            return false;
+        }
         center.PivotTo(part.GetPivot().sub(lookVector.mul(newPos)).sub(new Vector3(0, 1, 0)));
         make("BoolValue", {Parent: part, Value: true, Name: "HasAttachment"});
         make("BoolValue", {Parent: (offset as PartOffset).part, Value: true, Name: "HasAttachment"});
+        return true;
     }
 }

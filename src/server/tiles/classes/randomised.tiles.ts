@@ -9,14 +9,14 @@ export default class TileRandomizer {
 
     getRandomTile() {
         const children = this.TileFolder.GetChildren();
-        const instances: Model[] = []
+        const instances: RoomInfo[] = []
         for (const child of children) {
             const module = child.FindFirstChildOfClass("ModuleScript");
             if (module !== undefined) {
                 const info = require(module) as  {
                     "roomExport": RoomInfo;
                 }
-                instances.push(info["roomExport"].roomModel)
+                instances.push(info["roomExport"])
             }
         }
         return getRandom(instances);
@@ -24,7 +24,7 @@ export default class TileRandomizer {
 
     getTileOfType(roomType: RoomTypes) {
         const children = this.TileFolder.GetChildren();
-        const validInstances: Model[] = [];
+        const validInstances: RoomInfo[] = [];
         for (const child of children) {
             const module = child.FindFirstChildOfClass("ModuleScript");
             if (module !== undefined) {
@@ -32,7 +32,7 @@ export default class TileRandomizer {
                     "roomExport": RoomInfo;
                 }
                 if (info["roomExport"].roomType === roomType) {
-                    validInstances.push(info["roomExport"].roomModel);
+                    validInstances.push(info["roomExport"]);
                 }
             }
         }
@@ -41,7 +41,7 @@ export default class TileRandomizer {
 
     getTileOfTypes(roomTypes: RoomTypes[]) {
         const children = this.TileFolder.GetChildren();
-        const validInstances: Model[] = [];
+        const validInstances: RoomInfo[] = [];
         for (const child of children) {
             const module = child.FindFirstChildOfClass("ModuleScript");
             if (module !== undefined) {
@@ -49,7 +49,7 @@ export default class TileRandomizer {
                     "roomExport": RoomInfo;
                 }
                 if (roomTypes.includes(info["roomExport"].roomType)) {
-                    validInstances.push(info["roomExport"].roomModel);
+                    validInstances.push(info["roomExport"]);
                 }
             }
         }

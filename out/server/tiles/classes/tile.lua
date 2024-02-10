@@ -17,6 +17,8 @@ do
 	function Tile:constructor(model)
 		self.attachmentPoints = {}
 		self._model = model
+		local parser = TileParser.new(self._model)
+		self.TileData = parser:getTileData()
 		-- const points = this._model.WaitForChild("apoints") as Folder;
 		self.attach = model:WaitForChild("AttachmentPoint")
 		local _exp = self._model:GetDescendants()
@@ -38,10 +40,11 @@ do
 		end
 	end
 	function Tile:attachTile(tile, point)
-		local parser = TileParser.new(tile._model)
-		local tInfo = parser:getTileData()
-		local attach = RoomAttachment.new(tInfo)
-		attach:attachToPart(point)
+		local attach = RoomAttachment.new(tile.TileData)
+		if not attach:attachToPart(point) then
+			return false
+		end
+		return true
 		--[[
 			const thisAttach = this.attachmentPoints.find((v) => v === info.thisTileAttachment);
 			const otherTile = tile.attachmentPoints.find((v) => v === info.attachmentPoint);

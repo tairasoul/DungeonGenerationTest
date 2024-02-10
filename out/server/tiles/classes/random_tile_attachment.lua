@@ -24,7 +24,7 @@ do
 		if tile == nil then
 			return nil
 		end
-		local clone = tile:Clone()
+		local clone = tile.roomModel:Clone()
 		clone.Parent = tiles
 		local parser = TileParser.new(clone)
 		local tileData = parser:getTileData()
@@ -37,7 +37,7 @@ do
 		if tile == nil then
 			return nil
 		end
-		local clone = tile:Clone()
+		local clone = tile.roomModel:Clone()
 		clone.Parent = tiles
 		local parser = TileParser.new(clone)
 		local tileData = parser:getTileData()

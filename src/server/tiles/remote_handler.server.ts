@@ -1,4 +1,4 @@
-import { ServerScriptService } from "@rbxts/services";
+import { ServerStorage } from "@rbxts/services";
 import { remotes } from "shared/remotes";
 import RandomTileAttacher from "./classes/random_tile_attachment";
 import Tile from "./classes/tile";
@@ -6,8 +6,9 @@ import TileRandomizer from "./classes/randomised.tiles";
 import { getRandom } from "shared/utils";
 import { tiles as tileStorage } from "shared/vars/folders";
 import make from "@rbxts/make";
+import TileParser from "./classes/tileParser";
 
-const folder = ServerScriptService.WaitForChild("tiles") as Folder;
+const folder = ServerStorage.WaitForChild("tiles") as Folder;
 
 const randomizer = new RandomTileAttacher(folder);
 
@@ -21,6 +22,10 @@ remotes.generateRoom.connect((player, roomT) => {
     tStorage.push(new Tile(randomizer.attachTileToPoint(character.WaitForChild("HumanoidRootPart") as Part, roomT) as Model));
 });
 
+const allowedTilesFilter = [
+    "Room"
+];
+
 remotes.generateRoomWithDepth.connect((player, depth) => {
     print(`received request to generate with depth ${depth}, generating`);
     const character = player.Character ?? player.CharacterAdded.Wait()[0];
@@ -28,15 +33,28 @@ remotes.generateRoomWithDepth.connect((player, depth) => {
     let tile = new Tile(baseModel);
     tStorage.push(tile);
     for (let i = 0; i < depth; i++) {
-        const randomized = tiles.getRandomTile();
+        const parser = new TileParser(tile._model);
+        const info = parser.getTileData();
+        const randomized = tiles.getTileOfTypes(info.types);
         if (randomized === undefined) continue;
-        const clone = randomized.Clone();
+        const clone = randomized.roomModel.Clone();
         clone.Parent = tileStorage;
         const tc = new Tile(clone);
-        const randomThis = getRandom(tile.attachmentPoints, (inst) => !inst.FindFirstChild("HasAttachment"));
+        let randomThis = getRandom(tile.attachmentPoints, (inst) => !inst.FindFirstChild("HasAttachment"));
+        if (randomThis === undefined) {
+            const filtered1 = tStorage.filter((v) => allowedTilesFilter.includes(v._model.Name));
+            const filtered = filtered1.filter((v) => v.attachmentPoints.some((part) => !part.FindFirstChild("HasAttachment")));
+            randomThis = getRandom(filtered[filtered.size() - 1].attachmentPoints, (inst) => !inst.FindFirstChild("HasAttachment"))
+        };
         if (randomThis === undefined) continue;
-        tile.attachTile(tc, randomThis);
-        tile = tc;
+        if (tile.attachTile(tc, randomThis)) {
+            tile = tc;
+            tStorage.push(tc);
+        }
+        else {
+            clone.ClearAllChildren();
+            clone.Parent = undefined;
+        }
     }
 })
 

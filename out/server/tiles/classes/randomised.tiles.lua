@@ -23,8 +23,8 @@ do
 			local module = child:FindFirstChildOfClass("ModuleScript")
 			if module ~= nil then
 				local info = require(module)
-				local _roomModel = info.roomExport.roomModel
-				table.insert(instances, _roomModel)
+				local _arg0 = info.roomExport
+				table.insert(instances, _arg0)
 			end
 		end
 		return getRandom(instances)
@@ -37,8 +37,8 @@ do
 			if module ~= nil then
 				local info = require(module)
 				if info.roomExport.roomType == roomType then
-					local _roomModel = info.roomExport.roomModel
-					table.insert(validInstances, _roomModel)
+					local _arg0 = info.roomExport
+					table.insert(validInstances, _arg0)
 				end
 			end
 		end
@@ -54,8 +54,8 @@ do
 				local _roomTypes = roomTypes
 				local _roomType = info.roomExport.roomType
 				if table.find(_roomTypes, _roomType) ~= nil then
-					local _roomModel = info.roomExport.roomModel
-					table.insert(validInstances, _roomModel)
+					local _arg0 = info.roomExport
+					table.insert(validInstances, _arg0)
 				end
 			end
 		end

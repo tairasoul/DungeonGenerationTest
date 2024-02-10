@@ -1,11 +1,11 @@
-import { ServerScriptService } from "@rbxts/services";
+import { ServerScriptService, ServerStorage } from "@rbxts/services";
 import FolderMerger from "./classes/folderMerger";
 import make from "@rbxts/make";
 
-const nonts = ServerScriptService.WaitForChild("tiles.non-ts") as Folder;
+const nonts = ServerStorage.WaitForChild("tiles.non-ts") as Folder;
 const tsTiles = ServerScriptService.WaitForChild("TS").WaitForChild("tiles").WaitForChild("tiles") as Folder;
 
-const folder = ServerScriptService.FindFirstChild("tiles") as Folder ?? make("Folder", {Name: "tiles", Parent: ServerScriptService}) as Folder;
+const folder = ServerStorage.FindFirstChild("tiles") as Folder ?? make("Folder", {Name: "tiles", Parent: ServerStorage}) as Folder;
 
 const merger = new FolderMerger(folder);
 
