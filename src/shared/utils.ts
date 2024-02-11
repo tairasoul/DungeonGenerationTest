@@ -1,4 +1,4 @@
-import { HttpService } from "@rbxts/services";
+import { HttpService, Players } from "@rbxts/services";
 
 export function getRandom<T extends defined>(array: T[], filter: (inst: T) => boolean = () => true) {
     const filtered = array.filter(filter);
@@ -57,4 +57,16 @@ export function applyOffsetRelativeToPart(part: BasePart, offsetVector: Vector3)
     const newPosition = part.Position.add(scaledOffsetVector);
 
     return newPosition;
+}
+
+export function getAllPlayerParts() {
+    const players = Players.GetPlayers();
+    const parts: Part[] = [];
+    for (const player of players) {
+        const char = player.Character ?? player.CharacterAdded.Wait()[0];
+        for (const part of char.GetDescendants().filter((v) => v.IsA("Part"))) {
+            parts.push(part as Part);
+        }
+    }
+    return parts;
 }

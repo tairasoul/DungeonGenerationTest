@@ -1,6 +1,8 @@
 -- Compiled with roblox-ts v2.1.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
-local HttpService = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services").HttpService
+local _services = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services")
+local HttpService = _services.HttpService
+local Players = _services.Players
 local function getRandom(array, filter)
 	if filter == nil then
 		filter = function()
@@ -88,6 +90,31 @@ local function applyOffsetRelativeToPart(part, offsetVector)
 	local newPosition = part.Position + scaledOffsetVector
 	return newPosition
 end
+local function getAllPlayerParts()
+	local players = Players:GetPlayers()
+	local parts = {}
+	for _, player in players do
+		local char = player.Character or (player.CharacterAdded:Wait())
+		local _exp = char:GetDescendants()
+		local _arg0 = function(v)
+			return v:IsA("Part")
+		end
+		-- ▼ ReadonlyArray.filter ▼
+		local _newValue = {}
+		local _length = 0
+		for _k, _v in _exp do
+			if _arg0(_v, _k - 1, _exp) == true then
+				_length += 1
+				_newValue[_length] = _v
+			end
+		end
+		-- ▲ ReadonlyArray.filter ▲
+		for _1, part in _newValue do
+			table.insert(parts, part)
+		end
+	end
+	return parts
+end
 return {
 	getRandom = getRandom,
 	getDistance = getDistance,
@@ -97,4 +124,5 @@ return {
 	CFrameComponentsSub = CFrameComponentsSub,
 	CFrameComponentsAdd = CFrameComponentsAdd,
 	applyOffsetRelativeToPart = applyOffsetRelativeToPart,
+	getAllPlayerParts = getAllPlayerParts,
 }

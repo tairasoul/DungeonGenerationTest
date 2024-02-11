@@ -1,6 +1,7 @@
 import { Skill, SkillDecorator } from "@rbxts/wcs";
 import { TweenService, Workspace } from "@rbxts/services";
 import healthRegistry from "shared/registries/healthSystem";
+import { getAllPlayerParts } from "shared/utils";
 
 @SkillDecorator
 export class Dodge extends Skill {
@@ -17,24 +18,27 @@ export class Dodge extends Skill {
     protected OnStartClient(StarterParams: void) {
         const characterModel = this.Character.Instance as Model;
         const primary = characterModel.WaitForChild("HumanoidRootPart") as BasePart;
-        primary.Anchored = true;
         const lookVector = primary.CFrame.LookVector;
         const params = new RaycastParams();
         params.FilterType = Enum.RaycastFilterType.Exclude;
-        params.FilterDescendantsInstances = characterModel.GetDescendants();
-        let distance = new Vector3(-12, 0, -12);
-        const raycastResult = Workspace.Raycast(characterModel.GetPivot().Position, lookVector.mul(distance), params);
-        if (raycastResult !== undefined) {
-            distance = new Vector3(-raycastResult.Distance, 0, -raycastResult.Distance);
+        params.FilterDescendantsInstances = getAllPlayerParts();
+        const initialRaycastCheck = Workspace.Blockcast(characterModel.GetPivot().add(lookVector.mul(new Vector3(2, 0, 2))), characterModel.GetBoundingBox()[1], lookVector.mul(new Vector3(-2.5, 0, -2.5)), params);
+        if (initialRaycastCheck === undefined) {
+            primary.Anchored = true;
+            let distance = new Vector3(-12, 0, -12);
+            const raycastResult = Workspace.Blockcast(characterModel.GetPivot(), characterModel.GetBoundingBox()[1], lookVector.mul(distance), params);
+            if (raycastResult !== undefined) {
+                distance = new Vector3(-raycastResult.Distance, 0, -raycastResult.Distance);
+            }
+            const tweenI = new TweenInfo(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out);
+    
+            const tween = TweenService.Create(primary, tweenI, {CFrame: primary.CFrame.add(lookVector.mul(distance))});
+    
+            tween.Play();
+    
+            tween.Completed.Once(() => { 
+                primary.Anchored = false
+            });
         }
-        const tweenI = new TweenInfo(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out);
-
-        const tween = TweenService.Create(primary, tweenI, {CFrame: primary.CFrame.add(lookVector.mul(distance))});
-
-        tween.Play();
-
-        tween.Completed.Once(() => { 
-            primary.Anchored = false
-        });
     }
 }

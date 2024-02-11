@@ -7,6 +7,7 @@ local _services = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts
 local TweenService = _services.TweenService
 local Workspace = _services.Workspace
 local healthRegistry = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "registries", "healthSystem").default
+local getAllPlayerParts = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getAllPlayerParts
 local Dodge
 do
 	local super = Skill
@@ -36,32 +37,43 @@ do
 	function Dodge:OnStartClient(StarterParams)
 		local characterModel = self.Character.Instance
 		local primary = characterModel:WaitForChild("HumanoidRootPart")
-		primary.Anchored = true
 		local lookVector = primary.CFrame.LookVector
 		local params = RaycastParams.new()
 		params.FilterType = Enum.RaycastFilterType.Exclude
-		params.FilterDescendantsInstances = characterModel:GetDescendants()
-		local distance = Vector3.new(-12, 0, -12)
+		params.FilterDescendantsInstances = getAllPlayerParts()
 		local _fn = Workspace
-		local _exp = characterModel:GetPivot().Position
-		local _distance = distance
-		local raycastResult = _fn:Raycast(_exp, lookVector * _distance, params)
-		if raycastResult ~= nil then
-			distance = Vector3.new(-raycastResult.Distance, 0, -raycastResult.Distance)
+		local _exp = characterModel:GetPivot()
+		local _vector3 = Vector3.new(2, 0, 2)
+		local _arg0 = lookVector * _vector3
+		local _exp_1 = _exp + _arg0
+		local _exp_2 = (select(2, characterModel:GetBoundingBox()))
+		local _vector3_1 = Vector3.new(-2.5, 0, -2.5)
+		local initialRaycastCheck = _fn:Blockcast(_exp_1, _exp_2, lookVector * _vector3_1, params)
+		if initialRaycastCheck == nil then
+			primary.Anchored = true
+			local distance = Vector3.new(-12, 0, -12)
+			local _fn_1 = Workspace
+			local _exp_3 = characterModel:GetPivot()
+			local _exp_4 = (select(2, characterModel:GetBoundingBox()))
+			local _distance = distance
+			local raycastResult = _fn_1:Blockcast(_exp_3, _exp_4, lookVector * _distance, params)
+			if raycastResult ~= nil then
+				distance = Vector3.new(-raycastResult.Distance, 0, -raycastResult.Distance)
+			end
+			local tweenI = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+			local _fn_2 = TweenService
+			local _object = {}
+			local _left = "CFrame"
+			local _cFrame = primary.CFrame
+			local _distance_1 = distance
+			local _arg0_1 = lookVector * _distance_1
+			_object[_left] = _cFrame + _arg0_1
+			local tween = _fn_2:Create(primary, tweenI, _object)
+			tween:Play()
+			tween.Completed:Once(function()
+				primary.Anchored = false
+			end)
 		end
-		local tweenI = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-		local _fn_1 = TweenService
-		local _object = {}
-		local _left = "CFrame"
-		local _cFrame = primary.CFrame
-		local _distance_1 = distance
-		local _arg0 = lookVector * _distance_1
-		_object[_left] = _cFrame + _arg0
-		local tween = _fn_1:Create(primary, tweenI, _object)
-		tween:Play()
-		tween.Completed:Once(function()
-			primary.Anchored = false
-		end)
 	end
 	Dodge = SkillDecorator(Dodge) or Dodge
 end
