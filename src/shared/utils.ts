@@ -1,4 +1,4 @@
-import { HttpService, Players } from "@rbxts/services";
+import { HttpService, Players, RunService } from "@rbxts/services";
 
 export function getRandom<T extends defined>(array: T[], filter: (inst: T) => boolean = () => true) {
     const filtered = array.filter(filter);
@@ -90,6 +90,24 @@ export function getLastBeforeCondition<T extends defined>(array: T[], condition:
             return item;
     }
     return undefined; // Return undefined if no item satisfies the condition
+}
+
+export function benchmark(func: () => unknown) {
+    const startTime = os.clock();
+    let endTime = os.clock();
+    const con = RunService.Heartbeat.Connect((dt) => endTime += dt);
+    func();
+    con.Disconnect();
+    const diff = endTime - startTime;
+    const minutes = math.floor(diff / 60);
+    const seconds = math.floor(diff % 60);
+    const milliseconds = math.floor((diff - math.floor(diff)) * 1000);
+    const time = {
+        minutes,
+        seconds,
+        milliseconds
+    }
+    return time;
 }
 
 export function getDistance(vector1: Vector3, vector2: Vector3) {

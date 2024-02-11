@@ -3,6 +3,7 @@ local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_incl
 local _services = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services")
 local HttpService = _services.HttpService
 local Players = _services.Players
+local RunService = _services.RunService
 local function getRandom(array, filter)
 	if filter == nil then
 		filter = function()
@@ -219,6 +220,26 @@ local function getLastBeforeCondition(array, condition)
 	end
 	return nil
 end
+local function benchmark(func)
+	local startTime = os.clock()
+	local endTime = os.clock()
+	local con = RunService.Heartbeat:Connect(function(dt)
+		endTime += dt
+		return endTime
+	end)
+	func()
+	con:Disconnect()
+	local diff = endTime - startTime
+	local minutes = math.floor(diff / 60)
+	local seconds = math.floor(diff % 60)
+	local milliseconds = math.floor((diff - math.floor(diff)) * 1000)
+	local time = {
+		minutes = minutes,
+		seconds = seconds,
+		milliseconds = milliseconds,
+	}
+	return time
+end
 local function getDistance(vector1, vector2)
 	local _vector1 = vector1
 	local _vector2 = vector2
@@ -314,6 +335,7 @@ return {
 	getNextAfterCondition_Reverse = getNextAfterCondition_Reverse,
 	getNextAfterCondition = getNextAfterCondition,
 	getLastBeforeCondition = getLastBeforeCondition,
+	benchmark = benchmark,
 	getDistance = getDistance,
 	guid = guid,
 	eulerToVector = eulerToVector,

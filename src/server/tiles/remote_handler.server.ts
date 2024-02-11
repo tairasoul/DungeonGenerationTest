@@ -3,7 +3,7 @@ import { remotes } from "shared/remotes";
 import RandomTileAttacher from "./classes/random_tile_attachment";
 import Tile from "./classes/tile";
 import TileRandomizer from "./classes/randomised.tiles";
-import { getNextAfterCondition_Reverse, getRandom, inverseForEach } from "shared/utils";
+import { benchmark, getNextAfterCondition_Reverse, getRandom, inverseForEach } from "shared/utils";
 import { tiles as tileStorage } from "shared/vars/folders";
 import make from "@rbxts/make";
 import { RoomInfo } from "./interfaces/room";
@@ -62,15 +62,23 @@ remotes.generateRoomWithDepth.connect((player, depth) => {
         }
     }
     task.spawn(() => {
-        const startTime = os.time();
-        for (let i = 0; i < depth; i++) {
-            RunService.Heartbeat.Wait();
-            print(`generating tile ${i}/${depth}`);
-            genTile();
+        const time = benchmark(() => {
+            for (let i = 0; i < depth - 1; i++) {
+                RunService.Heartbeat.Wait();
+                genTile();
+            }
+        })
+        let timeString = `generation of ${depth} tiles took`;
+        if (time.minutes > 0) {
+            timeString += ` ${time.minutes} minute${time.minutes > 1 ? "s": ""}`;
         }
-        const endTime = os.time();
-        const diff = endTime - startTime;
-        print(`generation of ${depth} tiles took${diff > 60 ? ` ${math.round(diff / 60)} minutes` : ""}${(diff % 60) !== 0 ? ` ${diff % 60} seconds` : ""}`);
+        if (time.seconds > 0) {
+            timeString += ` ${time.seconds} second${time.seconds > 1 ? "s" : ""}`;
+        }
+        if (time.milliseconds > 0) {
+            timeString += ` ${time.milliseconds} milliseconds`;
+        }
+        print(timeString);
     })
 })
 

@@ -8,6 +8,7 @@ local RandomTileAttacher = TS.import(script, game:GetService("ServerScriptServic
 local Tile = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tile").default
 local TileRandomizer = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "randomised.tiles").default
 local _utils = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils")
+local benchmark = _utils.benchmark
 local getNextAfterCondition_Reverse = _utils.getNextAfterCondition_Reverse
 local getRandom = _utils.getRandom
 local inverseForEach = _utils.inverseForEach
@@ -87,27 +88,36 @@ remotes.generateRoomWithDepth:connect(function(player, depth)
 		end
 	end
 	task.spawn(function()
-		local startTime = os.time()
-		do
-			local i = 0
-			local _shouldIncrement = false
-			while true do
-				if _shouldIncrement then
-					i += 1
-				else
-					_shouldIncrement = true
+		local time = benchmark(function()
+			do
+				local i = 0
+				local _shouldIncrement = false
+				while true do
+					if _shouldIncrement then
+						i += 1
+					else
+						_shouldIncrement = true
+					end
+					if not (i < depth - 1) then
+						break
+					end
+					RunService.Heartbeat:Wait()
+					print("generating tile " .. (tostring(i) .. ("/" .. tostring(depth))))
+					genTile()
 				end
-				if not (i < depth) then
-					break
-				end
-				RunService.Heartbeat:Wait()
-				print("generating tile " .. (tostring(i) .. ("/" .. tostring(depth))))
-				genTile()
 			end
+		end)
+		local timeString = "generation of " .. (tostring(depth) .. " tiles took")
+		if time.minutes > 0 then
+			timeString ..= " " .. (tostring(time.minutes) .. (" minute" .. (if time.minutes > 1 then "s" else "")))
 		end
-		local endTime = os.time()
-		local diff = endTime - startTime
-		print("generation of " .. (tostring(depth) .. (" tiles took" .. ((if diff > 60 then " " .. (tostring(math.round(diff / 60)) .. " minutes") else "") .. (if (diff % 60) ~= 0 then " " .. (tostring(diff % 60) .. " seconds") else "")))))
+		if time.seconds > 0 then
+			timeString ..= " " .. (tostring(time.seconds) .. (" second" .. (if time.seconds > 1 then "s" else "")))
+		end
+		if time.milliseconds > 0 then
+			timeString ..= " " .. (tostring(time.milliseconds) .. " milliseconds")
+		end
+		print(timeString)
 	end)
 end)
 remotes.clearTiles:connect(function()
