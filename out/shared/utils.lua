@@ -28,6 +28,94 @@ local function getRandom(array, filter)
 	local random = math.random(1, #filtered)
 	return filtered[random - 1 + 1]
 end
+local function getRandomWithWeight(array, filter, weights)
+	if filter == nil then
+		filter = function()
+			return true
+		end
+	end
+	if weights == nil then
+		weights = {}
+	end
+	local _array = array
+	local _filter = filter
+	-- ▼ ReadonlyArray.filter ▼
+	local _newValue = {}
+	local _length = 0
+	for _k, _v in _array do
+		if _filter(_v, _k - 1, _array) == true then
+			_length += 1
+			_newValue[_length] = _v
+		end
+	end
+	-- ▲ ReadonlyArray.filter ▲
+	local filtered = _newValue
+	if #filtered == 0 then
+		return nil
+	end
+	-- Apply weights to the filtered array
+	local _arg0 = function(element, index)
+		local _object = {
+			element = element,
+		}
+		local _left = "weight"
+		local _condition = weights[index + 1]
+		if not (_condition ~= 0 and (_condition == _condition and _condition)) then
+			_condition = 1
+		end
+		_object[_left] = _condition
+		return _object
+	end
+	-- ▼ ReadonlyArray.map ▼
+	local _newValue_1 = table.create(#filtered)
+	for _k, _v in filtered do
+		_newValue_1[_k] = _arg0(_v, _k - 1, filtered)
+	end
+	-- ▲ ReadonlyArray.map ▲
+	local weightedArray = _newValue_1
+	-- Calculate total weight
+	local _arg0_1 = function(sum, _param)
+		local weight = _param.weight
+		return sum + weight
+	end
+	-- ▼ ReadonlyArray.reduce ▼
+	local _result = 0
+	local _callback = _arg0_1
+	for _i = 1, #weightedArray do
+		_result = _callback(_result, weightedArray[_i], _i - 1, weightedArray)
+	end
+	-- ▲ ReadonlyArray.reduce ▲
+	local totalWeight = _result
+	-- Generate a random number within the total weight range
+	local randomWeight = math.random(0, totalWeight)
+	-- Select an element based on weighted probability
+	for _, _binding in weightedArray do
+		local element = _binding.element
+		local weight = _binding.weight
+		if randomWeight <= weight then
+			return element
+		end
+		randomWeight -= weight
+	end
+	-- This should never happen, but just in case
+	return nil
+end
+local function getAllBeforeCondition(array, condition)
+	if condition == nil then
+		condition = function()
+			return true
+		end
+	end
+	local newArr = {}
+	for _, item in array do
+		if condition(item) then
+			table.insert(newArr, item)
+		else
+			break
+		end
+	end
+	return newArr
+end
 local function getDistance(vector1, vector2)
 	local _vector1 = vector1
 	local _vector2 = vector2
@@ -117,6 +205,8 @@ local function getAllPlayerParts()
 end
 return {
 	getRandom = getRandom,
+	getRandomWithWeight = getRandomWithWeight,
+	getAllBeforeCondition = getAllBeforeCondition,
 	getDistance = getDistance,
 	guid = guid,
 	eulerToVector = eulerToVector,

@@ -202,6 +202,18 @@ do
 			self.humanoid.Health = 0
 		end
 	end
+	function HealthSystem:healHealth(hp)
+		if hp > self.maxHealth:get() then
+			hp = self.maxHealth:get()
+		end
+		self.health:set(hp)
+	end
+	function HealthSystem:healShield(sp)
+		if sp > self.maxShield:get() then
+			sp = self.maxShield:get()
+		end
+		self.shield:set(sp)
+	end
 end
 return {
 	default = HealthSystem,

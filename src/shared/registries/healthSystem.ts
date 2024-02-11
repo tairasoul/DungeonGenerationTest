@@ -15,12 +15,10 @@ export default new class Registry {
     addHumanoid(humanoid: Humanoid) {
         if (this.getSystemForHumanoid(humanoid)) return this.getSystemForHumanoid(humanoid) as HealthSystem;
         const system = new HealthSystem(humanoid)
-        const callback = () => {
+        system.addValidListener(() => {
             this.HealthSystems = this.HealthSystems.filter((v) => v !== system);
-            system.removeValidListener(callback);
             system.removeAllListeners();
-        }
-        system.addValidListener(callback)
+        })
         this.HealthSystems.push(system);
         return system;
     }

@@ -52,10 +52,10 @@ iris:Connect(function()
 		_fn:fire(getRandom(_newValue))
 	end
 	iris.End()
-	iris.Tree({ "generation with depth" })
-	num = iris.InputNum({ "generation depth" }).state.number.value
-	if iris.Button({ "generate with depth" }).clicked() then
-		print("generating with depth " .. tostring(num))
+	iris.Tree({ "generation with amount" })
+	num = iris.InputNum({ "tiles to generate" }).state.number.value
+	if iris.Button({ "generate with amount" }).clicked() then
+		print("generating with amount " .. tostring(num))
 		remotes.generateRoomWithDepth:fire(num)
 	end
 	iris.End()

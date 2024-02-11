@@ -1,4 +1,5 @@
 import { Value, Observer } from "@rbxts/fusion";
+import make from "@rbxts/make";
 
 type listeners = {
     health: {callback: () => void, destroy: () => void}[];
@@ -13,7 +14,7 @@ export default class HealthSystem {
     shield = Value(this.maxShield.get());
     humanoid: Humanoid;
     canTakeDamage = false;
-    valid = Value(true);
+    private valid = Value(true);
     private observers = {
         health: Observer(this.health),
         shield: Observer(this.shield),
@@ -83,8 +84,19 @@ export default class HealthSystem {
             this.shield.set(this.shield.get() - damage);
         else
             this.health.set(this.health.get() - damage);
-        if (this.health.get() === 0) {
+        if (this.health.get() === 0)
             this.humanoid.Health = 0;
-        }
+    }
+
+    healHealth(hp: number) {
+        if (hp > this.maxHealth.get())
+            hp = this.maxHealth.get();
+        this.health.set(hp);
+    }
+
+    healShield(sp: number) {
+        if (sp > this.maxShield.get())
+            sp = this.maxShield.get();
+        this.shield.set(sp);
     }
 }

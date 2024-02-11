@@ -29,8 +29,7 @@ do
 			return self:getSystemForHumanoid(humanoid)
 		end
 		local system = HealthSystem.new(humanoid)
-		local callback
-		callback = function()
+		system:addValidListener(function()
 			local _healthSystems = self.HealthSystems
 			local _arg0 = function(v)
 				return v ~= system
@@ -46,10 +45,8 @@ do
 			end
 			-- ▲ ReadonlyArray.filter ▲
 			self.HealthSystems = _newValue
-			system:removeValidListener(callback)
 			system:removeAllListeners()
-		end
-		system:addValidListener(callback)
+		end)
 		table.insert(self.HealthSystems, system)
 		return system
 	end

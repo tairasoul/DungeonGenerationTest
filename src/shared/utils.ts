@@ -9,6 +9,46 @@ export function getRandom<T extends defined>(array: T[], filter: (inst: T) => bo
     return filtered[random - 1];
 }
 
+export function getRandomWithWeight<T extends defined>(array: T[], filter: (inst: T) => boolean = () => true, weights: number[] = []) {
+    const filtered = array.filter(filter);
+    if (filtered.size() === 0) {
+        return undefined;
+    }
+    // Apply weights to the filtered array
+    const weightedArray = filtered.map((element, index) => ({
+        element,
+        weight: weights[index] || 1 // Default weight is 1 if not provided
+    }));
+
+    // Calculate total weight
+    const totalWeight = weightedArray.reduce((sum, { weight }) => sum + weight, 0);
+
+    // Generate a random number within the total weight range
+    let randomWeight = math.random(0, totalWeight);
+    
+    // Select an element based on weighted probability
+    for (const { element, weight } of weightedArray) {
+        if (randomWeight <= weight) {
+            return element;
+        }
+        randomWeight -= weight;
+    }
+
+    // This should never happen, but just in case
+    return undefined;
+}
+
+export function getAllBeforeCondition<T extends defined>(array: T[], condition: (item: T) => boolean = () => true) {
+    const newArr = [];
+    for (const item of array) {
+        if (condition(item))
+            newArr.push(item);
+        else
+            break;
+    }
+    return newArr;
+}
+
 export function getDistance(vector1: Vector3, vector2: Vector3) {
     return vector1.sub(vector2);
 }
