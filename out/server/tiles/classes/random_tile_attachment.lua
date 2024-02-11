@@ -17,27 +17,18 @@ do
 		return self:constructor(...) or self
 	end
 	function RandomTileAttacher:constructor(folder)
-		self.tileRandomiser = TileRandomizer.new(folder)
+		self.tileRandomizer = TileRandomizer.new(folder)
 	end
 	function RandomTileAttacher:attachTileToPoint(part, tileType)
-		local tile = self.tileRandomiser:getTileOfType(tileType)
-		if tile == nil then
-			return nil
-		end
-		local clone = tile.roomModel:Clone()
-		clone.Parent = tiles
-		local parser = TileParser.new(clone)
-		local tileData = parser:getTileData()
-		local attachment = RoomAttachment.new(tileData)
-		attachment:attachToPart(part)
-		return {
-			roomType = tile.roomType,
-			roomModel = clone,
-		}
+		local tile = self.tileRandomizer:getTileOfType(tileType)
+		return self:attachTile(part, tile)
 	end
 	function RandomTileAttacher:attachRandomTile(part)
-		local tile = self.tileRandomiser:getRandomTile()
-		if tile == nil then
+		local tile = self.tileRandomizer:getRandomTile()
+		return self:attachTile(part, tile)
+	end
+	function RandomTileAttacher:attachTile(part, tile)
+		if not tile then
 			return nil
 		end
 		local clone = tile.roomModel:Clone()

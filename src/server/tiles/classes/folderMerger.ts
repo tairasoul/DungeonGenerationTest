@@ -1,17 +1,27 @@
 export default class FolderMerger {
-    private _folder: Folder;
+    private targetFolder: Folder;
+
     constructor(folder: Folder) {
-        this._folder = folder;
+        this.targetFolder = folder;
     }
 
-    merge(...folders: Folder[]) {
+    public merge(...folders: (Folder | undefined)[]): void {
         for (const folder of folders) {
-            if (folder !== undefined) {
-                for (const child of folder.GetChildren()) {
-                    child.Parent = this._folder;
-                }
-                folder.Destroy();
+            if (folder) {
+                this.moveChildren(folder);
+                this.destroyFolder(folder);
             }
         }
-    } 
+    }
+
+    private moveChildren(folder: Folder): void {
+        const children = folder.GetChildren();
+        for (const child of children) {
+            child.Parent = this.targetFolder;
+        }
+    }
+
+    private destroyFolder(folder: Folder): void {
+        folder.Destroy();
+    }
 }

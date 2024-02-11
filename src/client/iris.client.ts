@@ -26,24 +26,20 @@ iris.Connect(() => {
                 }
             iris.End();
             if (iris.Button([`generate ${currentTile.lower()} at current position`]).clicked()) {
-                print("generating tile");
                 remotes.generateRoom.fire(currentTile);
             }
             if (iris.Button(["generate random tile at current location"]).clicked()) {
-                print("generating random tile");
                 remotes.generateRoom.fire(getRandom(TileTypes.filter(() => true)) as tiles);
             }
         iris.End();
         iris.Tree(["generation with amount"])
             num = iris.InputNum(["tiles to generate"]).state["number"].value as number;
             if (iris.Button(["generate with amount"]).clicked()) {
-                print(`generating with amount ${num}`);
                 remotes.generateRoomWithDepth.fire(num);
             }
         iris.End();
         iris.Tree(["misc"])
             if (iris.Button(["clear tiles"]).clicked()) {
-                print("clearing tiles");
                 remotes.clearTiles.fire();
             }
             if (iris.Button(["test remote"]).clicked()) {
@@ -52,5 +48,3 @@ iris.Connect(() => {
         iris.End();
     iris.End();
 });
-
-Players.LocalPlayer.CharacterAdded.Connect(() => (Workspace.CurrentCamera as Camera).CameraSubject = Workspace.WaitForChild("cameraPart") as Part);

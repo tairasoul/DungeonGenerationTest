@@ -12,10 +12,10 @@ do
 		return self:constructor(...) or self
 	end
 	function TileParser:constructor(model)
-		self._model = model
+		self.model = model
 	end
 	function TileParser:getTileData()
-		local _exp = self._model:GetDescendants()
+		local _exp = self.model:GetDescendants()
 		local _arg0 = function(v)
 			return v:IsA("Part") and v.Name == "Doorway"
 		end
@@ -30,18 +30,28 @@ do
 		end
 		-- ▲ ReadonlyArray.filter ▲
 		local children = _newValue
-		local roomInfo = require(self._model:FindFirstChild("room.info"))
-		local tileData = {
-			attachmentPoint = self._model:WaitForChild("AttachmentPoint"),
+		local roomInfo = self:getRoomInfo()
+		local attachmentPoint = self.model:WaitForChild("AttachmentPoint")
+		local centerPoint = self.model:WaitForChild("centerPoint")
+		local validPoints = children
+		return {
+			attachmentPoint = attachmentPoint,
 			types = roomInfo.types,
-			originModel = self._model,
-			centerPoint = self._model:WaitForChild("centerPoint"),
-			validPoints = {},
+			originModel = self.model,
+			centerPoint = centerPoint,
+			validPoints = validPoints,
 		}
-		for _, child in children do
-			table.insert(tileData.validPoints, child)
+	end
+	function TileParser:getRoomInfo()
+		local roomInfoModule = self.model:FindFirstChild("room.info")
+		if not roomInfoModule then
+			warn("Room info module not found for model " .. self.model.Name)
+			return {
+				types = {},
+			}
 		end
-		return tileData
+		local roomInfo = require(roomInfoModule)
+		return roomInfo
 	end
 end
 return {

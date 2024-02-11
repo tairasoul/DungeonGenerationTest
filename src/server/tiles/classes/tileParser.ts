@@ -1,27 +1,41 @@
 import { Tile } from "server/tiles/interfaces/parser";
 import { RoomTypes } from "server/tiles/interfaces/room";
 
+interface RoomInfo {
+    types: RoomTypes[];
+}
+
 export default class TileParser {
-    private _model: Model;
+    private model: Model;
+
     constructor(model: Model) {
-        this._model = model;
+        this.model = model;
     }
 
-    getTileData() {
-        const children = this._model.GetDescendants().filter((v) => v.IsA("Part") && v.Name === "Doorway");
-        const roomInfo = require(this._model.FindFirstChild("room.info") as ModuleScript) as {
-            "types": RoomTypes[]
-        }
-        const tileData: Tile = {
-            attachmentPoint: this._model.WaitForChild("AttachmentPoint") as Part,
+    public getTileData(): Tile {
+        const children = this.model.GetDescendants().filter(v => v.IsA("Part") && v.Name === "Doorway");
+        const roomInfo = this.getRoomInfo();
+        const attachmentPoint = this.model.WaitForChild("AttachmentPoint") as Part;
+        const centerPoint = this.model.WaitForChild("centerPoint") as Part;
+        const validPoints = children as Part[];
+
+        return {
+            attachmentPoint,
             types: roomInfo.types,
-            originModel: this._model,
-            centerPoint: this._model.WaitForChild("centerPoint") as Part,
-            validPoints: []
+            originModel: this.model,
+            centerPoint,
+            validPoints
+        };
+    }
+
+    private getRoomInfo(): RoomInfo {
+        const roomInfoModule = this.model.FindFirstChild("room.info") as ModuleScript;
+        if (!roomInfoModule) {
+            warn(`Room info module not found for model ${this.model.Name}`);
+            return { types: [] };
         }
-        for (const child of children as Part[]) {
-            tileData.validPoints.push(child);
-        }
-        return tileData;
+
+        const roomInfo = require(roomInfoModule) as RoomInfo;
+        return roomInfo;
     }
 }

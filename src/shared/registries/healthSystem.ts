@@ -1,33 +1,33 @@
 import HealthSystem from "../frameworks/character/health";
 
 export default new class Registry {
-    private HealthSystems: HealthSystem[] = [];
+    private healthSystems: HealthSystem[] = [];
 
     getSystemForHumanoid(humanoid: Humanoid) {
-        for (const system of this.HealthSystems) {
-            if (system.humanoid === humanoid) {
-                return system;
-            }
-        }
-        return undefined;
+        return this.healthSystems.find(system => system.humanoid === humanoid);
     }
 
     addHumanoid(humanoid: Humanoid) {
-        if (this.getSystemForHumanoid(humanoid)) return this.getSystemForHumanoid(humanoid) as HealthSystem;
-        const system = new HealthSystem(humanoid)
+        const existingSystem = this.getSystemForHumanoid(humanoid);
+        if (existingSystem) return existingSystem;
+
+        const system = new HealthSystem(humanoid);
         system.addValidListener(() => {
-            this.HealthSystems = this.HealthSystems.filter((v) => v !== system);
-            system.removeAllListeners();
-        })
-        this.HealthSystems.push(system);
+            this.removeSystem(system);
+        });
+        this.healthSystems.push(system);
         return system;
     }
 
     removeHumanoid(humanoid: Humanoid) {
-        if (this.HealthSystems.some((v) => v.humanoid === humanoid)) {
-            const system = this.HealthSystems.find((v) => v.humanoid === humanoid) as HealthSystem;
-            system.removeAllListeners();
-            this.HealthSystems = this.HealthSystems.filter((v) => v !== system);
+        const system = this.getSystemForHumanoid(humanoid);
+        if (system) {
+            this.removeSystem(system);
         }
+    }
+
+    private removeSystem(system: HealthSystem) {
+        system.removeAllListeners();
+        this.healthSystems = this.healthSystems.filter(existingSystem => existingSystem !== system);
     }
 }

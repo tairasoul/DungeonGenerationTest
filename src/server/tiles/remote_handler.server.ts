@@ -15,12 +15,13 @@ const randomizer = new RandomTileAttacher(folder);
 
 const tiles = new TileRandomizer(folder);
 
-const cameraPart = make("Part", {Parent: game.GetService("Workspace"), Anchored: true, Name: "cameraPart"});
+const getCharacter = (player: Player) => player.Character || player.CharacterAdded.Wait()[0];
 
 remotes.generateRoom.connect((player, roomT) => {
     print("received request to generate tile, generating");
-    const character = player.Character ?? player.CharacterAdded.Wait()[0];
-    const tile = randomizer.attachTileToPoint(character.WaitForChild("HumanoidRootPart") as Part, roomT) as RoomInfo
+    const character = getCharacter(player);
+    const humanoidRootPart = character.WaitForChild("HumanoidRootPart") as Part;
+    const tile = randomizer.attachTileToPoint(humanoidRootPart, roomT) as RoomInfo;
     tileRegistry.tiles.push(new Tile(tile.roomModel, tile));
 });
 
@@ -29,71 +30,101 @@ remotes.generateRoom.connect((player, roomT) => {
 // otherwise it has a chance to have the first tile also be connected to a tile behind it
 
 remotes.generateRoomWithDepth.connect((player, depth) => {
-    print(`received request to generate with depth ${depth}, generating`);
-    const character = player.Character ?? player.CharacterAdded.Wait()[0];
-    const baseModel = randomizer.attachRandomTile(character.WaitForChild("Torso") as Part) as RoomInfo;
+    const character = getCharacter(player);
+    const humanoidRootPart = character.WaitForChild("Torso") as Part;
+    humanoidRootPart.Anchored = true;
+    const baseModel = randomizer.attachRandomTile(humanoidRootPart) as RoomInfo;
     let tile = new Tile(baseModel.roomModel, baseModel);
-    tileRegistry.tiles.push(tile);
+    tileRegistry.tiles.push(tile);    
+    print(`generating ${depth} tiles`);
     function genTile() {
-        character.PivotTo(tile._model.GetPivot().add(new Vector3(0, 50, 0)));
-        cameraPart.Position = tile._model.GetPivot().Position.add(new Vector3(0, 50, 0));
-        const randomized = tiles.getTileOfTypes(tile.TileData.types);
-        if (randomized === undefined) return;
-        let randomThis = getRandom(tile.attachmentPoints, (inst) => !inst.FindFirstChild("HasAttachment"));
-        if (randomThis === undefined) {
+        humanoidRootPart.CFrame = tile._model.GetPivot().add(new Vector3(0, 100, 0));
+        let randomized = tiles.getTileOfTypes(tile.TileData.types);
+        if (!randomized) return;
+        let randomThis;
+        let attempts = 0;
+        while (attempts < 2) {
+            randomThis = getRandom(tile.attachmentPoints, (inst) => !inst.FindFirstChild("HasAttachment"));
+            if (randomThis) break;
             tile = getNextAfterCondition_Reverse(tileRegistry.tiles, (item) => item === tile) as Tile;
-            genTile();
-            return;
-        };
+            randomized = tiles.getTileOfTypes(tile.TileData.types); // Get new tile type
+            if (!randomized) return;
+            attempts++;
+        }
+        
+        if (!randomThis) return;
+    
         const clone = randomized.roomModel.Clone();
         clone.Parent = tileStorage;
         const tc = new Tile(clone, randomized);
+    
         if (tile.attachTile(tc, randomThis)) {
-            tileRegistry.tiles.insert(tileRegistry.tiles.indexOf(tile) + 1, tc);    
+            const index = tileRegistry.tiles.indexOf(tile) + 1;
+            tileRegistry.tiles.insert(index, tc);
             tile = tc;
-        }
-        else {
-            if (getRandom(tile.attachmentPoints, (inst) => !inst.FindFirstChild("HasAttachment")) === undefined) {
-                tile = getNextAfterCondition_Reverse(tileRegistry.tiles, (item) => item === tile) as Tile;
-            }
+        } else {
             clone.ClearAllChildren();
             clone.Parent = undefined;
             genTile();
         }
     }
-    task.spawn(() => {
-        const time = benchmark(() => {
-            for (let i = 0; i < depth - 1; i++) {
-                RunService.Heartbeat.Wait();
-                genTile();
-            }
-        })
-        let timeString = `generation of ${depth} tiles took`;
-        if (time.minutes > 0) {
-            timeString += ` ${time.minutes} minute${time.minutes > 1 ? "s": ""}`;
+    const genTileBatch = () => {
+        for (let i = 0; i < depth - 1; i++) {
+            RunService.Heartbeat.Wait();
+            genTile();
         }
-        if (time.seconds > 0) {
-            timeString += ` ${time.seconds} second${time.seconds > 1 ? "s" : ""}`;
+    };
+
+    const time = benchmark(genTileBatch);
+    let timeString = `generation of ${depth} tiles took`;
+    if (time.minutes > 0) {
+        timeString += ` ${time.minutes} minute${time.minutes > 1 ? "s": ""}`;
+    }
+    if (time.seconds > 0) {
+        timeString += ` ${time.seconds} second${time.seconds > 1 ? "s" : ""}`;
+    }
+    if (time.milliseconds > 0) {
+        timeString += ` ${time.milliseconds} milliseconds`;
+    }
+    print(timeString);
+    humanoidRootPart.Anchored = false;
+});
+
+// Reuse children array and batch size
+const clearTilesBatch = (children: Instance[], batchSize: number, totalBatches: number) => {
+    for (let i = 0; i < totalBatches; i++) {
+        RunService.Heartbeat.Wait(); // Yield before processing each batch
+        const startIdx = i * batchSize;
+        const endIdx = math.min((i + 1) * batchSize, children.size());
+        
+        for (let j = startIdx; j < endIdx; j++) {
+            const child = children[j];
+            child.Destroy();
         }
-        if (time.milliseconds > 0) {
-            timeString += ` ${time.milliseconds} milliseconds`;
-        }
-        print(timeString);
-    })
-})
+    }
+    tileRegistry.tiles.clear();
+};
 
 remotes.clearTiles.connect(() => {
-    print("received request to clear tiles, clearing.");
     const children = tileStorage.GetChildren();
-    print(`clearing ${children.size()} tiles`)
-    task.spawn(() => {
-        inverseForEach(children, (v) => {
-            RunService.Heartbeat.Wait();
-            v.Destroy();
-        });
-        tileRegistry.tiles.clear();
-    })
-})
+    const batchSize = 50; // Define batch size
+    const totalBatches = math.ceil(children.size() / batchSize);
+    const amt = children.size();
+    print(`clearing ${children.size()} tiles in ${totalBatches} batches`);
+    const time = benchmark(() => clearTilesBatch(children, batchSize, totalBatches));
+    let timeString = `cleared ${amt} tiles in ${totalBatches} batches in`;
+    if (time.minutes > 0) {
+        timeString += ` ${time.minutes} minute${time.minutes > 1 ? "s": ""}`;
+    }
+    if (time.seconds > 0) {
+        timeString += ` ${time.seconds} second${time.seconds > 1 ? "s" : ""}`;
+    }
+    if (time.milliseconds > 0) {
+        timeString += ` ${time.milliseconds} milliseconds`;
+    }
+    print(timeString);
+});
+
 
 remotes.test.connect((player) => {
     print("test remote called");

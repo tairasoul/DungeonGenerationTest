@@ -12,18 +12,25 @@ do
 		return self:constructor(...) or self
 	end
 	function FolderMerger:constructor(folder)
-		self._folder = folder
+		self.targetFolder = folder
 	end
 	function FolderMerger:merge(...)
 		local folders = { ... }
 		for _, folder in folders do
-			if folder ~= nil then
-				for _1, child in folder:GetChildren() do
-					child.Parent = self._folder
-				end
-				folder:Destroy()
+			if folder then
+				self:moveChildren(folder)
+				self:destroyFolder(folder)
 			end
 		end
+	end
+	function FolderMerger:moveChildren(folder)
+		local children = folder:GetChildren()
+		for _, child in children do
+			child.Parent = self.targetFolder
+		end
+	end
+	function FolderMerger:destroyFolder(folder)
+		folder:Destroy()
 	end
 end
 return {

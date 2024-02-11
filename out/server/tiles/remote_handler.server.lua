@@ -11,22 +11,20 @@ local _utils = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "ut
 local benchmark = _utils.benchmark
 local getNextAfterCondition_Reverse = _utils.getNextAfterCondition_Reverse
 local getRandom = _utils.getRandom
-local inverseForEach = _utils.inverseForEach
 local tileStorage = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "vars", "folders").tiles
 local make = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "make")
 local tileRegistry = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tileRegistry").default
 local folder = ServerStorage:WaitForChild("tiles")
 local randomizer = RandomTileAttacher.new(folder)
 local tiles = TileRandomizer.new(folder)
-local cameraPart = make("Part", {
-	Parent = game:GetService("Workspace"),
-	Anchored = true,
-	Name = "cameraPart",
-})
+local getCharacter = function(player)
+	return player.Character or (player.CharacterAdded:Wait())
+end
 remotes.generateRoom:connect(function(player, roomT)
 	print("received request to generate tile, generating")
-	local character = player.Character or (player.CharacterAdded:Wait())
-	local tile = randomizer:attachTileToPoint(character:WaitForChild("HumanoidRootPart"), roomT)
+	local character = getCharacter(player)
+	local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+	local tile = randomizer:attachTileToPoint(humanoidRootPart, roomT)
 	local _tiles = tileRegistry.tiles
 	local _tile = Tile.new(tile.roomModel, tile)
 	table.insert(_tiles, _tile)
@@ -35,33 +33,42 @@ end)
 -- make it so this can't generate anywhere behind the initial tile
 -- otherwise it has a chance to have the first tile also be connected to a tile behind it
 remotes.generateRoomWithDepth:connect(function(player, depth)
-	print("received request to generate with depth " .. (tostring(depth) .. ", generating"))
-	local character = player.Character or (player.CharacterAdded:Wait())
-	local baseModel = randomizer:attachRandomTile(character:WaitForChild("Torso"))
+	local character = getCharacter(player)
+	local humanoidRootPart = character:WaitForChild("Torso")
+	humanoidRootPart.Anchored = true
+	local baseModel = randomizer:attachRandomTile(humanoidRootPart)
 	local tile = Tile.new(baseModel.roomModel, baseModel)
 	local _tiles = tileRegistry.tiles
 	local _tile = tile
 	table.insert(_tiles, _tile)
+	print("generating " .. (tostring(depth) .. " tiles"))
 	local function genTile()
-		local _fn = character
 		local _exp = tile._model:GetPivot()
-		local _vector3 = Vector3.new(0, 50, 0)
-		_fn:PivotTo(_exp + _vector3)
-		local _position = tile._model:GetPivot().Position
-		local _vector3_1 = Vector3.new(0, 50, 0)
-		cameraPart.Position = _position + _vector3_1
+		local _vector3 = Vector3.new(0, 100, 0)
+		humanoidRootPart.CFrame = _exp + _vector3
 		local randomized = tiles:getTileOfTypes(tile.TileData.types)
-		if randomized == nil then
+		if not randomized then
 			return nil
 		end
-		local randomThis = getRandom(tile.attachmentPoints, function(inst)
-			return not inst:FindFirstChild("HasAttachment")
-		end)
-		if randomThis == nil then
+		local randomThis
+		local attempts = 0
+		while attempts < 2 do
+			randomThis = getRandom(tile.attachmentPoints, function(inst)
+				return not inst:FindFirstChild("HasAttachment")
+			end)
+			if randomThis then
+				break
+			end
 			tile = getNextAfterCondition_Reverse(tileRegistry.tiles, function(item)
 				return item == tile
 			end)
-			genTile()
+			randomized = tiles:getTileOfTypes(tile.TileData.types)
+			if not randomized then
+				return nil
+			end
+			attempts += 1
+		end
+		if not randomThis then
 			return nil
 		end
 		local clone = randomized.roomModel:Clone()
@@ -69,68 +76,105 @@ remotes.generateRoomWithDepth:connect(function(player, depth)
 		local tc = Tile.new(clone, randomized)
 		if tile:attachTile(tc, randomThis) then
 			local _tiles_1 = tileRegistry.tiles
-			local _tiles_2 = tileRegistry.tiles
 			local _tile_1 = tile
-			local _arg0 = (table.find(_tiles_2, _tile_1) or 0) - 1 + 1
-			table.insert(_tiles_1, _arg0 + 1, tc)
+			local index = (table.find(_tiles_1, _tile_1) or 0) - 1 + 1
+			table.insert(tileRegistry.tiles, index + 1, tc)
 			tile = tc
 		else
-			if getRandom(tile.attachmentPoints, function(inst)
-				return not inst:FindFirstChild("HasAttachment")
-			end) == nil then
-				tile = getNextAfterCondition_Reverse(tileRegistry.tiles, function(item)
-					return item == tile
-				end)
-			end
 			clone:ClearAllChildren()
 			clone.Parent = nil
 			genTile()
 		end
 	end
-	task.spawn(function()
-		local time = benchmark(function()
+	local genTileBatch = function()
+		do
+			local i = 0
+			local _shouldIncrement = false
+			while true do
+				if _shouldIncrement then
+					i += 1
+				else
+					_shouldIncrement = true
+				end
+				if not (i < depth - 1) then
+					break
+				end
+				RunService.Heartbeat:Wait()
+				genTile()
+			end
+		end
+	end
+	local time = benchmark(genTileBatch)
+	local timeString = "generation of " .. (tostring(depth) .. " tiles took")
+	if time.minutes > 0 then
+		timeString ..= " " .. (tostring(time.minutes) .. (" minute" .. (if time.minutes > 1 then "s" else "")))
+	end
+	if time.seconds > 0 then
+		timeString ..= " " .. (tostring(time.seconds) .. (" second" .. (if time.seconds > 1 then "s" else "")))
+	end
+	if time.milliseconds > 0 then
+		timeString ..= " " .. (tostring(time.milliseconds) .. " milliseconds")
+	end
+	print(timeString)
+	humanoidRootPart.Anchored = false
+end)
+-- Reuse children array and batch size
+local clearTilesBatch = function(children, batchSize, totalBatches)
+	do
+		local i = 0
+		local _shouldIncrement = false
+		while true do
+			if _shouldIncrement then
+				i += 1
+			else
+				_shouldIncrement = true
+			end
+			if not (i < totalBatches) then
+				break
+			end
+			RunService.Heartbeat:Wait()
+			local startIdx = i * batchSize
+			local endIdx = math.min((i + 1) * batchSize, #children)
 			do
-				local i = 0
-				local _shouldIncrement = false
+				local j = startIdx
+				local _shouldIncrement_1 = false
 				while true do
-					if _shouldIncrement then
-						i += 1
+					if _shouldIncrement_1 then
+						j += 1
 					else
-						_shouldIncrement = true
+						_shouldIncrement_1 = true
 					end
-					if not (i < depth - 1) then
+					if not (j < endIdx) then
 						break
 					end
-					RunService.Heartbeat:Wait()
-					print("generating tile " .. (tostring(i) .. ("/" .. tostring(depth))))
-					genTile()
+					local child = children[j + 1]
+					child:Destroy()
 				end
 			end
-		end)
-		local timeString = "generation of " .. (tostring(depth) .. " tiles took")
-		if time.minutes > 0 then
-			timeString ..= " " .. (tostring(time.minutes) .. (" minute" .. (if time.minutes > 1 then "s" else "")))
 		end
-		if time.seconds > 0 then
-			timeString ..= " " .. (tostring(time.seconds) .. (" second" .. (if time.seconds > 1 then "s" else "")))
-		end
-		if time.milliseconds > 0 then
-			timeString ..= " " .. (tostring(time.milliseconds) .. " milliseconds")
-		end
-		print(timeString)
-	end)
-end)
+	end
+	table.clear(tileRegistry.tiles)
+end
 remotes.clearTiles:connect(function()
-	print("received request to clear tiles, clearing.")
 	local children = tileStorage:GetChildren()
-	print("clearing " .. (tostring(#children) .. " tiles"))
-	task.spawn(function()
-		inverseForEach(children, function(v)
-			RunService.Heartbeat:Wait()
-			v:Destroy()
-		end)
-		table.clear(tileRegistry.tiles)
+	local batchSize = 50
+	local totalBatches = math.ceil(#children / batchSize)
+	local amt = #children
+	print("clearing " .. (tostring(#children) .. (" tiles in " .. (tostring(totalBatches) .. " batches"))))
+	local time = benchmark(function()
+		return clearTilesBatch(children, batchSize, totalBatches)
 	end)
+	local timeString = "cleared " .. (tostring(amt) .. (" tiles in " .. (tostring(totalBatches) .. " batches in")))
+	if time.minutes > 0 then
+		timeString ..= " " .. (tostring(time.minutes) .. (" minute" .. (if time.minutes > 1 then "s" else "")))
+	end
+	if time.seconds > 0 then
+		timeString ..= " " .. (tostring(time.seconds) .. (" second" .. (if time.seconds > 1 then "s" else "")))
+	end
+	if time.milliseconds > 0 then
+		timeString ..= " " .. (tostring(time.milliseconds) .. " milliseconds")
+	end
+	print(timeString)
 end)
 remotes.test:connect(function(player)
 	print("test remote called")

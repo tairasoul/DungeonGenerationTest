@@ -5,35 +5,34 @@ import RoomAttachment from "./room_attachment";
 import { tiles } from "shared/vars/folders";
 
 export default class RandomTileAttacher {
-    private tileRandomiser: TileRandomizer;
+    private tileRandomizer: TileRandomizer;
+
     constructor(folder: Folder) {
-        this.tileRandomiser = new TileRandomizer(folder);
+        this.tileRandomizer = new TileRandomizer(folder);
     }
 
-    attachTileToPoint(part: Part, tileType: RoomTypes): RoomInfo | undefined {
-        const tile = this.tileRandomiser.getTileOfType(tileType);
-        if (tile === undefined) return;
-        const clone = tile.roomModel.Clone();
-        clone.Parent = tiles;
-        const parser = new TileParser(clone);
-        const tileData = parser.getTileData();
-        const attachment = new RoomAttachment(tileData);
-        attachment.attachToPart(part);
-        return {
-            roomType: tile.roomType,
-            roomModel: clone
-        };
+    public attachTileToPoint(part: Part, tileType: RoomTypes): RoomInfo | undefined {
+        const tile = this.tileRandomizer.getTileOfType(tileType);
+        return this.attachTile(part, tile);
     }
 
-    attachRandomTile(part: Part): RoomInfo | undefined {
-        const tile = this.tileRandomiser.getRandomTile();
-        if (tile === undefined) return;
+    public attachRandomTile(part: Part): RoomInfo | undefined {
+        const tile = this.tileRandomizer.getRandomTile();
+        return this.attachTile(part, tile);
+    }
+
+    private attachTile(part: Part, tile: RoomInfo | undefined): RoomInfo | undefined {
+        if (!tile) return;
+
         const clone = tile.roomModel.Clone();
         clone.Parent = tiles;
+
         const parser = new TileParser(clone);
         const tileData = parser.getTileData();
+
         const attachment = new RoomAttachment(tileData);
         attachment.attachToPart(part);
+
         return {
             roomType: tile.roomType,
             roomModel: clone

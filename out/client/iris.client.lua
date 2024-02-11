@@ -3,9 +3,6 @@ local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_incl
 local remotes = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "remotes").remotes
 local iris = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "iris", "out").default
 local getRandom = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getRandom
-local _services = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services")
-local Players = _services.Players
-local Workspace = _services.Workspace
 local TileTypes = { "Hallway", "Room" }
 iris.Init()
 local num = 0
@@ -33,11 +30,9 @@ iris:Connect(function()
 	end
 	iris.End()
 	if iris.Button({ "generate " .. (string.lower(currentTile) .. " at current position") }).clicked() then
-		print("generating tile")
 		remotes.generateRoom:fire(currentTile)
 	end
 	if iris.Button({ "generate random tile at current location" }).clicked() then
-		print("generating random tile")
 		local _fn = remotes.generateRoom
 		local _arg0 = function()
 			return true
@@ -58,13 +53,11 @@ iris:Connect(function()
 	iris.Tree({ "generation with amount" })
 	num = iris.InputNum({ "tiles to generate" }).state.number.value
 	if iris.Button({ "generate with amount" }).clicked() then
-		print("generating with amount " .. tostring(num))
 		remotes.generateRoomWithDepth:fire(num)
 	end
 	iris.End()
 	iris.Tree({ "misc" })
 	if iris.Button({ "clear tiles" }).clicked() then
-		print("clearing tiles")
 		remotes.clearTiles:fire()
 	end
 	if iris.Button({ "test remote" }).clicked() then
@@ -72,9 +65,4 @@ iris:Connect(function()
 	end
 	iris.End()
 	iris.End()
-end)
-Players.LocalPlayer.CharacterAdded:Connect(function()
-	local _exp = (Workspace.CurrentCamera)
-	_exp.CameraSubject = Workspace:WaitForChild("cameraPart")
-	return _exp.CameraSubject
 end)

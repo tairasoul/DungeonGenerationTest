@@ -1,27 +1,30 @@
 import TileParser from "./tileParser";
 import RoomAttachment from "./room_attachment";
 import { RoomInfo } from "../interfaces/room";
-import { Tile as parserData } from "../interfaces/parser";
+import { Tile as ParserData } from "../interfaces/parser";
 
 export default class Tile {
-    _model: Model;
-    public attachmentPoints: Part[] = [];
-    attach: Part;
-    TileData: parserData;
-    info: RoomInfo
+    public _model: Model;
+    public attachmentPoints: Part[];
+    public TileData: ParserData;
+    public info: RoomInfo;
+
     constructor(model: Model, info: RoomInfo) {
         this._model = model;
         this.info = info;
         const parser = new TileParser(this._model);
         this.TileData = parser.getTileData();
-        this.attach = model.WaitForChild("AttachmentPoint") as Part;
-        for (const child of this._model.GetDescendants().filter((v) => v.IsA("Part") && v.Name === "Doorway") as Part[]) {
-            this.attachmentPoints.push(child)
-        }
+        this.attachmentPoints = this.findAttachmentPoints();
     }
 
-    attachTile(tile: Tile, point: Part) {
+    private findAttachmentPoints(): Part[] {
+        return this._model.GetDescendants().filter(
+            v => v.IsA("Part") && v.Name === "Doorway"
+        ) as Part[];
+    }
+
+    public attachTile(tile: Tile, point: Part): boolean {
         const attach = new RoomAttachment(tile.TileData);
-        return attach.attachToPart(point)
+        return attach.attachToPart(point);
     }
 }

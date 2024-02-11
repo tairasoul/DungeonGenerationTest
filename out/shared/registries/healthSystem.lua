@@ -14,88 +14,59 @@ do
 		return self:constructor(...) or self
 	end
 	function Registry:constructor()
-		self.HealthSystems = {}
+		self.healthSystems = {}
 	end
 	function Registry:getSystemForHumanoid(humanoid)
-		for _, system in self.HealthSystems do
-			if system.humanoid == humanoid then
-				return system
-			end
+		local _healthSystems = self.healthSystems
+		local _arg0 = function(system)
+			return system.humanoid == humanoid
 		end
-		return nil
-	end
-	function Registry:addHumanoid(humanoid)
-		if self:getSystemForHumanoid(humanoid) then
-			return self:getSystemForHumanoid(humanoid)
-		end
-		local system = HealthSystem.new(humanoid)
-		system:addValidListener(function()
-			local _healthSystems = self.HealthSystems
-			local _arg0 = function(v)
-				return v ~= system
-			end
-			-- ▼ ReadonlyArray.filter ▼
-			local _newValue = {}
-			local _length = 0
-			for _k, _v in _healthSystems do
-				if _arg0(_v, _k - 1, _healthSystems) == true then
-					_length += 1
-					_newValue[_length] = _v
-				end
-			end
-			-- ▲ ReadonlyArray.filter ▲
-			self.HealthSystems = _newValue
-			system:removeAllListeners()
-		end)
-		table.insert(self.HealthSystems, system)
-		return system
-	end
-	function Registry:removeHumanoid(humanoid)
-		local _healthSystems = self.HealthSystems
-		local _arg0 = function(v)
-			return v.humanoid == humanoid
-		end
-		-- ▼ ReadonlyArray.some ▼
-		local _result = false
-		for _k, _v in _healthSystems do
-			if _arg0(_v, _k - 1, _healthSystems) then
-				_result = true
+		-- ▼ ReadonlyArray.find ▼
+		local _result
+		for _i, _v in _healthSystems do
+			if _arg0(_v, _i - 1, _healthSystems) == true then
+				_result = _v
 				break
 			end
 		end
-		-- ▲ ReadonlyArray.some ▲
-		if _result then
-			local _healthSystems_1 = self.HealthSystems
-			local _arg0_1 = function(v)
-				return v.humanoid == humanoid
-			end
-			-- ▼ ReadonlyArray.find ▼
-			local _result_1
-			for _i, _v in _healthSystems_1 do
-				if _arg0_1(_v, _i - 1, _healthSystems_1) == true then
-					_result_1 = _v
-					break
-				end
-			end
-			-- ▲ ReadonlyArray.find ▲
-			local system = _result_1
-			system:removeAllListeners()
-			local _healthSystems_2 = self.HealthSystems
-			local _arg0_2 = function(v)
-				return v ~= system
-			end
-			-- ▼ ReadonlyArray.filter ▼
-			local _newValue = {}
-			local _length = 0
-			for _k, _v in _healthSystems_2 do
-				if _arg0_2(_v, _k - 1, _healthSystems_2) == true then
-					_length += 1
-					_newValue[_length] = _v
-				end
-			end
-			-- ▲ ReadonlyArray.filter ▲
-			self.HealthSystems = _newValue
+		-- ▲ ReadonlyArray.find ▲
+		return _result
+	end
+	function Registry:addHumanoid(humanoid)
+		local existingSystem = self:getSystemForHumanoid(humanoid)
+		if existingSystem then
+			return existingSystem
 		end
+		local system = HealthSystem.new(humanoid)
+		system:addValidListener(function()
+			self:removeSystem(system)
+		end)
+		table.insert(self.healthSystems, system)
+		return system
+	end
+	function Registry:removeHumanoid(humanoid)
+		local system = self:getSystemForHumanoid(humanoid)
+		if system then
+			self:removeSystem(system)
+		end
+	end
+	function Registry:removeSystem(system)
+		system:removeAllListeners()
+		local _healthSystems = self.healthSystems
+		local _arg0 = function(existingSystem)
+			return existingSystem ~= system
+		end
+		-- ▼ ReadonlyArray.filter ▼
+		local _newValue = {}
+		local _length = 0
+		for _k, _v in _healthSystems do
+			if _arg0(_v, _k - 1, _healthSystems) == true then
+				_length += 1
+				_newValue[_length] = _v
+			end
+		end
+		-- ▲ ReadonlyArray.filter ▲
+		self.healthSystems = _newValue
 	end
 	_class = Registry
 end

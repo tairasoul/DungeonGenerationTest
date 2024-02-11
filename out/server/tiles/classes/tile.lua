@@ -15,12 +15,13 @@ do
 		return self:constructor(...) or self
 	end
 	function Tile:constructor(model, info)
-		self.attachmentPoints = {}
 		self._model = model
 		self.info = info
 		local parser = TileParser.new(self._model)
 		self.TileData = parser:getTileData()
-		self.attach = model:WaitForChild("AttachmentPoint")
+		self.attachmentPoints = self:findAttachmentPoints()
+	end
+	function Tile:findAttachmentPoints()
 		local _exp = self._model:GetDescendants()
 		local _arg0 = function(v)
 			return v:IsA("Part") and v.Name == "Doorway"
@@ -35,9 +36,7 @@ do
 			end
 		end
 		-- ▲ ReadonlyArray.filter ▲
-		for _, child in _newValue do
-			table.insert(self.attachmentPoints, child)
-		end
+		return _newValue
 	end
 	function Tile:attachTile(tile, point)
 		local attach = RoomAttachment.new(tile.TileData)

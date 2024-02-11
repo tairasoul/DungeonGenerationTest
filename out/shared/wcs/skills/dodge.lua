@@ -60,15 +60,14 @@ do
 			if raycastResult ~= nil then
 				distance = Vector3.new(-raycastResult.Distance, 0, -raycastResult.Distance)
 			end
-			local tweenI = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-			local _fn_2 = TweenService
-			local _object = {}
-			local _left = "CFrame"
+			local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
 			local _cFrame = primary.CFrame
 			local _distance_1 = distance
 			local _arg0_1 = lookVector * _distance_1
-			_object[_left] = _cFrame + _arg0_1
-			local tween = _fn_2:Create(primary, tweenI, _object)
+			local targetPosition = _cFrame + _arg0_1
+			local tween = TweenService:Create(primary, tweenInfo, {
+				CFrame = targetPosition,
+			})
 			tween:Play()
 			tween.Completed:Once(function()
 				primary.Anchored = false
