@@ -57,7 +57,6 @@ remotes.generateRoomWithDepth.connect((player, depth) => {
         const clone = randomized.roomModel.Clone();
         clone.Parent = tileStorage;
         const tc = new Tile(clone, randomized);
-    
         if (tile.attachTile(tc, randomThis)) {
             const index = tileRegistry.tiles.indexOf(tile) + 1;
             tileRegistry.tiles.insert(index, tc);
