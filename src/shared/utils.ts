@@ -49,6 +49,49 @@ export function getAllBeforeCondition<T extends defined>(array: T[], condition: 
     return newArr;
 }
 
+export function inverseForEach<T extends defined>(array: T[], callback: (item: T) => void) {
+    for (let i = array.size() - 1; i >= 0; i--) {
+        callback(array[i]);
+    }
+}
+
+export function getNextAfterCondition_Reverse<T extends defined>(array: T[], condition: (item: T) => boolean = () => true) {
+    let found = false;
+    for (let i = array.size() - 1; i >= 0; i--) {
+        const item = array[i];
+        if (found) {
+            return item;
+        }
+        if (condition(item)) {
+            found = true;
+        }
+    }
+    return undefined; // Return undefined if no item satisfies the condition
+}
+
+export function getNextAfterCondition<T extends defined>(array: T[], condition: (item: T) => boolean = () => true) {
+    let found = false;
+    for (let i = 0; i < array.size() - 1; i--) {
+        const item = array[i];
+        if (found) {
+            return item;
+        }
+        if (condition(item)) {
+            found = true;
+        }
+    }
+    return undefined; // Return undefined if no item satisfies the condition
+}
+
+export function getLastBeforeCondition<T extends defined>(array: T[], condition: (item: T) => boolean = () => true) {
+    for (let i = array.size() - 1; i >= 0; i--) {
+        const item = array[i];
+        if (condition(item))
+            return item;
+    }
+    return undefined; // Return undefined if no item satisfies the condition
+}
+
 export function getDistance(vector1: Vector3, vector2: Vector3) {
     return vector1.sub(vector2);
 }

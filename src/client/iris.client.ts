@@ -1,6 +1,7 @@
 import { remotes } from "shared/remotes";
 import iris from "@rbxts/iris";
 import { getRandom } from "shared/utils";
+import { Players, Workspace } from "@rbxts/services";
 
 type tiles = "Hallway" | "Room";
 
@@ -51,3 +52,5 @@ iris.Connect(() => {
         iris.End();
     iris.End();
 });
+
+Players.LocalPlayer.CharacterAdded.Connect(() => (Workspace.CurrentCamera as Camera).CameraSubject = Workspace.WaitForChild("cameraPart") as Part);

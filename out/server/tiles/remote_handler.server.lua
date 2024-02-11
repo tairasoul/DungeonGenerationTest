@@ -8,14 +8,20 @@ local RandomTileAttacher = TS.import(script, game:GetService("ServerScriptServic
 local Tile = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tile").default
 local TileRandomizer = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "randomised.tiles").default
 local _utils = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils")
-local getAllBeforeCondition = _utils.getAllBeforeCondition
+local getNextAfterCondition_Reverse = _utils.getNextAfterCondition_Reverse
 local getRandom = _utils.getRandom
+local inverseForEach = _utils.inverseForEach
 local tileStorage = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "vars", "folders").tiles
 local make = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "make")
 local tileRegistry = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tileRegistry").default
 local folder = ServerStorage:WaitForChild("tiles")
 local randomizer = RandomTileAttacher.new(folder)
 local tiles = TileRandomizer.new(folder)
+local cameraPart = make("Part", {
+	Parent = game:GetService("Workspace"),
+	Anchored = true,
+	Name = "cameraPart",
+})
 remotes.generateRoom:connect(function(player, roomT)
 	print("received request to generate tile, generating")
 	local character = player.Character or (player.CharacterAdded:Wait())
@@ -36,37 +42,52 @@ remotes.generateRoomWithDepth:connect(function(player, depth)
 	local _tile = tile
 	table.insert(_tiles, _tile)
 	local function genTile()
+		local _fn = character
+		local _exp = tile._model:GetPivot()
+		local _vector3 = Vector3.new(0, 50, 0)
+		_fn:PivotTo(_exp + _vector3)
+		local _position = tile._model:GetPivot().Position
+		local _vector3_1 = Vector3.new(0, 50, 0)
+		cameraPart.Position = _position + _vector3_1
 		local randomized = tiles:getTileOfTypes(tile.TileData.types)
 		if randomized == nil then
+			return nil
+		end
+		local randomThis = getRandom(tile.attachmentPoints, function(inst)
+			return not inst:FindFirstChild("HasAttachment")
+		end)
+		if randomThis == nil then
+			tile = getNextAfterCondition_Reverse(tileRegistry.tiles, function(item)
+				return item == tile
+			end)
+			genTile()
 			return nil
 		end
 		local clone = randomized.roomModel:Clone()
 		clone.Parent = tileStorage
 		local tc = Tile.new(clone, randomized)
-		local randomThis = getRandom(tile.attachmentPoints, function(inst)
-			return not inst:FindFirstChild("HasAttachment")
-		end)
-		if randomThis == nil then
-			clone:ClearAllChildren()
-			clone.Parent = nil
-			local beforeTile = getAllBeforeCondition(tileRegistry.tiles, function(item)
-				return item ~= tile
-			end)
-			tile = beforeTile[#beforeTile - 1 + 1]
-			genTile()
-			return nil
-		end
 		if tile:attachTile(tc, randomThis) then
-			tile = tc
 			local _tiles_1 = tileRegistry.tiles
+			local _tiles_2 = tileRegistry.tiles
 			local _tile_1 = tile
-			table.insert(_tiles_1, _tile_1)
+			local _arg0 = (table.find(_tiles_2, _tile_1) or 0) - 1 + 1
+			table.insert(_tiles_1, _arg0 + 1, tc)
+			tile = tc
 		else
+			if getRandom(tile.attachmentPoints, function(inst)
+				return not inst:FindFirstChild("HasAttachment")
+			end) == nil then
+				tile = getNextAfterCondition_Reverse(tileRegistry.tiles, function(item)
+					return item == tile
+				end)
+			end
 			clone:ClearAllChildren()
 			clone.Parent = nil
+			genTile()
 		end
 	end
 	task.spawn(function()
+		local startTime = os.time()
 		do
 			local i = 0
 			local _shouldIncrement = false
@@ -80,22 +101,26 @@ remotes.generateRoomWithDepth:connect(function(player, depth)
 					break
 				end
 				RunService.Heartbeat:Wait()
+				print("generating tile " .. (tostring(i) .. ("/" .. tostring(depth))))
 				genTile()
 			end
 		end
+		local endTime = os.time()
+		local diff = endTime - startTime
+		print("generation of " .. (tostring(depth) .. (" tiles took" .. ((if diff > 60 then " " .. (tostring(math.round(diff / 60)) .. " minutes") else "") .. (if (diff % 60) ~= 0 then " " .. (tostring(diff % 60) .. " seconds") else "")))))
 	end)
 end)
 remotes.clearTiles:connect(function()
 	print("received request to clear tiles, clearing.")
 	local children = tileStorage:GetChildren()
 	print("clearing " .. (tostring(#children) .. " tiles"))
-	local _arg0 = function(v)
-		return v:Destroy()
-	end
-	for _k, _v in children do
-		_arg0(_v, _k - 1, children)
-	end
-	table.clear(tileRegistry.tiles)
+	task.spawn(function()
+		inverseForEach(children, function(v)
+			RunService.Heartbeat:Wait()
+			v:Destroy()
+		end)
+		table.clear(tileRegistry.tiles)
+	end)
 end)
 remotes.test:connect(function(player)
 	print("test remote called")

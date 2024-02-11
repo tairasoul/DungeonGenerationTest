@@ -116,6 +116,109 @@ local function getAllBeforeCondition(array, condition)
 	end
 	return newArr
 end
+local function inverseForEach(array, callback)
+	do
+		local i = #array - 1
+		local _shouldIncrement = false
+		while true do
+			if _shouldIncrement then
+				i -= 1
+			else
+				_shouldIncrement = true
+			end
+			if not (i >= 0) then
+				break
+			end
+			callback(array[i + 1])
+		end
+	end
+end
+local function getNextAfterCondition_Reverse(array, condition)
+	if condition == nil then
+		condition = function()
+			return true
+		end
+	end
+	local found = false
+	do
+		local i = #array - 1
+		local _shouldIncrement = false
+		while true do
+			if _shouldIncrement then
+				i -= 1
+			else
+				_shouldIncrement = true
+			end
+			if not (i >= 0) then
+				break
+			end
+			local item = array[i + 1]
+			if found then
+				return item
+			end
+			if condition(item) then
+				found = true
+			end
+		end
+	end
+	return nil
+end
+local function getNextAfterCondition(array, condition)
+	if condition == nil then
+		condition = function()
+			return true
+		end
+	end
+	local found = false
+	do
+		local i = 0
+		local _shouldIncrement = false
+		while true do
+			if _shouldIncrement then
+				i -= 1
+			else
+				_shouldIncrement = true
+			end
+			if not (i < #array - 1) then
+				break
+			end
+			local item = array[i + 1]
+			if found then
+				return item
+			end
+			if condition(item) then
+				found = true
+			end
+		end
+	end
+	return nil
+end
+local function getLastBeforeCondition(array, condition)
+	if condition == nil then
+		condition = function()
+			return true
+		end
+	end
+	do
+		local i = #array - 1
+		local _shouldIncrement = false
+		while true do
+			if _shouldIncrement then
+				i -= 1
+			else
+				_shouldIncrement = true
+			end
+			if not (i >= 0) then
+				break
+			end
+			local item = array[i + 1]
+			if condition(item) then
+				return item
+			end
+		end
+	end
+	return nil
+end
 local function getDistance(vector1, vector2)
 	local _vector1 = vector1
 	local _vector2 = vector2
@@ -207,6 +310,10 @@ return {
 	getRandom = getRandom,
 	getRandomWithWeight = getRandomWithWeight,
 	getAllBeforeCondition = getAllBeforeCondition,
+	inverseForEach = inverseForEach,
+	getNextAfterCondition_Reverse = getNextAfterCondition_Reverse,
+	getNextAfterCondition = getNextAfterCondition,
+	getLastBeforeCondition = getLastBeforeCondition,
 	getDistance = getDistance,
 	guid = guid,
 	eulerToVector = eulerToVector,

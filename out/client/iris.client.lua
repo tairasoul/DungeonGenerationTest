@@ -3,6 +3,9 @@ local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_incl
 local remotes = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "remotes").remotes
 local iris = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "iris", "out").default
 local getRandom = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getRandom
+local _services = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services")
+local Players = _services.Players
+local Workspace = _services.Workspace
 local TileTypes = { "Hallway", "Room" }
 iris.Init()
 local num = 0
@@ -69,4 +72,9 @@ iris:Connect(function()
 	end
 	iris.End()
 	iris.End()
+end)
+Players.LocalPlayer.CharacterAdded:Connect(function()
+	local _exp = (Workspace.CurrentCamera)
+	_exp.CameraSubject = Workspace:WaitForChild("cameraPart")
+	return _exp.CameraSubject
 end)

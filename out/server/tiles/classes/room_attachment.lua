@@ -49,7 +49,12 @@ do
 			})
 			local _tiles = tileRegistry.tiles
 			local _arg0_1 = function(v)
-				return v._model:WaitForChild("centerPoint") == result.Instance
+				local _exp_1 = v._model:WaitForChild("centerPoint")
+				local _result = result.Instance:FindFirstAncestorOfClass("Model")
+				if _result ~= nil then
+					_result = _result:WaitForChild("centerPoint")
+				end
+				return _exp_1 == _result
 			end
 			-- ▼ ReadonlyArray.find ▼
 			local _result

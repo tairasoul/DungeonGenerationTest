@@ -32,7 +32,7 @@ export default class RoomAttachment {
         const result = Workspace.Raycast(part.GetPivot().sub(lookVector.mul(newPos)).Position, new Vector3(0, -2, 0));
         if (result !== undefined) {
             make("BoolValue", {Parent: part, Value: true, Name: "HasAttachment"});
-            const tile = tileRegistry.tiles.find((v) => v._model.WaitForChild("centerPoint") === result.Instance) as tile;
+            const tile = tileRegistry.tiles.find((v) => v._model.WaitForChild("centerPoint") === result.Instance.FindFirstAncestorOfClass("Model")?.WaitForChild("centerPoint")) as tile;
             const point = tile.attachmentPoints.filter((v) => !v.FindFirstChild("HasAttachment")).find((v) => getDistance(v.Position, part.Position).Magnitude < 2) as Part;
             if (point !== undefined)
                 make("BoolValue", {Parent: point, Value: true, Name: "HasAttachment"});
