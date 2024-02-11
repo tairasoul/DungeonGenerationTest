@@ -1,4 +1,4 @@
-import { ServerStorage } from "@rbxts/services";
+import { ServerStorage, Workspace } from "@rbxts/services";
 import { remotes } from "shared/remotes";
 import RandomTileAttacher from "./classes/random_tile_attachment";
 import Tile from "./classes/tile";
@@ -9,6 +9,8 @@ import make from "@rbxts/make";
 import { RoomInfo } from "./interfaces/room";
 
 const folder = ServerStorage.WaitForChild("tiles") as Folder;
+
+const cameraPart = make("Part", { Parent: Workspace, Transparency: 1, Anchored: true })
 
 const randomizer = new RandomTileAttacher(folder);
 
@@ -33,46 +35,51 @@ remotes.generateRoomWithDepth.connect((player, depth) => {
     const baseModel = randomizer.attachRandomTile(character.WaitForChild("Torso") as Part) as RoomInfo;
     let tile = new Tile(baseModel.roomModel, baseModel);
     tStorage.push(tile);
-    for (let i = 0; i < depth; i++) {
-        const randomized = tiles.getTileOfTypes(tile.TileData.types);
-        if (randomized === undefined) continue;
-        const clone = randomized.roomModel.Clone();
-        clone.Parent = tileStorage;
-        let tc = new Tile(clone, randomized);
-        let randomThis = getRandom(tile.attachmentPoints, (inst) => !inst.FindFirstChild("HasAttachment"));
-        if (randomThis === undefined) {
-            if (tc.info.roomType === "Room") {
-                clone.ClearAllChildren();
-                clone.Parent = undefined;
-                const random = tiles.getTileOfTypes(["Hallway"]);
-                if (random === undefined) continue;
-                const clone1 = random.roomModel.Clone();
-                clone1.Parent = tileStorage;
-                tc = new Tile(clone1, random);
+    task.spawn(() => {
+        for (let i = 0; i < depth; i++) {
+            task.wait()
+            cameraPart.Position = tile.attach.Position.add(new Vector3(0, 50, 0));
+            character.PivotTo(cameraPart.CFrame);
+            const randomized = tiles.getTileOfTypes(tile.TileData.types);
+            if (randomized === undefined) continue;
+            const clone = randomized.roomModel.Clone();
+            clone.Parent = tileStorage;
+            let tc = new Tile(clone, randomized);
+            let randomThis = getRandom(tile.attachmentPoints, (inst) => !inst.FindFirstChild("HasAttachment"));
+            if (randomThis === undefined) {
+                if (tc.info.roomType === "Room") {
+                    clone.ClearAllChildren();
+                    clone.Parent = undefined;
+                    const random = tiles.getTileOfTypes(["Hallway"]);
+                    if (random === undefined) continue;
+                    const clone1 = random.roomModel.Clone();
+                    clone1.Parent = tileStorage;
+                    tc = new Tile(clone1, random);
+                }
+                else {
+                    clone.ClearAllChildren();
+                    clone.Parent = undefined;
+                    const random = tiles.getTileOfTypes(["Room"]);
+                    if (random === undefined) continue;
+                    const clone1 = random.roomModel.Clone();
+                    clone1.Parent = tileStorage;
+                    tc = new Tile(clone1, random);
+                }
+                const filtered1 = tStorage.filter((v) => v.info.roomType !== tc.info.roomType);
+                const filtered = filtered1.filter((v) => v.attachmentPoints.some((part) => !part.FindFirstChild("HasAttachment")));
+                randomThis = getRandom(filtered[filtered.size() - 1].attachmentPoints, (inst) => !inst.FindFirstChild("HasAttachment"))
+            };
+            if (randomThis === undefined) continue;
+            if (tile.attachTile(tc, randomThis)) {
+                tile = tc;
+                tStorage.push(tile);
             }
             else {
                 clone.ClearAllChildren();
                 clone.Parent = undefined;
-                const random = tiles.getTileOfTypes(["Room"]);
-                if (random === undefined) continue;
-                const clone1 = random.roomModel.Clone();
-                clone1.Parent = tileStorage;
-                tc = new Tile(clone1, random);
             }
-            const filtered1 = tStorage.filter((v) => v.info.roomType !== tc.info.roomType);
-            const filtered = filtered1.filter((v) => v.attachmentPoints.some((part) => !part.FindFirstChild("HasAttachment")));
-            randomThis = getRandom(filtered[filtered.size() - 1].attachmentPoints, (inst) => !inst.FindFirstChild("HasAttachment"))
-        };
-        if (randomThis === undefined) continue;
-        if (tile.attachTile(tc, randomThis)) {
-            tile = tc;
-            tStorage.push(tile);
         }
-        else {
-            clone.ClearAllChildren();
-            clone.Parent = undefined;
-        }
-    }
+    })
 })
 
 remotes.clearTiles.connect(() => {
