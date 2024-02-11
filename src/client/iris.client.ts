@@ -33,10 +33,10 @@ iris.Connect(() => {
                 remotes.generateRoom.fire(getRandom(TileTypes.filter(() => true)) as tiles);
             }
         iris.End();
-        iris.Tree(["generation with depth"])
-            num = iris.InputNum(["generation depth"]).state["number"].value as number;
-            if (iris.Button(["generate with depth"]).clicked()) {
-                print(`generating with depth ${num}`);
+        iris.Tree(["generation with amount"])
+            num = iris.InputNum(["tiles to generate"]).state["number"].value as number;
+            if (iris.Button(["generate with amount"]).clicked()) {
+                print(`generating with amount ${num}`);
                 remotes.generateRoomWithDepth.fire(num);
             }
         iris.End();
