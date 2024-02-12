@@ -1,4 +1,5 @@
 import { HttpService, Players, RunService } from "@rbxts/services";
+import remotes from "./remotes";
 
 export function getRandom<T extends defined>(array: T[], filter: (inst: T) => boolean = () => true) {
     const filtered = array.filter(filter);
@@ -168,4 +169,8 @@ export function getAllPlayerParts() {
         }
     }
     return parts;
+}
+
+export function logServer(str: string, logType: "Warning" | "Error" | "Message" = "Message") {
+    remotes.serverLog.fireAll(str, logType);
 }

@@ -33,13 +33,15 @@ export default class RoomAttachment {
         if (result !== undefined) {
             make("BoolValue", {Parent: part, Value: true, Name: "HasAttachment"});
             const tile = tileRegistry.tiles.find((v) => v._model.WaitForChild("centerPoint") === result.Instance.FindFirstAncestorOfClass("Model")?.WaitForChild("centerPoint")) as tile;
-            const point = tile.attachmentPoints.filter((v) => !v.FindFirstChild("HasAttachment")).find((v) => getDistance(v.Position, part.Position).Magnitude < 2) as Part;
-            if (point !== undefined)
-                make("BoolValue", {Parent: point, Value: true, Name: "HasAttachment"});
-            return false;
+            if (tile !== undefined) {
+                const point = tile.attachmentPoints.filter((v) => !v.FindFirstChild("HasAttachment")).find((v) => getDistance(v.Position, part.Position).Magnitude < 2) as Part;
+                if (point !== undefined)
+                    make("BoolValue", {Parent: point, Value: true, Name: "HasAttachment"});
+                return false;
+            } 
         }
         center.PivotTo(part.GetPivot().sub(lookVector.mul(newPos)).sub(new Vector3(0, 1, 0)));
-        make("BoolValue", {Parent: part, Value: true, Name: "HasAttachment"});
+        if (!part.FindFirstChild("HasAttachment")) make("BoolValue", {Parent: part, Value: true, Name: "HasAttachment"});
         make("BoolValue", {Parent: (offset as PartOffset).part, Value: true, Name: "HasAttachment"});
         return true;
     }

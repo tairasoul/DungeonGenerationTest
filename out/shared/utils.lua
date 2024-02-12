@@ -3,6 +3,7 @@ local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_incl
 local _services = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services")
 local HttpService = _services.HttpService
 local Players = _services.Players
+local remotes = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "remotes").default
 local function getRandom(array, filter)
 	if filter == nil then
 		filter = function()
@@ -320,6 +321,12 @@ local function getAllPlayerParts()
 	end
 	return parts
 end
+local function logServer(str, logType)
+	if logType == nil then
+		logType = "Message"
+	end
+	remotes.serverLog:fireAll(str, logType)
+end
 return {
 	getRandom = getRandom,
 	getRandomWithWeight = getRandomWithWeight,
@@ -337,4 +344,5 @@ return {
 	CFrameComponentsAdd = CFrameComponentsAdd,
 	applyOffsetRelativeToPart = applyOffsetRelativeToPart,
 	getAllPlayerParts = getAllPlayerParts,
+	logServer = logServer,
 }

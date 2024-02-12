@@ -3,12 +3,10 @@ local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_incl
 local _remo = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "remo", "src")
 local createRemotes = _remo.createRemotes
 local remote = _remo.remote
-local remotes = createRemotes({
-	generateRoom = remote(),
-	generateRoomWithDepth = remote(),
-	clearTiles = remote(),
-	test = remote(),
+local default = createRemotes({
+	generateDungeon = remote(),
+	serverLog = remote(),
 })
 return {
-	remotes = remotes,
+	default = default,
 }

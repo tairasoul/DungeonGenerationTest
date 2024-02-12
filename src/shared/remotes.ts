@@ -1,12 +1,8 @@
-import { Server, createRemotes, remote } from "@rbxts/remo";
+import { Client, Server, createRemotes, remote } from "@rbxts/remo";
 
-type RoomTypes = "Hallway" | "Room";
-
-export const remotes = createRemotes(
+export default createRemotes(
     {
-        generateRoom: remote<Server, [roomType: RoomTypes]>(),
-        generateRoomWithDepth: remote<Server, [depth: number]>(),
-        clearTiles: remote<Server>(),
-        test: remote<Server>()
+        generateDungeon: remote<Server>(),
+        serverLog: remote<Client, [logString: string, logType: "Warning" | "Error"  | "Message"]>()
     }
 )
