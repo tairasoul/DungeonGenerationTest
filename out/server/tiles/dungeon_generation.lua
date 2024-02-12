@@ -174,7 +174,6 @@ do
 				return nil
 			end
 			local randomizedTile = tiles:getTileOfType(cfg.LAST_ROOM_TYPE)
-			print("[src/server/tiles/dungeon_generation.ts:108]", randomizedTile)
 			if not randomizedTile then
 				return nil
 			end
@@ -204,7 +203,7 @@ do
 				genFurthestTile()
 			end
 		end
-		logServer("generating " .. (tostring(cfg.TILES) .. " tiles"), "src/server/tiles/dungeon_generation.ts", 134)
+		logServer("generating " .. (tostring(cfg.TILES) .. " tiles"), "src/server/tiles/dungeon_generation.ts", 133)
 		local time = benchmark(genTileBatch)
 		local timeString = "generation of " .. (tostring(cfg.TILES) .. " tiles took")
 		if time.minutes > 0 then
@@ -216,7 +215,7 @@ do
 		if time.milliseconds > 0 then
 			timeString ..= " " .. (tostring(time.milliseconds) .. " milliseconds")
 		end
-		logServer(timeString, "src/server/tiles/dungeon_generation.ts", 147)
+		logServer(timeString, "src/server/tiles/dungeon_generation.ts", 146)
 		local furthestTime = benchmark(genFurthestTile)
 		local furthestTimeString = "generation of " .. (cfg.LAST_ROOM_TYPE .. " room at furthest tile took")
 		if furthestTime.minutes > 0 then
@@ -228,7 +227,7 @@ do
 		if furthestTime.milliseconds > 0 then
 			furthestTimeString ..= " " .. (tostring(furthestTime.milliseconds) .. " milliseconds")
 		end
-		logServer(furthestTimeString, "src/server/tiles/dungeon_generation.ts", 161)
+		logServer(furthestTimeString, "src/server/tiles/dungeon_generation.ts", 160)
 	end
 	_class = Generator
 end
