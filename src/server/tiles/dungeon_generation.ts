@@ -1,6 +1,5 @@
 import { RunService, ServerStorage } from "@rbxts/services";
 import RandomTileAttacher from "./classes/random_tile_attachment";
-import TileRandomizer from "./classes/randomised.tiles";
 import { config } from "./dungeon_config";
 import { benchmark, getNextAfterCondition_Reverse, getRandom, logServer } from "shared/utils";
 import { dungeonFolder } from "shared/vars/folders";
@@ -10,11 +9,11 @@ import { $file } from "rbxts-transform-debug";
 import { findFurthestTileFromSpecificTile } from "./pathfinding/findFurthest";
 import make from "@rbxts/make";
 
-const folder = ServerStorage.WaitForChild("tiles") as Folder;
+const folder = ServerStorage.WaitForChild("Tiles") as Folder;
 
 const randomizer = new RandomTileAttacher(folder);
 
-const tiles = new TileRandomizer(folder);
+const tiles = randomizer.tileRandomizer;
 export default class Generator {
     private config: config;
     private tiles: Tile[] = [];
@@ -56,7 +55,6 @@ export default class Generator {
             timeString += ` ${time.milliseconds} milliseconds`;
         }
         logServer(timeString, $file.filePath, $file.lineNumber);
-        this.tileStorage.Destroy();
     }
 
     generate() {
@@ -154,7 +152,7 @@ export default class Generator {
         logServer(timeString, $file.filePath, $file.lineNumber);
 
         const furthestTime = benchmark(genFurthestTile);
-        let furthestTimeString = `generation of ${this.config.LAST_ROOM_TYPE} room at furthest tile took`;
+        let furthestTimeString = `generation of ${this.config.LAST_ROOM_TYPE} tile type at furthest tile took`;
         if (furthestTime.minutes > 0) {
             furthestTimeString += ` ${furthestTime.minutes} minute${furthestTime.minutes > 1 ? "s": ""}`;
         }

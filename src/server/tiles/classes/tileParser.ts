@@ -21,21 +21,15 @@ export default class TileParser {
 
         return {
             attachmentPoint,
-            types: roomInfo.types,
+            types: roomInfo,
             originModel: this.model,
             centerPoint,
             validPoints
         };
     }
 
-    private getRoomInfo(): RoomInfo {
-        const roomInfoModule = this.model.FindFirstChild("room.info") as ModuleScript;
-        if (!roomInfoModule) {
-            warn(`Room info module not found for model ${this.model.Name}`);
-            return { types: [] };
-        }
-
-        const roomInfo = require(roomInfoModule) as RoomInfo;
-        return roomInfo;
+    private getRoomInfo(): string[] {
+        const module = require(this.model.FindFirstChild("validTypes") as ModuleScript) as string[];
+        return module;
     }
 }

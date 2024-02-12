@@ -3,7 +3,6 @@ local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_incl
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 local RandomTileAttacher = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "random_tile_attachment").default
-local TileRandomizer = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "randomised.tiles").default
 local _utils = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils")
 local benchmark = _utils.benchmark
 local getNextAfterCondition_Reverse = _utils.getNextAfterCondition_Reverse
@@ -13,9 +12,9 @@ local dungeonFolder = TS.import(script, game:GetService("ReplicatedStorage"), "T
 local Tile = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tile").default
 local findFurthestTileFromSpecificTile = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "pathfinding", "findFurthest").findFurthestTileFromSpecificTile
 local make = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "make")
-local folder = ServerStorage:WaitForChild("tiles")
+local folder = ServerStorage:WaitForChild("Tiles")
 local randomizer = RandomTileAttacher.new(folder)
-local tiles = TileRandomizer.new(folder)
+local tiles = randomizer.tileRandomizer
 local Generator
 do
 	Generator = setmetatable({}, {
@@ -77,7 +76,7 @@ do
 		local batchSize = 50
 		local totalBatches = math.ceil(#children / batchSize)
 		local amt = #children
-		logServer("clearing " .. (tostring(#children) .. (" tiles in " .. (tostring(totalBatches) .. " batches"))), "src/server/tiles/dungeon_generation.ts", 46)
+		logServer("clearing " .. (tostring(#children) .. (" tiles in " .. (tostring(totalBatches) .. " batches"))), "src/server/tiles/dungeon_generation.ts", 45)
 		local time = benchmark(function()
 			return self:_clearTilesBatch(children, batchSize, totalBatches)
 		end)
@@ -91,8 +90,7 @@ do
 		if time.milliseconds > 0 then
 			timeString ..= " " .. (tostring(time.milliseconds) .. " milliseconds")
 		end
-		logServer(timeString, "src/server/tiles/dungeon_generation.ts", 58)
-		self._tileStorage:Destroy()
+		logServer(timeString, "src/server/tiles/dungeon_generation.ts", 57)
 	end
 	function Generator:generate()
 		local baseModel = randomizer:attachTileToPoint(self._config.STARTING_PART, self._config.INITIAL_TILE_TYPE, self._tileStorage)
@@ -211,7 +209,7 @@ do
 				genFurthestTile()
 			end
 		end
-		logServer("generating " .. (tostring(self._config.TILES) .. " tiles"), "src/server/tiles/dungeon_generation.ts", 141)
+		logServer("generating " .. (tostring(self._config.TILES) .. " tiles"), "src/server/tiles/dungeon_generation.ts", 139)
 		local time = benchmark(genTileBatch)
 		local timeString = "generation of " .. (tostring(self._config.TILES) .. " tiles took")
 		if time.minutes > 0 then
@@ -223,9 +221,9 @@ do
 		if time.milliseconds > 0 then
 			timeString ..= " " .. (tostring(time.milliseconds) .. " milliseconds")
 		end
-		logServer(timeString, "src/server/tiles/dungeon_generation.ts", 154)
+		logServer(timeString, "src/server/tiles/dungeon_generation.ts", 152)
 		local furthestTime = benchmark(genFurthestTile)
-		local furthestTimeString = "generation of " .. (self._config.LAST_ROOM_TYPE .. " room at furthest tile took")
+		local furthestTimeString = "generation of " .. (self._config.LAST_ROOM_TYPE .. " tile type at furthest tile took")
 		if furthestTime.minutes > 0 then
 			furthestTimeString ..= " " .. (tostring(furthestTime.minutes) .. (" minute" .. (if furthestTime.minutes > 1 then "s" else "")))
 		end
@@ -235,7 +233,7 @@ do
 		if furthestTime.milliseconds > 0 then
 			furthestTimeString ..= " " .. (tostring(furthestTime.milliseconds) .. " milliseconds")
 		end
-		logServer(furthestTimeString, "src/server/tiles/dungeon_generation.ts", 168)
+		logServer(furthestTimeString, "src/server/tiles/dungeon_generation.ts", 166)
 	end
 end
 return {

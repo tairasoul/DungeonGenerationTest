@@ -1,34 +1,28 @@
 import { RoomTypes, RoomInfo } from "../interfaces/room";
 import { getRandom } from "shared/utils";
-
-interface TileModule {
-    roomExport: RoomInfo;
-}
+import tileFolderParser from "./tileFolderParser";
 
 export default class TileRandomizer {
-    private tileFolder: Folder;
+    parser: tileFolderParser
 
     constructor(folder: Folder) {
-        this.tileFolder = folder;
+        this.parser = new tileFolderParser(folder);
     }
 
     private getValidInstances(roomTypes?: RoomTypes[]): RoomInfo[] {
-        const children = this.tileFolder.GetChildren();
-        const validInstances: RoomInfo[] = [];
-        
-        for (const child of children) {
-            const module = child.FindFirstChildOfClass("ModuleScript");
-            if (module !== undefined) {
-                const info = require(module) as TileModule;
-                const roomExport = info.roomExport;
-
-                if (!roomTypes || roomTypes.includes(roomExport.roomType)) {
-                    validInstances.push(roomExport);
-                }
+        const instances: RoomInfo[] = [];
+        for (const roomType of roomTypes ?? this.parser.getTypes()) {
+            const rooms = this.parser.getRoomsOfType(roomType);
+            for (const room of rooms as Model[]) {
+                instances.push(
+                    {
+                        roomModel: room,
+                        roomType
+                    }
+                )
             }
         }
-        
-        return validInstances;
+        return instances;
     }
 
     getRandomTile(): RoomInfo | undefined {

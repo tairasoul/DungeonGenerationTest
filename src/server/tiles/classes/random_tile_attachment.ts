@@ -4,7 +4,7 @@ import TileParser from "./tileParser";
 import RoomAttachment from "./room_attachment";
 
 export default class RandomTileAttacher {
-    private tileRandomizer: TileRandomizer;
+    tileRandomizer: TileRandomizer;
 
     constructor(folder: Folder) {
         this.tileRandomizer = new TileRandomizer(folder);

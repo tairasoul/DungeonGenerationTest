@@ -1,6 +1,7 @@
 -- Compiled with roblox-ts v2.2.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local getRandom = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getRandom
+local tileFolderParser = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tileFolderParser").default
 local TileRandomizer
 do
 	TileRandomizer = setmetatable({}, {
@@ -14,28 +15,21 @@ do
 		return self:constructor(...) or self
 	end
 	function TileRandomizer:constructor(folder)
-		self._tileFolder = folder
+		self.parser = tileFolderParser.new(folder)
 	end
 	function TileRandomizer:_getValidInstances(roomTypes)
-		local children = self._tileFolder:GetChildren()
-		local validInstances = {}
-		for _, child in children do
-			local module = child:FindFirstChildOfClass("ModuleScript")
-			if module ~= nil then
-				local info = require(module)
-				local roomExport = info.roomExport
-				local _condition = not roomTypes
-				if not _condition then
-					local _roomTypes = roomTypes
-					local _roomType = roomExport.roomType
-					_condition = table.find(_roomTypes, _roomType) ~= nil
-				end
-				if _condition then
-					table.insert(validInstances, roomExport)
-				end
+		local instances = {}
+		for _, roomType in roomTypes or self.parser:getTypes() do
+			local rooms = self.parser:getRoomsOfType(roomType)
+			for _1, room in rooms do
+				local _arg0 = {
+					roomModel = room,
+					roomType = roomType,
+				}
+				table.insert(instances, _arg0)
 			end
 		end
-		return validInstances
+		return instances
 	end
 	function TileRandomizer:getRandomTile()
 		local validInstances = self:_getValidInstances()

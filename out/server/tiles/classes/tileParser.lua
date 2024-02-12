@@ -36,22 +36,15 @@ do
 		local validPoints = children
 		return {
 			attachmentPoint = attachmentPoint,
-			types = roomInfo.types,
+			types = roomInfo,
 			originModel = self._model,
 			centerPoint = centerPoint,
 			validPoints = validPoints,
 		}
 	end
 	function TileParser:_getRoomInfo()
-		local roomInfoModule = self._model:FindFirstChild("room.info")
-		if not roomInfoModule then
-			warn("Room info module not found for model " .. self._model.Name)
-			return {
-				types = {},
-			}
-		end
-		local roomInfo = require(roomInfoModule)
-		return roomInfo
+		local module = require(self._model:FindFirstChild("validTypes"))
+		return module
 	end
 end
 return {

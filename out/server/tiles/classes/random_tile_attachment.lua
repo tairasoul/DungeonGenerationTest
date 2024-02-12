@@ -16,14 +16,14 @@ do
 		return self:constructor(...) or self
 	end
 	function RandomTileAttacher:constructor(folder)
-		self._tileRandomizer = TileRandomizer.new(folder)
+		self.tileRandomizer = TileRandomizer.new(folder)
 	end
 	function RandomTileAttacher:attachTileToPoint(part, tileType, parent)
-		local tile = self._tileRandomizer:getTileOfType(tileType)
+		local tile = self.tileRandomizer:getTileOfType(tileType)
 		return self:_attachTile(part, tile, parent)
 	end
 	function RandomTileAttacher:attachRandomTile(part, parent)
-		local tile = self._tileRandomizer:getRandomTile()
+		local tile = self.tileRandomizer:getRandomTile()
 		return self:_attachTile(part, tile, parent)
 	end
 	function RandomTileAttacher:_attachTile(part, tile, parent)
