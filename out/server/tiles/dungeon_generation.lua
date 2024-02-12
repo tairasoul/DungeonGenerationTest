@@ -88,13 +88,16 @@ do
 		logServer(timeString)
 	end
 	function Generator:generate(cfg)
-		local baseModel = randomizer:attachRandomTile(cfg.STARTING_PART)
+		local baseModel = randomizer:attachTileToPoint(cfg.STARTING_PART, cfg.INITIAL_TILE_TYPE)
 		local tile = Tile.new(baseModel.roomModel, baseModel)
 		local _tiles = tileRegistry.tiles
 		local _tile = tile
 		table.insert(_tiles, _tile)
 		logServer("generating " .. (tostring(cfg.TILES) .. " tiles"))
-		local function genTile()
+		local function genTile(maxRetries)
+			if maxRetries == nil then
+				maxRetries = 5
+			end
 			local randomized = tiles:getTileOfTypes(tile.TileData.types)
 			if not randomized then
 				return nil
@@ -124,6 +127,15 @@ do
 			clone.Parent = tileStorage
 			local tc = Tile.new(clone, randomized)
 			if tile:attachTile(tc, randomThis) then
+				local cframe = tile._model:GetPivot()
+				if cframe.X < cfg.STARTING_PART.Position.X or cframe.Z < cfg.STARTING_PART.Position.Z then
+					clone:ClearAllChildren()
+					clone.Parent = nil
+					if maxRetries ~= 0 then
+						genTile(maxRetries - 1)
+					end
+					return nil
+				end
 				local _tiles_1 = tileRegistry.tiles
 				local _tile_1 = tile
 				local index = (table.find(_tiles_1, _tile_1) or 0) - 1 + 1
@@ -132,7 +144,9 @@ do
 			else
 				clone:ClearAllChildren()
 				clone.Parent = nil
-				genTile()
+				if maxRetries ~= 0 then
+					genTile(maxRetries - 1)
+				end
 			end
 		end
 		local genTileBatch = function()
@@ -149,7 +163,7 @@ do
 						break
 					end
 					RunService.Heartbeat:Wait()
-					genTile()
+					genTile(10)
 				end
 			end
 		end

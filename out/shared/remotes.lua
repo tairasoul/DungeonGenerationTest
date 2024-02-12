@@ -5,6 +5,7 @@ local createRemotes = _remo.createRemotes
 local remote = _remo.remote
 local default = createRemotes({
 	generateDungeon = remote(),
+	clearDungeon = remote(),
 	serverLog = remote(),
 })
 return {

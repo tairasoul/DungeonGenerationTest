@@ -50,11 +50,11 @@ export default new class Generator {
     }
 
     generate(cfg: config) {
-        const baseModel = randomizer.attachRandomTile(cfg.STARTING_PART) as RoomInfo;
+        const baseModel = randomizer.attachTileToPoint(cfg.STARTING_PART, cfg.INITIAL_TILE_TYPE) as RoomInfo;
         let tile = new Tile(baseModel.roomModel, baseModel);
         tileRegistry.tiles.push(tile);    
         logServer(`generating ${cfg.TILES} tiles`);
-        function genTile() {
+        function genTile(maxRetries: number = 5) {
             let randomized = tiles.getTileOfTypes(tile.TileData.types);
             if (!randomized) return;
             let randomThis;
@@ -74,19 +74,26 @@ export default new class Generator {
             clone.Parent = tileStorage;
             const tc = new Tile(clone, randomized);
             if (tile.attachTile(tc, randomThis)) {
+                const cframe = tile._model.GetPivot();
+                if (cframe.X < cfg.STARTING_PART.Position.X || cframe.Z < cfg.STARTING_PART.Position.Z) {
+                    clone.ClearAllChildren();
+                    clone.Parent = undefined;
+                    if (maxRetries !== 0) genTile(maxRetries - 1)
+                    return;
+                }
                 const index = tileRegistry.tiles.indexOf(tile) + 1;
                 tileRegistry.tiles.insert(index, tc);
                 tile = tc;
             } else {
                 clone.ClearAllChildren();
                 clone.Parent = undefined;
-                genTile();
+                if (maxRetries !== 0) genTile(maxRetries - 1);
             }
         }
         const genTileBatch = () => {
             for (let i = 0; i < cfg.TILES - 1; i++) {
                 RunService.Heartbeat.Wait();
-                genTile();
+                genTile(10);
             }
         };
 
