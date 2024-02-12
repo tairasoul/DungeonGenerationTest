@@ -11,8 +11,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@rbxts/compiler-types": "2.1.0-types.1",
-    "@rbxts/types": "^1.0.749",
+    "@rbxts/compiler-types": "2.2.0-types.0",
+    "@rbxts/types": "^1.0.750",
     "typescript": "^5.3.3"
   },
   "dependencies": {
@@ -92,6 +92,12 @@
     "@rbxts/wcs": "^0.6.32",
     "@rbxts/wired": "^0.1.12",
     "@rbxts/yaruil": "0.1.2-alpha",
+    "@rbxts/yetanothernet": "0.7.0-beta.3",
+    "rbxts-transform-debug": "^2.2.0",
+    "rbxts-transformer-macros": "^0.0.11",
+    "rbxts-transformer-private": "^1.0.1",
+    "rbxts-transformer-services": "^1.1.1",
+    "rbxts-transformer-switchcase": "^1.0.1",
     "rbxts-transformer-t": "^1.1.5",
     "rbxts-transformer-yaruil": "^1.0.3"
   }

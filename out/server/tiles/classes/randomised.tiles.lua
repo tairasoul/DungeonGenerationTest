@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.1.0
+-- Compiled with roblox-ts v2.2.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local getRandom = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getRandom
 local TileRandomizer
@@ -14,10 +14,10 @@ do
 		return self:constructor(...) or self
 	end
 	function TileRandomizer:constructor(folder)
-		self.tileFolder = folder
+		self._tileFolder = folder
 	end
-	function TileRandomizer:getValidInstances(roomTypes)
-		local children = self.tileFolder:GetChildren()
+	function TileRandomizer:_getValidInstances(roomTypes)
+		local children = self._tileFolder:GetChildren()
 		local validInstances = {}
 		for _, child in children do
 			local module = child:FindFirstChildOfClass("ModuleScript")
@@ -38,15 +38,15 @@ do
 		return validInstances
 	end
 	function TileRandomizer:getRandomTile()
-		local validInstances = self:getValidInstances()
+		local validInstances = self:_getValidInstances()
 		return getRandom(validInstances)
 	end
 	function TileRandomizer:getTileOfType(roomType)
-		local validInstances = self:getValidInstances({ roomType })
+		local validInstances = self:_getValidInstances({ roomType })
 		return getRandom(validInstances)
 	end
 	function TileRandomizer:getTileOfTypes(roomTypes)
-		local validInstances = self:getValidInstances(roomTypes)
+		local validInstances = self:_getValidInstances(roomTypes)
 		return getRandom(validInstances)
 	end
 end

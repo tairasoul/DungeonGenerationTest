@@ -171,6 +171,14 @@ export function getAllPlayerParts() {
     return parts;
 }
 
-export function logServer(str: string, logType: "Warning" | "Error" | "Message" = "Message") {
-    remotes.serverLog.fireAll(str, logType);
+export function logServer(str: string, srcFile: string, lineNumber: number, logType: "Warning" | "Error" | "Message" = "Message") {
+    remotes.serverLog.fireAll(str, srcFile, lineNumber, logType);
+}
+
+export function reverseArray<T extends defined>(array: T[]): T[] {
+    const reversedArray: T[] = [];
+    for (let i = array.size() - 1; i >= 0; i--) {
+        reversedArray.push(array[i]);
+    }
+    return reversedArray;
 }

@@ -1,8 +1,7 @@
--- Compiled with roblox-ts v2.1.0
+-- Compiled with roblox-ts v2.2.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
-local _services = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services")
-local ServerScriptService = _services.ServerScriptService
-local ServerStorage = _services.ServerStorage
+local ServerScriptService = game:GetService("ServerScriptService")
+local ServerStorage = game:GetService("ServerStorage")
 local FolderMerger = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "folderMerger").default
 local make = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "make")
 local nonts = ServerStorage:WaitForChild("tiles.non-ts")

@@ -1,15 +1,15 @@
 import remotes from "shared/remotes";
 
-remotes.serverLog.connect((str, logType) => {
+remotes.serverLog.connect((str, filePath, lineNumber, logType) => {
     switch (logType) {
         case "Warning":
-            warn(`[Server]: ${str}`);
+            warn(`[${filePath}:${lineNumber}]: ${str}`);
             break;
         case "Error":
-            error(`[Server]: ${str}`, 0);
+            error(`[${filePath}:${lineNumber}]: ${str}`, 0);
             break;
         case "Message":
-            print(`[Server]: ${str}`);
+            print(`[${filePath}:${lineNumber}]: ${str}`);
             break;
     }
 })

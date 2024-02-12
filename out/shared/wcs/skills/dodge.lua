@@ -1,11 +1,10 @@
--- Compiled with roblox-ts v2.1.0
+-- Compiled with roblox-ts v2.2.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local _wcs = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "wcs", "out")
 local Skill = _wcs.Skill
 local SkillDecorator = _wcs.SkillDecorator
-local _services = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services")
-local TweenService = _services.TweenService
-local Workspace = _services.Workspace
+local TweenService = game:GetService("TweenService")
+local Workspace = game:GetService("Workspace")
 local healthRegistry = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "registries", "healthSystem").default
 local getAllPlayerParts = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getAllPlayerParts
 local Dodge

@@ -1,8 +1,8 @@
--- Compiled with roblox-ts v2.1.0
+-- Compiled with roblox-ts v2.2.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local getDistance = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getDistance
 local make = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "make")
-local Workspace = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services").Workspace
+local Workspace = game:GetService("Workspace")
 local tileRegistry = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tileRegistry").default
 local RoomAttachment
 do
@@ -17,20 +17,20 @@ do
 		return self:constructor(...) or self
 	end
 	function RoomAttachment:constructor(tile)
-		self.AttachmentOffset = nil
+		self._AttachmentOffset = nil
 		self._tile = tile
 		self:calculateOffsets()
 	end
 	function RoomAttachment:calculateOffsets()
 		local centerPoint = self._tile.centerPoint.Position
 		local offset = getDistance(centerPoint, self._tile.attachmentPoint.Position)
-		self.AttachmentOffset = {
+		self._AttachmentOffset = {
 			part = self._tile.attachmentPoint,
 			offset = offset,
 		}
 	end
 	function RoomAttachment:attachToPart(part)
-		local offset = self.AttachmentOffset
+		local offset = self._AttachmentOffset
 		local center = self._tile.originModel
 		local pos = offset.offset
 		local lookVector = part.CFrame.LookVector
@@ -100,8 +100,16 @@ do
 						Value = true,
 						Name = "HasAttachment",
 					})
+					make("ObjectValue", {
+						Parent = part,
+						Value = point,
+						Name = "AttachmentPart",
+					})
 				end
-				return false
+				return {
+					result = false,
+					tile = tile,
+				}
 			end
 		end
 		local _fn_1 = center
@@ -121,7 +129,14 @@ do
 			Value = true,
 			Name = "HasAttachment",
 		})
-		return true
+		make("ObjectValue", {
+			Parent = part,
+			Value = self._tile.attachmentPoint,
+			Name = "AttachmentPart",
+		})
+		return {
+			result = true,
+		}
 	end
 end
 return {

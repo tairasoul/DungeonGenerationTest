@@ -12,5 +12,6 @@ import { RoomTypes } from "./interfaces/room";
 export type config = {
     TILES: number;
     STARTING_PART: Part;
-    INITIAL_TILE_TYPE: RoomTypes
+    INITIAL_TILE_TYPE: RoomTypes;
+    LAST_ROOM_TYPE: RoomTypes;
 }

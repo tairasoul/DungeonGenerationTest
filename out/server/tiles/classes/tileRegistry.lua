@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.1.0
+-- Compiled with roblox-ts v2.2.0
 local _class
 do
 	local TileRegistry = setmetatable({}, {

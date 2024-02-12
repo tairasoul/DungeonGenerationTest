@@ -1,10 +1,12 @@
--- Compiled with roblox-ts v2.1.0
+-- Compiled with roblox-ts v2.2.0
 --[[
 	import { Workspace } from "@rbxts/services";
+	
 	const config = {
-	TILES: 30,
-	STARTING_PART: Workspace.WaitForChild("DungeonStart") as Part
+	    TILES: 30,
+	    STARTING_PART: Workspace.WaitForChild("DungeonStart") as Part
 	}
+	
 	export default config;
 ]]
 return nil

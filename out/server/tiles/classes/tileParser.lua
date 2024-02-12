@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.1.0
+-- Compiled with roblox-ts v2.2.0
 local TileParser
 do
 	TileParser = setmetatable({}, {
@@ -12,10 +12,10 @@ do
 		return self:constructor(...) or self
 	end
 	function TileParser:constructor(model)
-		self.model = model
+		self._model = model
 	end
 	function TileParser:getTileData()
-		local _exp = self.model:GetDescendants()
+		local _exp = self._model:GetDescendants()
 		local _arg0 = function(v)
 			return v:IsA("Part") and v.Name == "Doorway"
 		end
@@ -30,22 +30,22 @@ do
 		end
 		-- ▲ ReadonlyArray.filter ▲
 		local children = _newValue
-		local roomInfo = self:getRoomInfo()
-		local attachmentPoint = self.model:WaitForChild("AttachmentPoint")
-		local centerPoint = self.model:WaitForChild("centerPoint")
+		local roomInfo = self:_getRoomInfo()
+		local attachmentPoint = self._model:WaitForChild("AttachmentPoint")
+		local centerPoint = self._model:WaitForChild("centerPoint")
 		local validPoints = children
 		return {
 			attachmentPoint = attachmentPoint,
 			types = roomInfo.types,
-			originModel = self.model,
+			originModel = self._model,
 			centerPoint = centerPoint,
 			validPoints = validPoints,
 		}
 	end
-	function TileParser:getRoomInfo()
-		local roomInfoModule = self.model:FindFirstChild("room.info")
+	function TileParser:_getRoomInfo()
+		local roomInfoModule = self._model:FindFirstChild("room.info")
 		if not roomInfoModule then
-			warn("Room info module not found for model " .. self.model.Name)
+			warn("Room info module not found for model " .. self._model.Name)
 			return {
 				types = {},
 			}

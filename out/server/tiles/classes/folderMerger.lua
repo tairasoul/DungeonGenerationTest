@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.1.0
+-- Compiled with roblox-ts v2.2.0
 local FolderMerger
 do
 	FolderMerger = setmetatable({}, {
@@ -12,24 +12,24 @@ do
 		return self:constructor(...) or self
 	end
 	function FolderMerger:constructor(folder)
-		self.targetFolder = folder
+		self._targetFolder = folder
 	end
 	function FolderMerger:merge(...)
 		local folders = { ... }
 		for _, folder in folders do
 			if folder then
-				self:moveChildren(folder)
-				self:destroyFolder(folder)
+				self:_moveChildren(folder)
+				self:_destroyFolder(folder)
 			end
 		end
 	end
-	function FolderMerger:moveChildren(folder)
+	function FolderMerger:_moveChildren(folder)
 		local children = folder:GetChildren()
 		for _, child in children do
-			child.Parent = self.targetFolder
+			child.Parent = self._targetFolder
 		end
 	end
-	function FolderMerger:destroyFolder(folder)
+	function FolderMerger:_destroyFolder(folder)
 		folder:Destroy()
 	end
 end

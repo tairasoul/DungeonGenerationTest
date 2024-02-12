@@ -1,4 +1,4 @@
-export type RoomTypes = "Hallway" | "Room";
+export type RoomTypes = string;
 
 export type RoomInfo = {
     roomType: RoomTypes;

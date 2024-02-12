@@ -4,6 +4,6 @@ export default createRemotes(
     {
         generateDungeon: remote<Server>(),
         clearDungeon: remote<Server>(),
-        serverLog: remote<Client, [logString: string, logType: "Warning" | "Error"  | "Message"]>()
+        serverLog: remote<Client, [logString: string, srcFile: string, lineNumber: number, logType: "Warning" | "Error"  | "Message"]>()
     }
-)
+);

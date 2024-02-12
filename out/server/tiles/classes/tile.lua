@@ -1,7 +1,8 @@
--- Compiled with roblox-ts v2.1.0
+-- Compiled with roblox-ts v2.2.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local TileParser = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tileParser").default
 local RoomAttachment = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "room_attachment").default
+local getDistance = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getDistance
 local Tile
 do
 	Tile = setmetatable({}, {
@@ -19,9 +20,10 @@ do
 		self.info = info
 		local parser = TileParser.new(self._model)
 		self.TileData = parser:getTileData()
-		self.attachmentPoints = self:findAttachmentPoints()
+		self.attachmentPoints = self:_findAttachmentPoints()
+		self.connections = {}
 	end
-	function Tile:findAttachmentPoints()
+	function Tile:_findAttachmentPoints()
 		local _exp = self._model:GetDescendants()
 		local _arg0 = function(v)
 			return v:IsA("Part") and v.Name == "Doorway"
@@ -40,7 +42,19 @@ do
 	end
 	function Tile:attachTile(tile, point)
 		local attach = RoomAttachment.new(tile.TileData)
-		return attach:attachToPart(point)
+		local couldAttach = attach:attachToPart(point)
+		if couldAttach.result then
+			self:addConnection(tile)
+		elseif couldAttach.tile then
+			self:addConnection(couldAttach.tile)
+		end
+		return couldAttach.result
+	end
+	function Tile:addConnection(tile)
+		local distance = getDistance(self.TileData.centerPoint.Position, tile.TileData.centerPoint.Position).Magnitude
+		local _connections = self.connections
+		local _tile = tile
+		_connections[_tile] = distance
 	end
 end
 return {

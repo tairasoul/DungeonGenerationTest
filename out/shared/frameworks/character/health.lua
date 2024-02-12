@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.1.0
+-- Compiled with roblox-ts v2.2.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local _fusion = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "fusion", "src")
 local Value = _fusion.Value
@@ -21,48 +21,48 @@ do
 		self.maxShield = Value(3)
 		self.shield = Value(self.maxShield:get())
 		self.canTakeDamage = false
-		self.valid = Value(true)
-		self.observers = {
+		self._valid = Value(true)
+		self._observers = {
 			health = Observer(self.health),
 			shield = Observer(self.shield),
-			valid = Observer(self.valid),
+			valid = Observer(self._valid),
 		}
-		self.listeners = {
+		self._listeners = {
 			health = {},
 			shield = {},
 			valid = {},
 		}
 		self.humanoid = humanoid
 		self.humanoid.Died:Once(function()
-			self.valid:set(false)
+			self._valid:set(false)
 		end)
 	end
 	function HealthSystem:addHealthListener(callback)
-		local _health = self.listeners.health
+		local _health = self._listeners.health
 		local _arg0 = {
 			callback = callback,
-			destroy = self.observers.health:onChange(callback),
+			destroy = self._observers.health:onChange(callback),
 		}
 		table.insert(_health, _arg0)
 	end
 	function HealthSystem:addShieldListener(callback)
-		local _shield = self.listeners.shield
+		local _shield = self._listeners.shield
 		local _arg0 = {
 			callback = callback,
-			destroy = self.observers.shield:onChange(callback),
+			destroy = self._observers.shield:onChange(callback),
 		}
 		table.insert(_shield, _arg0)
 	end
 	function HealthSystem:addValidListener(callback)
-		local _valid = self.listeners.valid
+		local _valid = self._listeners.valid
 		local _arg0 = {
 			callback = callback,
-			destroy = self.observers.valid:onChange(callback),
+			destroy = self._observers.valid:onChange(callback),
 		}
 		table.insert(_valid, _arg0)
 	end
 	function HealthSystem:removeHealthListener(callback)
-		local _health = self.listeners.health
+		local _health = self._listeners.health
 		local _arg0 = function(v)
 			return v.callback == callback
 		end
@@ -78,7 +78,7 @@ do
 		local listener = _result
 		if listener ~= nil then
 			listener.destroy()
-			local _health_1 = self.listeners.health
+			local _health_1 = self._listeners.health
 			local _arg0_1 = function(v)
 				return v ~= listener
 			end
@@ -92,11 +92,11 @@ do
 				end
 			end
 			-- ▲ ReadonlyArray.filter ▲
-			self.listeners.health = _newValue
+			self._listeners.health = _newValue
 		end
 	end
 	function HealthSystem:removeShieldListener(callback)
-		local _shield = self.listeners.shield
+		local _shield = self._listeners.shield
 		local _arg0 = function(v)
 			return v.callback == callback
 		end
@@ -112,7 +112,7 @@ do
 		local listener = _result
 		if listener ~= nil then
 			listener.destroy()
-			local _shield_1 = self.listeners.shield
+			local _shield_1 = self._listeners.shield
 			local _arg0_1 = function(v)
 				return v ~= listener
 			end
@@ -126,11 +126,11 @@ do
 				end
 			end
 			-- ▲ ReadonlyArray.filter ▲
-			self.listeners.shield = _newValue
+			self._listeners.shield = _newValue
 		end
 	end
 	function HealthSystem:removeValidListener(callback)
-		local _shield = self.listeners.shield
+		local _shield = self._listeners.shield
 		local _arg0 = function(v)
 			return v.callback == callback
 		end
@@ -146,7 +146,7 @@ do
 		local listener = _result
 		if listener ~= nil then
 			listener.destroy()
-			local _shield_1 = self.listeners.shield
+			local _shield_1 = self._listeners.shield
 			local _arg0_1 = function(v)
 				return v ~= listener
 			end
@@ -160,34 +160,34 @@ do
 				end
 			end
 			-- ▲ ReadonlyArray.filter ▲
-			self.listeners.shield = _newValue
+			self._listeners.shield = _newValue
 		end
 	end
 	function HealthSystem:removeAllListeners()
-		local _shield = self.listeners.shield
+		local _shield = self._listeners.shield
 		local _arg0 = function(v)
 			return v.destroy()
 		end
 		for _k, _v in _shield do
 			_arg0(_v, _k - 1, _shield)
 		end
-		local _health = self.listeners.health
+		local _health = self._listeners.health
 		local _arg0_1 = function(v)
 			return v.destroy()
 		end
 		for _k, _v in _health do
 			_arg0_1(_v, _k - 1, _health)
 		end
-		local _valid = self.listeners.valid
+		local _valid = self._listeners.valid
 		local _arg0_2 = function(v)
 			return v.destroy()
 		end
 		for _k, _v in _valid do
 			_arg0_2(_v, _k - 1, _valid)
 		end
-		table.clear(self.listeners.shield)
-		table.clear(self.listeners.health)
-		table.clear(self.listeners.valid)
+		table.clear(self._listeners.shield)
+		table.clear(self._listeners.health)
+		table.clear(self._listeners.valid)
 	end
 	function HealthSystem:takeDamage(damage)
 		if not self.canTakeDamage then

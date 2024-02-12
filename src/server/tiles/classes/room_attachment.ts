@@ -35,14 +35,22 @@ export default class RoomAttachment {
             const tile = tileRegistry.tiles.find((v) => v._model.WaitForChild("centerPoint") === result.Instance.FindFirstAncestorOfClass("Model")?.WaitForChild("centerPoint")) as tile;
             if (tile !== undefined) {
                 const point = tile.attachmentPoints.filter((v) => !v.FindFirstChild("HasAttachment")).find((v) => getDistance(v.Position, part.Position).Magnitude < 2) as Part;
-                if (point !== undefined)
+                if (point !== undefined) {
                     make("BoolValue", {Parent: point, Value: true, Name: "HasAttachment"});
-                return false;
+                    make("ObjectValue", {Parent: part, Value: point, Name: "AttachmentPart"});
+                }
+                return {
+                    result: false,
+                    tile
+                }
             } 
         }
         center.PivotTo(part.GetPivot().sub(lookVector.mul(newPos)).sub(new Vector3(0, 1, 0)));
         if (!part.FindFirstChild("HasAttachment")) make("BoolValue", {Parent: part, Value: true, Name: "HasAttachment"});
         make("BoolValue", {Parent: (offset as PartOffset).part, Value: true, Name: "HasAttachment"});
-        return true;
+        make("ObjectValue", {Parent: part, Value: this._tile.attachmentPoint, Name: "AttachmentPart"});
+        return {
+            result: true
+        }
     }
 }
