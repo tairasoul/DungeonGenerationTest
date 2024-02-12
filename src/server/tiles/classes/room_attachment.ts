@@ -1,10 +1,11 @@
 import { Tile } from "server/tiles/interfaces/parser";
 import { PartOffset } from "server/tiles/interfaces/attachment";
-import { getDistance } from "shared/utils";
+import { getDistance, logServer } from "shared/utils";
 import make from "@rbxts/make";
 import { Workspace } from "@rbxts/services";
 import tileRegistry from "./tileRegistry";
 import tile from "./tile";
+import { $file } from "rbxts-transform-debug";
 
 export default class RoomAttachment {
     _tile: Tile;
@@ -29,8 +30,9 @@ export default class RoomAttachment {
         const pos = (offset as PartOffset).offset;
         const lookVector = part.CFrame.LookVector;
         const newPos = new Vector3(pos.X, 0, pos.X).add(new Vector3(pos.Z, 0, pos.Z));
-        const result = Workspace.Raycast(part.GetPivot().sub(lookVector.mul(newPos)).Position, new Vector3(0, -2, 0));
+        const result = Workspace.Blockcast(part.GetPivot().sub(lookVector.mul(newPos)).add(new Vector3(0, 10, 0)), center.GetBoundingBox()[1], new Vector3(0, -15, 0));
         if (result !== undefined) {
+            logServer(`attachment for ${this._tile.originModel} to ${part} overlaps with a part! ${result.Instance.FindFirstAncestorOfClass("Model")}`, $file.filePath, $file.lineNumber, "Warning");
             make("BoolValue", {Parent: part, Value: true, Name: "HasAttachment"});
             const tile = tileRegistry.tiles.find((v) => v._model.WaitForChild("centerPoint") === result.Instance.FindFirstAncestorOfClass("Model")?.WaitForChild("centerPoint")) as tile;
             if (tile !== undefined) {
@@ -38,6 +40,7 @@ export default class RoomAttachment {
                 if (point !== undefined) {
                     make("BoolValue", {Parent: point, Value: true, Name: "HasAttachment"});
                     make("ObjectValue", {Parent: part, Value: point, Name: "AttachmentPart"});
+                    make("ObjectValue", {Parent: point, Value: part, Name: "AttachmentPart"})
                 }
                 return {
                     result: false,
@@ -49,6 +52,7 @@ export default class RoomAttachment {
         if (!part.FindFirstChild("HasAttachment")) make("BoolValue", {Parent: part, Value: true, Name: "HasAttachment"});
         make("BoolValue", {Parent: (offset as PartOffset).part, Value: true, Name: "HasAttachment"});
         make("ObjectValue", {Parent: part, Value: this._tile.attachmentPoint, Name: "AttachmentPart"});
+        make("ObjectValue", {Parent: (offset as PartOffset).part, Value: part, Name: "AttachmentPart"});
         return {
             result: true
         }

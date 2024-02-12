@@ -1,6 +1,8 @@
 -- Compiled with roblox-ts v2.2.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
-local getDistance = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getDistance
+local _utils = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils")
+local getDistance = _utils.getDistance
+local logServer = _utils.logServer
 local make = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "make")
 local Workspace = game:GetService("Workspace")
 local tileRegistry = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tileRegistry").default
@@ -40,8 +42,10 @@ do
 		local _fn = Workspace
 		local _exp = part:GetPivot()
 		local _arg0 = lookVector * newPos
-		local result = _fn:Raycast((_exp - _arg0).Position, Vector3.new(0, -2, 0))
+		local _vector3_2 = Vector3.new(0, 10, 0)
+		local result = _fn:Blockcast(_exp - _arg0 + _vector3_2, (select(2, center:GetBoundingBox())), Vector3.new(0, -15, 0))
 		if result ~= nil then
+			logServer("attachment for " .. (tostring(self._tile.originModel) .. (" to " .. (tostring(part) .. (" overlaps with a part! " .. tostring((result.Instance:FindFirstAncestorOfClass("Model"))))))), "src/server/tiles/classes/room_attachment.ts", 35, "Warning")
 			make("BoolValue", {
 				Parent = part,
 				Value = true,
@@ -105,6 +109,11 @@ do
 						Value = point,
 						Name = "AttachmentPart",
 					})
+					make("ObjectValue", {
+						Parent = point,
+						Value = part,
+						Name = "AttachmentPart",
+					})
 				end
 				return {
 					result = false,
@@ -115,8 +124,8 @@ do
 		local _fn_1 = center
 		local _exp_1 = part:GetPivot()
 		local _arg0_1 = lookVector * newPos
-		local _vector3_2 = Vector3.new(0, 1, 0)
-		_fn_1:PivotTo(_exp_1 - _arg0_1 - _vector3_2)
+		local _vector3_3 = Vector3.new(0, 1, 0)
+		_fn_1:PivotTo(_exp_1 - _arg0_1 - _vector3_3)
 		if not part:FindFirstChild("HasAttachment") then
 			make("BoolValue", {
 				Parent = part,
@@ -132,6 +141,11 @@ do
 		make("ObjectValue", {
 			Parent = part,
 			Value = self._tile.attachmentPoint,
+			Name = "AttachmentPart",
+		})
+		make("ObjectValue", {
+			Parent = offset.part,
+			Value = part,
 			Name = "AttachmentPart",
 		})
 		return {
