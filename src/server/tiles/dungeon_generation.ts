@@ -81,7 +81,7 @@ export default class Generator {
             const clone = randomized.roomModel.Clone();
             clone.Parent = this.tileStorage;
             const tc = new Tile(clone, randomized);
-            if (tile.attachTile(tc, randomThis)) {
+            if (tile.attachTile(tc, randomThis, this.tiles)) {
                 const cframe = tc._model.GetPivot();
                 if (cframe.X < this.config.STARTING_PART.Position.X || cframe.Z < this.config.STARTING_PART.Position.Z) {
                     clone.ClearAllChildren();
@@ -126,7 +126,7 @@ export default class Generator {
             clone.Parent = this.tileStorage;
             const newTile = new Tile(clone, randomizedTile);
         
-            if (furthestTile.attachTile(newTile, randomAttachmentPoint)) {
+            if (furthestTile.attachTile(newTile, randomAttachmentPoint, this.tiles)) {
                 const index = this.tiles.indexOf(furthestTile) + 1;
                 this.tiles.insert(index, newTile);
             } else {

@@ -40,9 +40,9 @@ do
 		-- ▲ ReadonlyArray.filter ▲
 		return _newValue
 	end
-	function Tile:attachTile(tile, point)
+	function Tile:attachTile(tile, point, tileList)
 		local attach = RoomAttachment.new(tile.TileData)
-		local couldAttach = attach:attachToPart(point)
+		local couldAttach = attach:attachToPart(point, tileList)
 		if couldAttach.result then
 			self:addConnection(tile)
 		elseif couldAttach.tile then

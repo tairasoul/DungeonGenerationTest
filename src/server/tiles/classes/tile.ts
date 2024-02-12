@@ -26,9 +26,9 @@ export default class Tile {
         ) as Part[];
     }
 
-    public attachTile(tile: Tile, point: Part): boolean {
+    public attachTile(tile: Tile, point: Part, tileList: Tile[]): boolean {
         const attach = new RoomAttachment(tile.TileData);
-        const couldAttach = attach.attachToPart(point);
+        const couldAttach = attach.attachToPart(point, tileList);
         if (couldAttach.result)
             this.addConnection(tile);
         else if (couldAttach.tile) {

@@ -5,7 +5,6 @@ local getDistance = _utils.getDistance
 local logServer = _utils.logServer
 local make = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "make")
 local Workspace = game:GetService("Workspace")
-local tileRegistry = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tileRegistry").default
 local RoomAttachment
 do
 	RoomAttachment = setmetatable({}, {
@@ -31,7 +30,7 @@ do
 			offset = offset,
 		}
 	end
-	function RoomAttachment:attachToPart(part)
+	function RoomAttachment:attachToPart(part, tileList)
 		local offset = self._AttachmentOffset
 		local center = self._tile.originModel
 		local pos = offset.offset
@@ -45,13 +44,13 @@ do
 		local _vector3_2 = Vector3.new(0, 10, 0)
 		local result = _fn:Blockcast(_exp - _arg0 + _vector3_2, (select(2, center:GetBoundingBox())), Vector3.new(0, -15, 0))
 		if result ~= nil then
-			logServer("attachment for " .. (tostring(self._tile.originModel) .. (" to " .. (tostring(part) .. (" overlaps with a part! " .. tostring((result.Instance:FindFirstAncestorOfClass("Model"))))))), "src/server/tiles/classes/room_attachment.ts", 35, "Warning")
+			logServer("attachment for " .. (tostring(self._tile.originModel) .. (" to " .. (tostring(part) .. (" overlaps with a part! " .. tostring((result.Instance:FindFirstAncestorOfClass("Model"))))))), "src/server/tiles/classes/room_attachment.ts", 34, "Warning")
 			make("BoolValue", {
 				Parent = part,
 				Value = true,
 				Name = "HasAttachment",
 			})
-			local _tiles = tileRegistry.tiles
+			local _tileList = tileList
 			local _arg0_1 = function(v)
 				local _exp_1 = v._model:WaitForChild("centerPoint")
 				local _result = result.Instance:FindFirstAncestorOfClass("Model")
@@ -62,8 +61,8 @@ do
 			end
 			-- ▼ ReadonlyArray.find ▼
 			local _result
-			for _i, _v in _tiles do
-				if _arg0_1(_v, _i - 1, _tiles) == true then
+			for _i, _v in _tileList do
+				if _arg0_1(_v, _i - 1, _tileList) == true then
 					_result = _v
 					break
 				end

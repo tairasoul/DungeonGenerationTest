@@ -1,10 +1,6 @@
 import { Tile } from "server/tiles/interfaces/parser";
 import { RoomTypes } from "server/tiles/interfaces/room";
 
-interface RoomInfo {
-    types: RoomTypes[];
-}
-
 export default class TileParser {
     private model: Model;
 

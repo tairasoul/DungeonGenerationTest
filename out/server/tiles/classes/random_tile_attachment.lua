@@ -35,7 +35,7 @@ do
 		local parser = TileParser.new(clone)
 		local tileData = parser:getTileData()
 		local attachment = RoomAttachment.new(tileData)
-		attachment:attachToPart(part)
+		attachment:attachToPart(part, {})
 		return {
 			roomType = tile.roomType,
 			roomModel = clone,

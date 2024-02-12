@@ -132,7 +132,7 @@ do
 			local clone = randomized.roomModel:Clone()
 			clone.Parent = self._tileStorage
 			local tc = Tile.new(clone, randomized)
-			if tile:attachTile(tc, randomThis) then
+			if tile:attachTile(tc, randomThis, self._tiles) then
 				local cframe = tc._model:GetPivot()
 				if cframe.X < self._config.STARTING_PART.Position.X or cframe.Z < self._config.STARTING_PART.Position.Z then
 					clone:ClearAllChildren()
@@ -200,7 +200,7 @@ do
 			local clone = randomizedTile.roomModel:Clone()
 			clone.Parent = self._tileStorage
 			local newTile = Tile.new(clone, randomizedTile)
-			if furthestTile:attachTile(newTile, randomAttachmentPoint) then
+			if furthestTile:attachTile(newTile, randomAttachmentPoint, self._tiles) then
 				local index = (table.find(self._tiles, furthestTile) or 0) - 1 + 1
 				table.insert(self._tiles, index + 1, newTile)
 			else

@@ -30,7 +30,7 @@ export default class RandomTileAttacher {
         const tileData = parser.getTileData();
 
         const attachment = new RoomAttachment(tileData);
-        attachment.attachToPart(part);
+        attachment.attachToPart(part, []);
 
         return {
             roomType: tile.roomType,

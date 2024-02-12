@@ -3,7 +3,6 @@ import { PartOffset } from "server/tiles/interfaces/attachment";
 import { getDistance, logServer } from "shared/utils";
 import make from "@rbxts/make";
 import { Workspace } from "@rbxts/services";
-import tileRegistry from "./tileRegistry";
 import tile from "./tile";
 import { $file } from "rbxts-transform-debug";
 
@@ -24,7 +23,7 @@ export default class RoomAttachment {
         }
     }
 
-    attachToPart(part: Part) {
+    attachToPart(part: Part, tileList: tile[]) {
         const offset = this.AttachmentOffset;
         const center = this._tile.originModel;
         const pos = (offset as PartOffset).offset;
@@ -34,7 +33,7 @@ export default class RoomAttachment {
         if (result !== undefined) {
             logServer(`attachment for ${this._tile.originModel} to ${part} overlaps with a part! ${result.Instance.FindFirstAncestorOfClass("Model")}`, $file.filePath, $file.lineNumber, "Warning");
             make("BoolValue", {Parent: part, Value: true, Name: "HasAttachment"});
-            const tile = tileRegistry.tiles.find((v) => v._model.WaitForChild("centerPoint") === result.Instance.FindFirstAncestorOfClass("Model")?.WaitForChild("centerPoint")) as tile;
+            const tile = tileList.find((v) => v._model.WaitForChild("centerPoint") === result.Instance.FindFirstAncestorOfClass("Model")?.WaitForChild("centerPoint")) as tile;
             if (tile !== undefined) {
                 const point = tile.attachmentPoints.filter((v) => !v.FindFirstChild("HasAttachment")).find((v) => getDistance(v.Position, part.Position).Magnitude < 2) as Part;
                 if (point !== undefined) {
