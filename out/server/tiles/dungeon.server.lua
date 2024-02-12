@@ -5,12 +5,13 @@ local Generator = TS.import(script, game:GetService("ServerScriptService"), "TS"
 local ServerScriptService = game:GetService("ServerScriptService")
 local Workspace = game:GetService("Workspace")
 local generated = false
+local cfg = require(ServerScriptService:WaitForChild("DungeonConfig"))
+local gen = Generator.new(cfg)
 remotes.generateDungeon:connect(function()
 	if generated then
 		return nil
 	end
-	local cfg = require(ServerScriptService:WaitForChild("DungeonConfig"))
-	Generator:generate(cfg)
+	gen:generate()
 	local door = Workspace:WaitForChild("StartingRoom"):WaitForChild("Door")
 	door.Transparency = 1
 	door.CanCollide = false
@@ -20,7 +21,7 @@ remotes.clearDungeon:connect(function()
 	if not generated then
 		return nil
 	end
-	Generator:clear()
+	gen:clear()
 	local door = Workspace:WaitForChild("StartingRoom"):WaitForChild("Door")
 	door.Transparency = 0
 	door.CanCollide = true

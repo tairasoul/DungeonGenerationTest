@@ -1,6 +1,6 @@
 import { Workspace } from "@rbxts/services";
 
 const tileFolder = new Instance("Folder", Workspace);
-tileFolder.Name = "Tiles";
+tileFolder.Name = "Dungeons";
 
-export const tiles = tileFolder;
+export const dungeonFolder = tileFolder;

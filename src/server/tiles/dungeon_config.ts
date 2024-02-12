@@ -14,4 +14,5 @@ export type config = {
     STARTING_PART: Part;
     INITIAL_TILE_TYPE: RoomTypes;
     LAST_ROOM_TYPE: RoomTypes;
+    DUNGEON_NAME: string;
 }

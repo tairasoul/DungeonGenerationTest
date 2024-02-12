@@ -1,43 +1,50 @@
 import { RunService, ServerStorage } from "@rbxts/services";
-import tileRegistry from "./classes/tileRegistry";
 import RandomTileAttacher from "./classes/random_tile_attachment";
 import TileRandomizer from "./classes/randomised.tiles";
 import { config } from "./dungeon_config";
 import { benchmark, getNextAfterCondition_Reverse, getRandom, logServer } from "shared/utils";
-import { tiles as tileStorage } from "shared/vars/folders";
+import { dungeonFolder } from "shared/vars/folders";
 import Tile from "./classes/tile";
 import { RoomInfo } from "./interfaces/room";
-import { $file, $print } from "rbxts-transform-debug";
+import { $file } from "rbxts-transform-debug";
 import { findFurthestTileFromSpecificTile } from "./pathfinding/findFurthest";
+import make from "@rbxts/make";
 
 const folder = ServerStorage.WaitForChild("tiles") as Folder;
 
 const randomizer = new RandomTileAttacher(folder);
 
 const tiles = new TileRandomizer(folder);
-
-const clearTilesBatch = (children: Instance[], batchSize: number, totalBatches: number) => {
-    for (let i = 0; i < totalBatches; i++) {
-        RunService.Heartbeat.Wait(); // Yield before processing each batch
-        const startIdx = i * batchSize;
-        const endIdx = math.min((i + 1) * batchSize, children.size());
-        
-        for (let j = startIdx; j < endIdx; j++) {
-            const child = children[j];
-            child.Destroy();
-        }
+export default class Generator {
+    private config: config;
+    private tiles: Tile[] = [];
+    private tileStorage: Folder;
+    constructor(cfg: config) {
+        this.config = cfg;
+        this.tileStorage = make("Folder", {Name: this.config.DUNGEON_NAME, Parent: dungeonFolder})
     }
-    tileRegistry.tiles.clear();
-};
 
-export default new class Generator {
+    private clearTilesBatch(children: Instance[], batchSize: number, totalBatches: number) {
+        for (let i = 0; i < totalBatches; i++) {
+            RunService.Heartbeat.Wait(); // Yield before processing each batch
+            const startIdx = i * batchSize;
+            const endIdx = math.min((i + 1) * batchSize, children.size());
+            
+            for (let j = startIdx; j < endIdx; j++) {
+                const child = children[j];
+                child.Destroy();
+            }
+        }
+        this.tiles.clear();
+    };
+
     clear() {
-        const children = tileStorage.GetChildren();
+        const children = this.tileStorage.GetChildren();
         const batchSize = 50; // Define batch size
         const totalBatches = math.ceil(children.size() / batchSize);
         const amt = children.size();
         logServer(`clearing ${children.size()} tiles in ${totalBatches} batches`, $file.filePath, $file.lineNumber);
-        const time = benchmark(() => clearTilesBatch(children, batchSize, totalBatches));
+        const time = benchmark(() => this.clearTilesBatch(children, batchSize, totalBatches));
         let timeString = `cleared ${amt} tiles in ${totalBatches} batches in`;
         if (time.minutes > 0) {
             timeString += ` ${time.minutes} minute${time.minutes > 1 ? "s": ""}`;
@@ -49,14 +56,15 @@ export default new class Generator {
             timeString += ` ${time.milliseconds} milliseconds`;
         }
         logServer(timeString, $file.filePath, $file.lineNumber);
+        this.tileStorage.Destroy();
     }
 
-    generate(cfg: config) {
-        const baseModel = randomizer.attachTileToPoint(cfg.STARTING_PART, cfg.INITIAL_TILE_TYPE) as RoomInfo;
+    generate() {
+        const baseModel = randomizer.attachTileToPoint(this.config.STARTING_PART, this.config.INITIAL_TILE_TYPE, this.tileStorage) as RoomInfo;
         let tile = new Tile(baseModel.roomModel, baseModel);
         const firstTile = tile;
-        tileRegistry.tiles.push(tile);    
-        function genTile(maxRetries: number = 5) {
+        this.tiles.push(tile);    
+        const genTile = (maxRetries: number = 5) => {
             let randomized = tiles.getTileOfTypes(tile.TileData.types);
             if (!randomized) return;
             let randomThis;
@@ -64,7 +72,7 @@ export default new class Generator {
             while (attempts < 2) {
                 randomThis = getRandom(tile.attachmentPoints, (inst) => !inst.FindFirstChild("HasAttachment"));
                 if (randomThis) break;
-                tile = getNextAfterCondition_Reverse(tileRegistry.tiles, (item) => item === tile) as Tile;
+                tile = getNextAfterCondition_Reverse(this.tiles, (item) => item === tile) as Tile;
                 randomized = tiles.getTileOfTypes(tile.TileData.types); // Get new tile type
                 if (!randomized) return;
                 attempts++;
@@ -73,18 +81,18 @@ export default new class Generator {
             if (!randomThis) return;
         
             const clone = randomized.roomModel.Clone();
-            clone.Parent = tileStorage;
+            clone.Parent = this.tileStorage;
             const tc = new Tile(clone, randomized);
             if (tile.attachTile(tc, randomThis)) {
                 const cframe = tc._model.GetPivot();
-                if (cframe.X < cfg.STARTING_PART.Position.X || cframe.Z < cfg.STARTING_PART.Position.Z) {
+                if (cframe.X < this.config.STARTING_PART.Position.X || cframe.Z < this.config.STARTING_PART.Position.Z) {
                     clone.ClearAllChildren();
                     clone.Parent = undefined;
                     if (maxRetries !== 0) genTile(maxRetries - 1)
                     return;
                 }
-                const index = tileRegistry.tiles.indexOf(tile) + 1;
-                tileRegistry.tiles.insert(index, tc);
+                const index = this.tiles.indexOf(tile) + 1;
+                this.tiles.insert(index, tc);
                 tile = tc;
             } else {
                 clone.ClearAllChildren();
@@ -94,7 +102,7 @@ export default new class Generator {
         }
 
         const genTileBatch = () => {
-            for (let i = 0; i < cfg.TILES - 1; i++) {
+            for (let i = 0; i < this.config.TILES - 1; i++) {
                 RunService.Heartbeat.Wait();
                 genTile(20);
             }
@@ -104,7 +112,7 @@ export default new class Generator {
             const furthestTile = findFurthestTileFromSpecificTile(firstTile);
             if (!furthestTile) return;
         
-            const randomizedTile = tiles.getTileOfType(cfg.LAST_ROOM_TYPE);
+            const randomizedTile = tiles.getTileOfType(this.config.LAST_ROOM_TYPE);
             if (!randomizedTile) return;
         
             let randomAttachmentPoint;
@@ -117,12 +125,12 @@ export default new class Generator {
             if (!randomAttachmentPoint) return;
         
             const clone = randomizedTile.roomModel.Clone();
-            clone.Parent = tileStorage;
+            clone.Parent = this.tileStorage;
             const newTile = new Tile(clone, randomizedTile);
         
             if (furthestTile.attachTile(newTile, randomAttachmentPoint)) {
-                const index = tileRegistry.tiles.indexOf(furthestTile) + 1;
-                tileRegistry.tiles.insert(index, newTile);
+                const index = this.tiles.indexOf(furthestTile) + 1;
+                this.tiles.insert(index, newTile);
             } else {
                 clone.ClearAllChildren();
                 clone.Parent = undefined;
@@ -130,9 +138,9 @@ export default new class Generator {
             }
         }
 
-        logServer(`generating ${cfg.TILES} tiles`, $file.filePath, $file.lineNumber);
+        logServer(`generating ${this.config.TILES} tiles`, $file.filePath, $file.lineNumber);
         const time = benchmark(genTileBatch);
-        let timeString = `generation of ${cfg.TILES} tiles took`;
+        let timeString = `generation of ${this.config.TILES} tiles took`;
         if (time.minutes > 0) {
             timeString += ` ${time.minutes} minute${time.minutes > 1 ? "s": ""}`;
         }
@@ -146,7 +154,7 @@ export default new class Generator {
         logServer(timeString, $file.filePath, $file.lineNumber);
 
         const furthestTime = benchmark(genFurthestTile);
-        let furthestTimeString = `generation of ${cfg.LAST_ROOM_TYPE} room at furthest tile took`;
+        let furthestTimeString = `generation of ${this.config.LAST_ROOM_TYPE} room at furthest tile took`;
         if (furthestTime.minutes > 0) {
             furthestTimeString += ` ${furthestTime.minutes} minute${furthestTime.minutes > 1 ? "s": ""}`;
         }
