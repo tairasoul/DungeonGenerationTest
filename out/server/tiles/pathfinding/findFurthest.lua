@@ -1,38 +1,35 @@
 -- Compiled with roblox-ts v2.2.0
-local function findFurthestTileFromSpecificTile(startTile)
+local function findFurthestTileFromSpecificTile(startTile, exclusions)
+	if exclusions == nil then
+		exclusions = {}
+	end
 	local visited = {}
 	local furthestTile
 	local maxDistance = -math.huge
+	-- Coordinates of the specific XZ position
+	local targetX = 43
+	local targetZ = 0
 	-- Depth-First Search (DFS) function
 	local function dfs(currentTile, distance)
 		-- Mark the current tile as visited
 		local _currentTile = currentTile
 		visited[_currentTile] = true
-		-- Check if the current tile has available attachment points
-		local _attachmentPoints = currentTile.attachmentPoints
-		local _arg0 = function(point)
-			return not point:FindFirstChild("HasAttachment")
-		end
-		-- ▼ ReadonlyArray.some ▼
-		local _result = false
-		for _k, _v in _attachmentPoints do
-			if _arg0(_v, _k - 1, _attachmentPoints) then
-				_result = true
-				break
-			end
-		end
-		-- ▲ ReadonlyArray.some ▲
-		if _result then
+		-- Calculate the distance to the target XZ position
+		local currentX = currentTile.TileData.centerPoint.Position.X
+		local currentZ = currentTile.TileData.centerPoint.Position.Z
+		local distanceToTargetXZ = math.sqrt((targetX - currentX) ^ 2 + (targetZ - currentZ) ^ 2)
+		-- Check if the current tile's XZ position is more than 20 studs away from the target XZ position
+		if distanceToTargetXZ > 20 then
 			-- Update furthest tile if needed
 			if distance > maxDistance then
 				maxDistance = distance
 				furthestTile = currentTile
 			end
-		end
-		-- Explore neighboring tiles recursively
-		for neighborTile, _ in currentTile.connections do
-			if not (visited[neighborTile] ~= nil) then
-				dfs(neighborTile, distance + currentTile.connections[neighborTile])
+			-- Explore neighboring tiles recursively
+			for neighborTile, neighborDistance in currentTile.connections do
+				if not (visited[neighborTile] ~= nil) and not (exclusions[neighborTile] ~= nil) then
+					dfs(neighborTile, distance + neighborDistance)
+				end
 			end
 		end
 	end

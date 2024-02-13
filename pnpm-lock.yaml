@@ -14,6 +14,9 @@ dependencies:
   '@rbxts/builders':
     specifier: ^1.0.2
     version: 1.0.2
+  '@rbxts/ceive-im-gizmo':
+    specifier: 3.2.0-ts.0
+    version: 3.2.0-ts.0
   '@rbxts/character-promise':
     specifier: ^1.0.2
     version: 1.0.2
@@ -62,6 +65,9 @@ dependencies:
   '@rbxts/ghostevents':
     specifier: ^1.0.0
     version: 1.0.0
+  '@rbxts/gizmo':
+    specifier: ^2.0.5
+    version: 2.0.5
   '@rbxts/horseman':
     specifier: ^1.1.7
     version: 1.1.7(@rbxts/flipper@2.0.1)(@rbxts/types@1.0.750)
@@ -301,6 +307,10 @@ packages:
     resolution: {integrity: sha512-q/Byk3xJne36TknSwB6119Y094NqbOnTcITcLWY1FqKeqV/8NAwIcmfztbGWDMMqL/FIiWnfzm8Z/MyY3Z/o0w==}
     dev: false
 
+  /@rbxts/ceive-im-gizmo@3.2.0-ts.0:
+    resolution: {integrity: sha512-y1dkccfZ8ZKOICatEyCu0l+O8xheGaakCYqShx05X/Y52Vtoy2aDcDeitNIbpHzEPIQjB0FsPU3m9SbTe1B9XQ==}
+    dev: false
+
   /@rbxts/character-promise@1.0.2:
     resolution: {integrity: sha512-5RYqcCywWqTrSAvkE2mrNWnLoqoOfmZGZn7+50pcAulbXbZd4svgHDY7+yUbevVIcQDa5meEKrVkt7sC0YBBVw==}
     dependencies:
@@ -418,6 +428,10 @@ packages:
     resolution: {integrity: sha512-c72xJeRoLcATrmQ5ouXaJAAzj8inrTjjIrndxsw2sGn5TKUWnafG1ozaEYGPR/guk0+sXPC78v6hUNVIVHwd2Q==}
     dependencies:
       '@rbxts/services': 1.5.3
+    dev: false
+
+  /@rbxts/gizmo@2.0.5:
+    resolution: {integrity: sha512-4mxZUHgstnIx+pOhUHamVtBxdHhaTUuAvZw5nSg01EztLcDqCudvlk1p56GQaj0o/aj0/5S7k46fN3XMiKTtHg==}
     dev: false
 
   /@rbxts/horseman@1.1.7(@rbxts/flipper@2.0.1)(@rbxts/types@1.0.750):

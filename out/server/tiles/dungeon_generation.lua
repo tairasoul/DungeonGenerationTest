@@ -235,8 +235,11 @@ do
 			end
 		end
 		local genFurthestTile
-		genFurthestTile = function()
-			local furthestTile = findFurthestTileFromSpecificTile(firstTile)
+		genFurthestTile = function(exclusions)
+			if exclusions == nil then
+				exclusions = {}
+			end
+			local furthestTile = findFurthestTileFromSpecificTile(firstTile, exclusions)
 			if not furthestTile then
 				return nil
 			end
@@ -256,6 +259,20 @@ do
 				attempts += 1
 			end
 			if not randomAttachmentPoint then
+				-- Create a new set with the updated exclusions including the current furthest tile
+				local newExclusions = {}
+				local _exclusions = exclusions
+				local _arg0 = function(v)
+					local _v = v
+					newExclusions[_v] = true
+					return newExclusions
+				end
+				for _v in _exclusions do
+					_arg0(_v, _v, _exclusions)
+				end
+				newExclusions[furthestTile] = true
+				-- Call genFurthestTile again with the updated exclusions set
+				genFurthestTile(newExclusions)
 				return nil
 			end
 			local clone = randomizedTile.roomModel:Clone()
@@ -266,12 +283,26 @@ do
 				local index = (table.find(self._tiles, furthestTile) or 0) - 1 + 1
 				table.insert(self._tiles, index + 1, newTile)
 			else
+				logServer("failed to generate tile at furthest tile, retrying", "src/server/tiles/dungeon_generation.ts", 165)
 				clone:ClearAllChildren()
 				clone.Parent = nil
-				genFurthestTile()
+				-- Create a new set with the updated exclusions including the current furthest tile
+				local newExclusions = {}
+				local _exclusions = exclusions
+				local _arg0 = function(v)
+					local _v = v
+					newExclusions[_v] = true
+					return newExclusions
+				end
+				for _v in _exclusions do
+					_arg0(_v, _v, _exclusions)
+				end
+				newExclusions[furthestTile] = true
+				-- Call genFurthestTile again with the updated exclusions set
+				genFurthestTile(newExclusions)
 			end
 		end
-		logServer("generating " .. (tostring(self._config.TILES) .. " tiles"), "src/server/tiles/dungeon_generation.ts", 162)
+		logServer("generating " .. (tostring(self._config.TILES) .. " tiles"), "src/server/tiles/dungeon_generation.ts", 179)
 		local time = benchmark(genTileBatch)
 		local timeString = "generation of " .. (tostring(self._config.TILES) .. " tiles took")
 		if time.minutes > 0 then
@@ -283,7 +314,8 @@ do
 		if time.milliseconds > 0 then
 			timeString ..= " " .. (tostring(time.milliseconds) .. " milliseconds")
 		end
-		logServer(timeString, "src/server/tiles/dungeon_generation.ts", 175)
+		logServer(timeString, "src/server/tiles/dungeon_generation.ts", 192)
+		logServer("generating tile at furthest tile, with type " .. self._config.LAST_ROOM_TYPE, "src/server/tiles/dungeon_generation.ts", 194)
 		local furthestTime = benchmark(genFurthestTile)
 		local furthestTimeString = "generation of " .. (self._config.LAST_ROOM_TYPE .. " tile type at furthest tile took")
 		if furthestTime.minutes > 0 then
@@ -295,7 +327,7 @@ do
 		if furthestTime.milliseconds > 0 then
 			furthestTimeString ..= " " .. (tostring(furthestTime.milliseconds) .. " milliseconds")
 		end
-		logServer(furthestTimeString, "src/server/tiles/dungeon_generation.ts", 189)
+		logServer(furthestTimeString, "src/server/tiles/dungeon_generation.ts", 207)
 		self._hasGenerated:set(true)
 	end
 end
