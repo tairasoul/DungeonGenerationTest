@@ -1,12 +1,12 @@
 import { RunService, ServerStorage } from "@rbxts/services";
-import RandomTileAttacher from "./classes/random_tile_attachment";
-import { config } from "./dungeon_config";
+import RandomTileAttacher from "./random_tile_attachment";
+import { config } from "../interfaces/dungeon_config";
 import { benchmark, getNextAfterCondition_Reverse, getRandom, logServer } from "shared/utils";
 import { dungeonFolder } from "shared/vars/folders";
-import Tile from "./classes/tile";
-import { RoomInfo } from "./interfaces/room";
-import { $file, $print } from "rbxts-transform-debug";
-import { findFurthestTileFromSpecificTile } from "./pathfinding/findFurthest";
+import Tile from "./tile";
+import { RoomInfo } from "../interfaces/room";
+import { $file } from "rbxts-transform-debug";
+import { findFurthestTileFromSpecificTile } from "../pathfinding/findFurthest";
 import make from "@rbxts/make";
 import { Observer, Value } from "@rbxts/fusion";
 

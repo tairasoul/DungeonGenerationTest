@@ -7,7 +7,7 @@ const config = {
 
 export default config;*/
 
-import { RoomTypes } from "./interfaces/room";
+import { RoomTypes } from "./room";
 
 export type config = {
     TILES: number;

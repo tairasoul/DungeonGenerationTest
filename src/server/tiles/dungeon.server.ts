@@ -1,7 +1,7 @@
 import remotes from "shared/remotes";
-import Generator from "./dungeon_generation";
+import Generator from "./classes/dungeon_generation";
 import { ServerScriptService, Workspace } from "@rbxts/services";
-import { config } from "./dungeon_config";
+import { config } from "./interfaces/dungeon_config";
 
 let generated = false;
 const cfg: config = require(ServerScriptService.WaitForChild("DungeonConfig") as ModuleScript) as config;
