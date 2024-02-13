@@ -16,11 +16,20 @@ do
 		return self:constructor(...) or self
 	end
 	function GizmoDrawer:constructor()
-		self.DRAW_ATTACHMENT_POINT_DIRECTION = false
-		task.spawn(function()
+		self.DRAW_ATTACHMENT_POINT_DIRECTION = true
+		self._stoploop = false
+		self:init_loop()
+	end
+	function GizmoDrawer:init_loop()
+		self._stoploop = false
+		self._loop = task.spawn(function()
 			while true do
 				local _value = task.wait()
 				if not (_value ~= 0 and (_value == _value and _value)) then
+					break
+				end
+				if self._stoploop then
+					coroutine.yield()
 					break
 				end
 				if self.DRAW_ATTACHMENT_POINT_DIRECTION then
@@ -47,11 +56,20 @@ do
 						local _vector3_1 = Vector3.new(0, 10, 0)
 						local _lookVector = attachmentPoint.CFrame.LookVector
 						local _vector3_2 = Vector3.new(10, 0, 10)
-						_fn:Draw(_exp_1, _position_1 + _vector3_1 - (_lookVector * _vector3_2), 2, 2, 50)
+						_fn:Draw(_exp_1, _position_1 + _vector3_1 - (_lookVector * _vector3_2), 1, 1, 15)
 					end
 				end
 			end
 		end)
+	end
+	function GizmoDrawer:stop_loop()
+		self._stoploop = true
+		if self._loop then
+			while coroutine.status(self._loop) ~= "suspended" do
+				task.wait()
+			end
+			coroutine.close(self._loop)
+		end
 	end
 	_class = GizmoDrawer
 end
