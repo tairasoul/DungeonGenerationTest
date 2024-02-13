@@ -122,6 +122,7 @@ export default class Generator {
         }
 
         const genTileBatch = () => {
+            logServer(`generating ${this.config.TILES} tiles`, $file.filePath, $file.lineNumber);
             for (let i = 0; i < this.config.TILES - 1; i++) {
                 RunService.Heartbeat.Wait();
                 genTile(20);
@@ -129,6 +130,7 @@ export default class Generator {
         };
 
         const genFurthestTile = (exclusions: Set<Tile> = new Set()) => {
+            logServer(`generating tile at furthest tile, with type ${this.config.LAST_ROOM_TYPE}`, $file.filePath, $file.lineNumber);
             const furthestTile = findFurthestTileFromSpecificTile(firstTile, exclusions);
             if (!furthestTile) return;
         
@@ -175,8 +177,6 @@ export default class Generator {
                 genFurthestTile(newExclusions);
             }
         }
-
-        logServer(`generating ${this.config.TILES} tiles`, $file.filePath, $file.lineNumber);
         const time = benchmark(genTileBatch);
         let timeString = `generation of ${this.config.TILES} tiles took`;
         if (time.minutes > 0) {
@@ -190,8 +190,6 @@ export default class Generator {
         }
 
         logServer(timeString, $file.filePath, $file.lineNumber);
-
-        logServer(`generating tile at furthest tile, with type ${this.config.LAST_ROOM_TYPE}`, $file.filePath, $file.lineNumber);
         const furthestTime = benchmark(genFurthestTile);
         let furthestTimeString = `generation of ${this.config.LAST_ROOM_TYPE} tile type at furthest tile took`;
         if (furthestTime.minutes > 0) {

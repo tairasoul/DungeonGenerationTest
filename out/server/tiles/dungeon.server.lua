@@ -11,11 +11,11 @@ remotes.generateDungeon:connect(function()
 	if generated then
 		return nil
 	end
+	generated = true
 	gen:generate()
 	local door = Workspace:WaitForChild("StartingRoom"):WaitForChild("Door")
 	door.Transparency = 1
 	door.CanCollide = false
-	generated = true
 end)
 remotes.clearDungeon:connect(function()
 	if not generated then

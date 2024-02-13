@@ -10,11 +10,11 @@ const gen = new Generator(cfg);
 
 remotes.generateDungeon.connect(() => {
     if (generated) return;
+    generated = true;
     gen.generate();
     const door = Workspace.WaitForChild("StartingRoom").WaitForChild("Door") as Part;
     door.Transparency = 1;
     door.CanCollide = false;
-    generated = true;
 })
 
 remotes.clearDungeon.connect(() => {

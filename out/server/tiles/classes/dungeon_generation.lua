@@ -217,6 +217,7 @@ do
 			end
 		end
 		local genTileBatch = function()
+			logServer("generating " .. (tostring(self._config.TILES) .. " tiles"), "src/server/tiles/classes/dungeon_generation.ts", 125)
 			do
 				local i = 0
 				local _shouldIncrement = false
@@ -239,6 +240,7 @@ do
 			if exclusions == nil then
 				exclusions = {}
 			end
+			logServer("generating tile at furthest tile, with type " .. self._config.LAST_ROOM_TYPE, "src/server/tiles/classes/dungeon_generation.ts", 133)
 			local furthestTile = findFurthestTileFromSpecificTile(firstTile, exclusions)
 			if not furthestTile then
 				return nil
@@ -283,7 +285,7 @@ do
 				local index = (table.find(self._tiles, furthestTile) or 0) - 1 + 1
 				table.insert(self._tiles, index + 1, newTile)
 			else
-				logServer("failed to generate tile at furthest tile, retrying", "src/server/tiles/classes/dungeon_generation.ts", 165)
+				logServer("failed to generate tile at furthest tile, retrying", "src/server/tiles/classes/dungeon_generation.ts", 167)
 				clone:ClearAllChildren()
 				clone.Parent = nil
 				-- Create a new set with the updated exclusions including the current furthest tile
@@ -302,7 +304,6 @@ do
 				genFurthestTile(newExclusions)
 			end
 		end
-		logServer("generating " .. (tostring(self._config.TILES) .. " tiles"), "src/server/tiles/classes/dungeon_generation.ts", 179)
 		local time = benchmark(genTileBatch)
 		local timeString = "generation of " .. (tostring(self._config.TILES) .. " tiles took")
 		if time.minutes > 0 then
@@ -315,7 +316,6 @@ do
 			timeString ..= " " .. (tostring(time.milliseconds) .. " milliseconds")
 		end
 		logServer(timeString, "src/server/tiles/classes/dungeon_generation.ts", 192)
-		logServer("generating tile at furthest tile, with type " .. self._config.LAST_ROOM_TYPE, "src/server/tiles/classes/dungeon_generation.ts", 194)
 		local furthestTime = benchmark(genFurthestTile)
 		local furthestTimeString = "generation of " .. (self._config.LAST_ROOM_TYPE .. " tile type at furthest tile took")
 		if furthestTime.minutes > 0 then
@@ -327,7 +327,7 @@ do
 		if furthestTime.milliseconds > 0 then
 			furthestTimeString ..= " " .. (tostring(furthestTime.milliseconds) .. " milliseconds")
 		end
-		logServer(furthestTimeString, "src/server/tiles/classes/dungeon_generation.ts", 207)
+		logServer(furthestTimeString, "src/server/tiles/classes/dungeon_generation.ts", 205)
 		self._hasGenerated:set(true)
 	end
 end
