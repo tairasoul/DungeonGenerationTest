@@ -11,8 +11,8 @@ export default class Tile {
     public info: RoomInfo;
     public connections: Map<Tile, number>; // Map of connected tiles and their distances
 
-    constructor(model: Model, info: RoomInfo) {
-        this._model = model;
+    constructor(info: RoomInfo) {
+        this._model = info.roomModel;
         this.info = info;
         const parser = new TileParser(this._model);
         this.TileData = parser.getTileData();

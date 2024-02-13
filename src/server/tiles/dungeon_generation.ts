@@ -8,6 +8,7 @@ import { RoomInfo } from "./interfaces/room";
 import { $file } from "rbxts-transform-debug";
 import { findFurthestTileFromSpecificTile } from "./pathfinding/findFurthest";
 import make from "@rbxts/make";
+import { Observer, Value } from "@rbxts/fusion";
 
 const folder = ServerStorage.WaitForChild("Tiles") as Folder;
 
@@ -18,6 +19,9 @@ export default class Generator {
     private config: config;
     private tiles: Tile[] = [];
     private tileStorage: Folder;
+    private hasGenerated = Value(false);
+    private generated = Observer(this.hasGenerated);
+    private generatedListeners: {callback: () => unknown, destroy: () => void}[] = [];
     constructor(cfg: config) {
         this.config = cfg;
         this.tileStorage = make("Folder", {Name: this.config.DUNGEON_NAME, Parent: dungeonFolder})
@@ -37,6 +41,22 @@ export default class Generator {
         this.tiles.clear();
     };
 
+    addGeneratedListener(callback: () => unknown) {
+        this.generatedListeners.push({callback, destroy: this.generated.onChange(callback)})
+    }
+
+    removeGeneratedListener(callback: () => unknown) {
+        const found = this.generatedListeners.find((v) => v.callback === callback);
+        if (!found) throw "Listener not found for Generated observer.";
+        found.destroy();
+        this.generatedListeners = this.generatedListeners.filter((v) => v.callback !== callback);
+    }
+
+    removeListeners() {
+        this.generatedListeners.forEach((v) => v.destroy());
+        this.generatedListeners.clear();
+    }
+
     clear() {
         const children = this.tileStorage.GetChildren();
         const batchSize = 50; // Define batch size
@@ -55,11 +75,12 @@ export default class Generator {
             timeString += ` ${time.milliseconds} milliseconds`;
         }
         logServer(timeString, $file.filePath, $file.lineNumber);
+        this.hasGenerated.set(false);
     }
 
     generate() {
         const baseModel = randomizer.attachTileToPoint(this.config.STARTING_PART, this.config.INITIAL_TILE_TYPE, this.tileStorage) as RoomInfo;
-        let tile = new Tile(baseModel.roomModel, baseModel);
+        let tile = new Tile(baseModel);
         const firstTile = tile;
         this.tiles.push(tile);    
         const genTile = (maxRetries: number = 5) => {
@@ -79,8 +100,9 @@ export default class Generator {
             if (!randomThis) return;
         
             const clone = randomized.roomModel.Clone();
+            randomized.roomModel = clone;
             clone.Parent = this.tileStorage;
-            const tc = new Tile(clone, randomized);
+            const tc = new Tile(randomized);
             if (tile.attachTile(tc, randomThis, this.tiles)) {
                 const cframe = tc._model.GetPivot();
                 if (cframe.X < this.config.STARTING_PART.Position.X || cframe.Z < this.config.STARTING_PART.Position.Z) {
@@ -123,8 +145,9 @@ export default class Generator {
             if (!randomAttachmentPoint) return;
         
             const clone = randomizedTile.roomModel.Clone();
+            randomizedTile.roomModel = clone;
             clone.Parent = this.tileStorage;
-            const newTile = new Tile(clone, randomizedTile);
+            const newTile = new Tile(randomizedTile);
         
             if (furthestTile.attachTile(newTile, randomAttachmentPoint, this.tiles)) {
                 const index = this.tiles.indexOf(furthestTile) + 1;
@@ -164,5 +187,6 @@ export default class Generator {
         }
 
         logServer(furthestTimeString, $file.filePath, $file.lineNumber);
+        this.hasGenerated.set(true);
     }
 }

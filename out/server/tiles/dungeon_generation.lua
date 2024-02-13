@@ -12,6 +12,9 @@ local dungeonFolder = TS.import(script, game:GetService("ReplicatedStorage"), "T
 local Tile = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tile").default
 local findFurthestTileFromSpecificTile = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "pathfinding", "findFurthest").findFurthestTileFromSpecificTile
 local make = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "make")
+local _fusion = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "fusion", "src")
+local Observer = _fusion.Observer
+local Value = _fusion.Value
 local folder = ServerStorage:WaitForChild("Tiles")
 local randomizer = RandomTileAttacher.new(folder)
 local tiles = randomizer.tileRandomizer
@@ -29,6 +32,9 @@ do
 	end
 	function Generator:constructor(cfg)
 		self._tiles = {}
+		self._hasGenerated = Value(false)
+		self._generated = Observer(self._hasGenerated)
+		self._generatedListeners = {}
 		self._config = cfg
 		self._tileStorage = make("Folder", {
 			Name = self._config.DUNGEON_NAME,
@@ -71,12 +77,65 @@ do
 		end
 		table.clear(self._tiles)
 	end
+	function Generator:addGeneratedListener(callback)
+		local __generatedListeners = self._generatedListeners
+		local _arg0 = {
+			callback = callback,
+			destroy = self._generated:onChange(callback),
+		}
+		table.insert(__generatedListeners, _arg0)
+	end
+	function Generator:removeGeneratedListener(callback)
+		local __generatedListeners = self._generatedListeners
+		local _arg0 = function(v)
+			return v.callback == callback
+		end
+		-- ▼ ReadonlyArray.find ▼
+		local _result
+		for _i, _v in __generatedListeners do
+			if _arg0(_v, _i - 1, __generatedListeners) == true then
+				_result = _v
+				break
+			end
+		end
+		-- ▲ ReadonlyArray.find ▲
+		local found = _result
+		if not found then
+			error("Listener not found for Generated observer.")
+		end
+		found.destroy()
+		local __generatedListeners_1 = self._generatedListeners
+		local _arg0_1 = function(v)
+			return v.callback ~= callback
+		end
+		-- ▼ ReadonlyArray.filter ▼
+		local _newValue = {}
+		local _length = 0
+		for _k, _v in __generatedListeners_1 do
+			if _arg0_1(_v, _k - 1, __generatedListeners_1) == true then
+				_length += 1
+				_newValue[_length] = _v
+			end
+		end
+		-- ▲ ReadonlyArray.filter ▲
+		self._generatedListeners = _newValue
+	end
+	function Generator:removeListeners()
+		local __generatedListeners = self._generatedListeners
+		local _arg0 = function(v)
+			return v.destroy()
+		end
+		for _k, _v in __generatedListeners do
+			_arg0(_v, _k - 1, __generatedListeners)
+		end
+		table.clear(self._generatedListeners)
+	end
 	function Generator:clear()
 		local children = self._tileStorage:GetChildren()
 		local batchSize = 50
 		local totalBatches = math.ceil(#children / batchSize)
 		local amt = #children
-		logServer("clearing " .. (tostring(#children) .. (" tiles in " .. (tostring(totalBatches) .. " batches"))), "src/server/tiles/dungeon_generation.ts", 45)
+		logServer("clearing " .. (tostring(#children) .. (" tiles in " .. (tostring(totalBatches) .. " batches"))), "src/server/tiles/dungeon_generation.ts", 65)
 		local time = benchmark(function()
 			return self:_clearTilesBatch(children, batchSize, totalBatches)
 		end)
@@ -90,11 +149,12 @@ do
 		if time.milliseconds > 0 then
 			timeString ..= " " .. (tostring(time.milliseconds) .. " milliseconds")
 		end
-		logServer(timeString, "src/server/tiles/dungeon_generation.ts", 57)
+		logServer(timeString, "src/server/tiles/dungeon_generation.ts", 77)
+		self._hasGenerated:set(false)
 	end
 	function Generator:generate()
 		local baseModel = randomizer:attachTileToPoint(self._config.STARTING_PART, self._config.INITIAL_TILE_TYPE, self._tileStorage)
-		local tile = Tile.new(baseModel.roomModel, baseModel)
+		local tile = Tile.new(baseModel)
 		local firstTile = tile
 		local __tiles = self._tiles
 		local _tile = tile
@@ -130,8 +190,9 @@ do
 				return nil
 			end
 			local clone = randomized.roomModel:Clone()
+			randomized.roomModel = clone
 			clone.Parent = self._tileStorage
-			local tc = Tile.new(clone, randomized)
+			local tc = Tile.new(randomized)
 			if tile:attachTile(tc, randomThis, self._tiles) then
 				local cframe = tc._model:GetPivot()
 				if cframe.X < self._config.STARTING_PART.Position.X or cframe.Z < self._config.STARTING_PART.Position.Z then
@@ -198,8 +259,9 @@ do
 				return nil
 			end
 			local clone = randomizedTile.roomModel:Clone()
+			randomizedTile.roomModel = clone
 			clone.Parent = self._tileStorage
-			local newTile = Tile.new(clone, randomizedTile)
+			local newTile = Tile.new(randomizedTile)
 			if furthestTile:attachTile(newTile, randomAttachmentPoint, self._tiles) then
 				local index = (table.find(self._tiles, furthestTile) or 0) - 1 + 1
 				table.insert(self._tiles, index + 1, newTile)
@@ -209,7 +271,7 @@ do
 				genFurthestTile()
 			end
 		end
-		logServer("generating " .. (tostring(self._config.TILES) .. " tiles"), "src/server/tiles/dungeon_generation.ts", 139)
+		logServer("generating " .. (tostring(self._config.TILES) .. " tiles"), "src/server/tiles/dungeon_generation.ts", 162)
 		local time = benchmark(genTileBatch)
 		local timeString = "generation of " .. (tostring(self._config.TILES) .. " tiles took")
 		if time.minutes > 0 then
@@ -221,7 +283,7 @@ do
 		if time.milliseconds > 0 then
 			timeString ..= " " .. (tostring(time.milliseconds) .. " milliseconds")
 		end
-		logServer(timeString, "src/server/tiles/dungeon_generation.ts", 152)
+		logServer(timeString, "src/server/tiles/dungeon_generation.ts", 175)
 		local furthestTime = benchmark(genFurthestTile)
 		local furthestTimeString = "generation of " .. (self._config.LAST_ROOM_TYPE .. " tile type at furthest tile took")
 		if furthestTime.minutes > 0 then
@@ -233,7 +295,8 @@ do
 		if furthestTime.milliseconds > 0 then
 			furthestTimeString ..= " " .. (tostring(furthestTime.milliseconds) .. " milliseconds")
 		end
-		logServer(furthestTimeString, "src/server/tiles/dungeon_generation.ts", 166)
+		logServer(furthestTimeString, "src/server/tiles/dungeon_generation.ts", 189)
+		self._hasGenerated:set(true)
 	end
 end
 return {

@@ -41,8 +41,8 @@ do
 		local _fn = Workspace
 		local _exp = part:GetPivot()
 		local _arg0 = lookVector * newPos
-		local _vector3_2 = Vector3.new(0, 10, 0)
-		local result = _fn:Blockcast(_exp - _arg0 + _vector3_2, (select(2, center:GetBoundingBox())), Vector3.new(0, -15, 0))
+		local _vector3_2 = Vector3.new(0, 2, 0)
+		local result = _fn:Raycast((_exp - _arg0 + _vector3_2).Position, Vector3.new(0, -5, 0))
 		if result ~= nil then
 			logServer("attachment for " .. (tostring(self._tile.originModel) .. (" to " .. (tostring(part) .. (" overlaps with a part! " .. tostring((result.Instance:FindFirstAncestorOfClass("Model"))))))), "src/server/tiles/classes/room_attachment.ts", 34, "Warning")
 			make("BoolValue", {

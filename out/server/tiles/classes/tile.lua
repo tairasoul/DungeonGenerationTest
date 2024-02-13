@@ -15,8 +15,8 @@ do
 		local self = setmetatable({}, Tile)
 		return self:constructor(...) or self
 	end
-	function Tile:constructor(model, info)
-		self._model = model
+	function Tile:constructor(info)
+		self._model = info.roomModel
 		self.info = info
 		local parser = TileParser.new(self._model)
 		self.TileData = parser:getTileData()
