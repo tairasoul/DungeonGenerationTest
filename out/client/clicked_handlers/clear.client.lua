@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.2.0
+-- Compiled with roblox-ts v2.3.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local Workspace = game:GetService("Workspace")
 local remotes = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "remotes").default

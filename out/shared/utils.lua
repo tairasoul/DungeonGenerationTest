@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.2.0
+-- Compiled with roblox-ts v2.3.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
@@ -27,7 +27,7 @@ local function getRandom(array, filter)
 		return nil
 	end
 	local random = math.random(1, #filtered)
-	return filtered[random - 1 + 1]
+	return filtered[random]
 end
 local function getRandomWithWeight(array, filter, weights)
 	if filter == nil then
@@ -55,35 +55,34 @@ local function getRandomWithWeight(array, filter, weights)
 		return nil
 	end
 	-- Apply weights to the filtered array
-	local _arg0 = function(element, index)
+	-- ▼ ReadonlyArray.map ▼
+	local _newValue_1 = table.create(#filtered)
+	local _callback = function(element, index)
 		local _object = {
 			element = element,
 		}
 		local _left = "weight"
 		local _condition = weights[index + 1]
-		if not (_condition ~= 0 and (_condition == _condition and _condition)) then
+		if not (_condition ~= 0 and _condition == _condition and _condition) then
 			_condition = 1
 		end
 		_object[_left] = _condition
 		return _object
 	end
-	-- ▼ ReadonlyArray.map ▼
-	local _newValue_1 = table.create(#filtered)
 	for _k, _v in filtered do
-		_newValue_1[_k] = _arg0(_v, _k - 1, filtered)
+		_newValue_1[_k] = _callback(_v, _k - 1, filtered)
 	end
 	-- ▲ ReadonlyArray.map ▲
 	local weightedArray = _newValue_1
 	-- Calculate total weight
-	local _arg0_1 = function(sum, _param)
+	-- ▼ ReadonlyArray.reduce ▼
+	local _result = 0
+	local _callback_1 = function(sum, _param)
 		local weight = _param.weight
 		return sum + weight
 	end
-	-- ▼ ReadonlyArray.reduce ▼
-	local _result = 0
-	local _callback = _arg0_1
 	for _i = 1, #weightedArray do
-		_result = _callback(_result, weightedArray[_i], _i - 1, weightedArray)
+		_result = _callback_1(_result, weightedArray[_i], _i - 1, weightedArray)
 	end
 	-- ▲ ReadonlyArray.reduce ▲
 	local totalWeight = _result
@@ -302,14 +301,14 @@ local function getAllPlayerParts()
 	for _, player in players do
 		local char = player.Character or (player.CharacterAdded:Wait())
 		local _exp = char:GetDescendants()
-		local _arg0 = function(v)
-			return v:IsA("Part")
-		end
 		-- ▼ ReadonlyArray.filter ▼
 		local _newValue = {}
+		local _callback = function(v)
+			return v:IsA("Part")
+		end
 		local _length = 0
 		for _k, _v in _exp do
-			if _arg0(_v, _k - 1, _exp) == true then
+			if _callback(_v, _k - 1, _exp) == true then
 				_length += 1
 				_newValue[_length] = _v
 			end

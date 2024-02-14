@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.2.0
+-- Compiled with roblox-ts v2.3.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local ceive = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "ceive-im-gizmo", "out")
 local Workspace = game:GetService("Workspace")
@@ -25,7 +25,7 @@ do
 		self._loop = task.spawn(function()
 			while true do
 				local _value = task.wait()
-				if not (_value ~= 0 and (_value == _value and _value)) then
+				if not (_value ~= 0 and _value == _value and _value) then
 					break
 				end
 				if self._stoploop then
@@ -34,14 +34,14 @@ do
 				end
 				if self.DRAW_ATTACHMENT_POINT_DIRECTION then
 					local _exp = Workspace:GetDescendants()
-					local _arg0 = function(v)
-						return v.Name == "AttachmentPoint"
-					end
 					-- ▼ ReadonlyArray.filter ▼
 					local _newValue = {}
+					local _callback = function(v)
+						return v.Name == "AttachmentPoint"
+					end
 					local _length = 0
 					for _k, _v in _exp do
-						if _arg0(_v, _k - 1, _exp) == true then
+						if _callback(_v, _k - 1, _exp) == true then
 							_length += 1
 							_newValue[_length] = _v
 						end

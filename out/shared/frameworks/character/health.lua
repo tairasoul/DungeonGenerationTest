@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.2.0
+-- Compiled with roblox-ts v2.3.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local _fusion = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "fusion", "src")
 local Value = _fusion.Value
@@ -62,14 +62,14 @@ do
 		table.insert(_valid, _arg0)
 	end
 	function HealthSystem:removeHealthListener(callback)
-		local _health = self._listeners.health
-		local _arg0 = function(v)
+		local _exp = self._listeners.health
+		-- ▼ ReadonlyArray.find ▼
+		local _callback = function(v)
 			return v.callback == callback
 		end
-		-- ▼ ReadonlyArray.find ▼
 		local _result
-		for _i, _v in _health do
-			if _arg0(_v, _i - 1, _health) == true then
+		for _i, _v in _exp do
+			if _callback(_v, _i - 1, _exp) == true then
 				_result = _v
 				break
 			end
@@ -78,15 +78,15 @@ do
 		local listener = _result
 		if listener ~= nil then
 			listener.destroy()
-			local _health_1 = self._listeners.health
-			local _arg0_1 = function(v)
-				return v ~= listener
-			end
+			local _exp_1 = self._listeners.health
 			-- ▼ ReadonlyArray.filter ▼
 			local _newValue = {}
+			local _callback_1 = function(v)
+				return v ~= listener
+			end
 			local _length = 0
-			for _k, _v in _health_1 do
-				if _arg0_1(_v, _k - 1, _health_1) == true then
+			for _k, _v in _exp_1 do
+				if _callback_1(_v, _k - 1, _exp_1) == true then
 					_length += 1
 					_newValue[_length] = _v
 				end
@@ -96,14 +96,14 @@ do
 		end
 	end
 	function HealthSystem:removeShieldListener(callback)
-		local _shield = self._listeners.shield
-		local _arg0 = function(v)
+		local _exp = self._listeners.shield
+		-- ▼ ReadonlyArray.find ▼
+		local _callback = function(v)
 			return v.callback == callback
 		end
-		-- ▼ ReadonlyArray.find ▼
 		local _result
-		for _i, _v in _shield do
-			if _arg0(_v, _i - 1, _shield) == true then
+		for _i, _v in _exp do
+			if _callback(_v, _i - 1, _exp) == true then
 				_result = _v
 				break
 			end
@@ -112,15 +112,15 @@ do
 		local listener = _result
 		if listener ~= nil then
 			listener.destroy()
-			local _shield_1 = self._listeners.shield
-			local _arg0_1 = function(v)
-				return v ~= listener
-			end
+			local _exp_1 = self._listeners.shield
 			-- ▼ ReadonlyArray.filter ▼
 			local _newValue = {}
+			local _callback_1 = function(v)
+				return v ~= listener
+			end
 			local _length = 0
-			for _k, _v in _shield_1 do
-				if _arg0_1(_v, _k - 1, _shield_1) == true then
+			for _k, _v in _exp_1 do
+				if _callback_1(_v, _k - 1, _exp_1) == true then
 					_length += 1
 					_newValue[_length] = _v
 				end
@@ -130,14 +130,14 @@ do
 		end
 	end
 	function HealthSystem:removeValidListener(callback)
-		local _shield = self._listeners.shield
-		local _arg0 = function(v)
+		local _exp = self._listeners.shield
+		-- ▼ ReadonlyArray.find ▼
+		local _callback = function(v)
 			return v.callback == callback
 		end
-		-- ▼ ReadonlyArray.find ▼
 		local _result
-		for _i, _v in _shield do
-			if _arg0(_v, _i - 1, _shield) == true then
+		for _i, _v in _exp do
+			if _callback(_v, _i - 1, _exp) == true then
 				_result = _v
 				break
 			end
@@ -146,15 +146,15 @@ do
 		local listener = _result
 		if listener ~= nil then
 			listener.destroy()
-			local _shield_1 = self._listeners.shield
-			local _arg0_1 = function(v)
-				return v ~= listener
-			end
+			local _exp_1 = self._listeners.shield
 			-- ▼ ReadonlyArray.filter ▼
 			local _newValue = {}
+			local _callback_1 = function(v)
+				return v ~= listener
+			end
 			local _length = 0
-			for _k, _v in _shield_1 do
-				if _arg0_1(_v, _k - 1, _shield_1) == true then
+			for _k, _v in _exp_1 do
+				if _callback_1(_v, _k - 1, _exp_1) == true then
 					_length += 1
 					_newValue[_length] = _v
 				end
@@ -164,27 +164,33 @@ do
 		end
 	end
 	function HealthSystem:removeAllListeners()
-		local _shield = self._listeners.shield
-		local _arg0 = function(v)
+		local _exp = self._listeners.shield
+		-- ▼ ReadonlyArray.forEach ▼
+		local _callback = function(v)
 			return v.destroy()
 		end
-		for _k, _v in _shield do
-			_arg0(_v, _k - 1, _shield)
+		for _k, _v in _exp do
+			_callback(_v, _k - 1, _exp)
 		end
-		local _health = self._listeners.health
-		local _arg0_1 = function(v)
+		-- ▲ ReadonlyArray.forEach ▲
+		local _exp_1 = self._listeners.health
+		-- ▼ ReadonlyArray.forEach ▼
+		local _callback_1 = function(v)
 			return v.destroy()
 		end
-		for _k, _v in _health do
-			_arg0_1(_v, _k - 1, _health)
+		for _k, _v in _exp_1 do
+			_callback_1(_v, _k - 1, _exp_1)
 		end
-		local _valid = self._listeners.valid
-		local _arg0_2 = function(v)
+		-- ▲ ReadonlyArray.forEach ▲
+		local _exp_2 = self._listeners.valid
+		-- ▼ ReadonlyArray.forEach ▼
+		local _callback_2 = function(v)
 			return v.destroy()
 		end
-		for _k, _v in _valid do
-			_arg0_2(_v, _k - 1, _valid)
+		for _k, _v in _exp_2 do
+			_callback_2(_v, _k - 1, _exp_2)
 		end
+		-- ▲ ReadonlyArray.forEach ▲
 		table.clear(self._listeners.shield)
 		table.clear(self._listeners.health)
 		table.clear(self._listeners.valid)

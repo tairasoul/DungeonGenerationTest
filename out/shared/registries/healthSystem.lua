@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.2.0
+-- Compiled with roblox-ts v2.3.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local HealthSystem = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "frameworks", "character", "health").default
 local _class
@@ -17,14 +17,14 @@ do
 		self._healthSystems = {}
 	end
 	function Registry:getSystemForHumanoid(humanoid)
-		local __healthSystems = self._healthSystems
-		local _arg0 = function(system)
+		local _exp = self._healthSystems
+		-- ▼ ReadonlyArray.find ▼
+		local _callback = function(system)
 			return system.humanoid == humanoid
 		end
-		-- ▼ ReadonlyArray.find ▼
 		local _result
-		for _i, _v in __healthSystems do
-			if _arg0(_v, _i - 1, __healthSystems) == true then
+		for _i, _v in _exp do
+			if _callback(_v, _i - 1, _exp) == true then
 				_result = _v
 				break
 			end
@@ -41,7 +41,8 @@ do
 		system:addValidListener(function()
 			self:_removeSystem(system)
 		end)
-		table.insert(self._healthSystems, system)
+		local _exp = self._healthSystems
+		table.insert(_exp, system)
 		return system
 	end
 	function Registry:removeHumanoid(humanoid)
@@ -52,15 +53,15 @@ do
 	end
 	function Registry:_removeSystem(system)
 		system:removeAllListeners()
-		local __healthSystems = self._healthSystems
-		local _arg0 = function(existingSystem)
-			return existingSystem ~= system
-		end
+		local _exp = self._healthSystems
 		-- ▼ ReadonlyArray.filter ▼
 		local _newValue = {}
+		local _callback = function(existingSystem)
+			return existingSystem ~= system
+		end
 		local _length = 0
-		for _k, _v in __healthSystems do
-			if _arg0(_v, _k - 1, __healthSystems) == true then
+		for _k, _v in _exp do
+			if _callback(_v, _k - 1, _exp) == true then
 				_length += 1
 				_newValue[_length] = _v
 			end

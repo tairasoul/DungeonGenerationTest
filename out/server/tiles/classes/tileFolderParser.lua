@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.2.0
+-- Compiled with roblox-ts v2.3.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local make = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "make")
 local tileFolderParser
@@ -39,7 +39,7 @@ do
 	function tileFolderParser:getRoomsOfType(roomType)
 		local roomFolder = self._folder:FindFirstChild(roomType)
 		if not roomFolder then
-			error("Folder for RoomType " .. (roomType .. " not found."))
+			error(`Folder for RoomType {roomType} not found.`)
 		end
 		return roomFolder:GetChildren()
 	end

@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.2.0
+-- Compiled with roblox-ts v2.3.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local getRandom = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getRandom
 local tileFolderParser = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tileFolderParser").default

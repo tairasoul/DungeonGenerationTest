@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.2.0
+-- Compiled with roblox-ts v2.3.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
@@ -86,14 +86,14 @@ do
 		table.insert(__generatedListeners, _arg0)
 	end
 	function Generator:removeGeneratedListener(callback)
-		local __generatedListeners = self._generatedListeners
-		local _arg0 = function(v)
+		local _exp = self._generatedListeners
+		-- ▼ ReadonlyArray.find ▼
+		local _callback = function(v)
 			return v.callback == callback
 		end
-		-- ▼ ReadonlyArray.find ▼
 		local _result
-		for _i, _v in __generatedListeners do
-			if _arg0(_v, _i - 1, __generatedListeners) == true then
+		for _i, _v in _exp do
+			if _callback(_v, _i - 1, _exp) == true then
 				_result = _v
 				break
 			end
@@ -104,15 +104,15 @@ do
 			error("Listener not found for Generated observer.")
 		end
 		found.destroy()
-		local __generatedListeners_1 = self._generatedListeners
-		local _arg0_1 = function(v)
-			return v.callback ~= callback
-		end
+		local _exp_1 = self._generatedListeners
 		-- ▼ ReadonlyArray.filter ▼
 		local _newValue = {}
+		local _callback_1 = function(v)
+			return v.callback ~= callback
+		end
 		local _length = 0
-		for _k, _v in __generatedListeners_1 do
-			if _arg0_1(_v, _k - 1, __generatedListeners_1) == true then
+		for _k, _v in _exp_1 do
+			if _callback_1(_v, _k - 1, _exp_1) == true then
 				_length += 1
 				_newValue[_length] = _v
 			end
@@ -121,13 +121,15 @@ do
 		self._generatedListeners = _newValue
 	end
 	function Generator:removeListeners()
-		local __generatedListeners = self._generatedListeners
-		local _arg0 = function(v)
+		local _exp = self._generatedListeners
+		-- ▼ ReadonlyArray.forEach ▼
+		local _callback = function(v)
 			return v.destroy()
 		end
-		for _k, _v in __generatedListeners do
-			_arg0(_v, _k - 1, __generatedListeners)
+		for _k, _v in _exp do
+			_callback(_v, _k - 1, _exp)
 		end
+		-- ▲ ReadonlyArray.forEach ▲
 		table.clear(self._generatedListeners)
 	end
 	function Generator:clear()
@@ -135,19 +137,19 @@ do
 		local batchSize = 50
 		local totalBatches = math.ceil(#children / batchSize)
 		local amt = #children
-		logServer("clearing " .. (tostring(#children) .. (" tiles in " .. (tostring(totalBatches) .. " batches"))), "src/server/tiles/classes/dungeon_generation.ts", 65)
+		logServer(`clearing {#children} tiles in {totalBatches} batches`, "src/server/tiles/classes/dungeon_generation.ts", 65)
 		local time = benchmark(function()
 			return self:_clearTilesBatch(children, batchSize, totalBatches)
 		end)
-		local timeString = "cleared " .. (tostring(amt) .. (" tiles in " .. (tostring(totalBatches) .. " batches in")))
+		local timeString = `cleared {amt} tiles in {totalBatches} batches in`
 		if time.minutes > 0 then
-			timeString ..= " " .. (tostring(time.minutes) .. (" minute" .. (if time.minutes > 1 then "s" else "")))
+			timeString ..= ` {time.minutes} minute{if time.minutes > 1 then "s" else ""}`
 		end
 		if time.seconds > 0 then
-			timeString ..= " " .. (tostring(time.seconds) .. (" second" .. (if time.seconds > 1 then "s" else "")))
+			timeString ..= ` {time.seconds} second{if time.seconds > 1 then "s" else ""}`
 		end
 		if time.milliseconds > 0 then
-			timeString ..= " " .. (tostring(time.milliseconds) .. " milliseconds")
+			timeString ..= ` {time.milliseconds} milliseconds`
 		end
 		logServer(timeString, "src/server/tiles/classes/dungeon_generation.ts", 77)
 		self._hasGenerated:set(false)
@@ -217,7 +219,7 @@ do
 			end
 		end
 		local genTileBatch = function()
-			logServer("generating " .. (tostring(self._config.TILES) .. " tiles"), "src/server/tiles/classes/dungeon_generation.ts", 125)
+			logServer(`generating {self._config.TILES} tiles`, "src/server/tiles/classes/dungeon_generation.ts", 125)
 			do
 				local i = 0
 				local _shouldIncrement = false
@@ -240,7 +242,7 @@ do
 			if exclusions == nil then
 				exclusions = {}
 			end
-			logServer("generating tile at furthest tile, with type " .. self._config.LAST_ROOM_TYPE, "src/server/tiles/classes/dungeon_generation.ts", 133)
+			logServer(`generating tile at furthest tile, with type {self._config.LAST_ROOM_TYPE}`, "src/server/tiles/classes/dungeon_generation.ts", 133)
 			local furthestTile = findFurthestTileFromSpecificTile(firstTile, exclusions)
 			if not furthestTile then
 				return nil
@@ -263,15 +265,16 @@ do
 			if not randomAttachmentPoint then
 				-- Create a new set with the updated exclusions including the current furthest tile
 				local newExclusions = {}
-				local _exclusions = exclusions
-				local _arg0 = function(v)
+				-- ▼ ReadonlySet.forEach ▼
+				local _callback = function(v)
 					local _v = v
 					newExclusions[_v] = true
 					return newExclusions
 				end
-				for _v in _exclusions do
-					_arg0(_v, _v, _exclusions)
+				for _v in exclusions do
+					_callback(_v, _v, exclusions)
 				end
+				-- ▲ ReadonlySet.forEach ▲
 				newExclusions[furthestTile] = true
 				-- Call genFurthestTile again with the updated exclusions set
 				genFurthestTile(newExclusions)
@@ -285,47 +288,48 @@ do
 				local index = (table.find(self._tiles, furthestTile) or 0) - 1 + 1
 				table.insert(self._tiles, index + 1, newTile)
 			else
-				logServer("failed to generate tile at furthest tile, retrying", "src/server/tiles/classes/dungeon_generation.ts", 167)
+				logServer(`failed to generate tile at furthest tile, retrying`, "src/server/tiles/classes/dungeon_generation.ts", 167)
 				clone:ClearAllChildren()
 				clone.Parent = nil
 				-- Create a new set with the updated exclusions including the current furthest tile
 				local newExclusions = {}
-				local _exclusions = exclusions
-				local _arg0 = function(v)
+				-- ▼ ReadonlySet.forEach ▼
+				local _callback = function(v)
 					local _v = v
 					newExclusions[_v] = true
 					return newExclusions
 				end
-				for _v in _exclusions do
-					_arg0(_v, _v, _exclusions)
+				for _v in exclusions do
+					_callback(_v, _v, exclusions)
 				end
+				-- ▲ ReadonlySet.forEach ▲
 				newExclusions[furthestTile] = true
 				-- Call genFurthestTile again with the updated exclusions set
 				genFurthestTile(newExclusions)
 			end
 		end
 		local time = benchmark(genTileBatch)
-		local timeString = "generation of " .. (tostring(self._config.TILES) .. " tiles took")
+		local timeString = `generation of {self._config.TILES} tiles took`
 		if time.minutes > 0 then
-			timeString ..= " " .. (tostring(time.minutes) .. (" minute" .. (if time.minutes > 1 then "s" else "")))
+			timeString ..= ` {time.minutes} minute{if time.minutes > 1 then "s" else ""}`
 		end
 		if time.seconds > 0 then
-			timeString ..= " " .. (tostring(time.seconds) .. (" second" .. (if time.seconds > 1 then "s" else "")))
+			timeString ..= ` {time.seconds} second{if time.seconds > 1 then "s" else ""}`
 		end
 		if time.milliseconds > 0 then
-			timeString ..= " " .. (tostring(time.milliseconds) .. " milliseconds")
+			timeString ..= ` {time.milliseconds} milliseconds`
 		end
 		logServer(timeString, "src/server/tiles/classes/dungeon_generation.ts", 192)
 		local furthestTime = benchmark(genFurthestTile)
-		local furthestTimeString = "generation of " .. (self._config.LAST_ROOM_TYPE .. " tile type at furthest tile took")
+		local furthestTimeString = `generation of {self._config.LAST_ROOM_TYPE} tile type at furthest tile took`
 		if furthestTime.minutes > 0 then
-			furthestTimeString ..= " " .. (tostring(furthestTime.minutes) .. (" minute" .. (if furthestTime.minutes > 1 then "s" else "")))
+			furthestTimeString ..= ` {furthestTime.minutes} minute{if furthestTime.minutes > 1 then "s" else ""}`
 		end
 		if furthestTime.seconds > 0 then
-			furthestTimeString ..= " " .. (tostring(furthestTime.seconds) .. (" second" .. (if furthestTime.seconds > 1 then "s" else "")))
+			furthestTimeString ..= ` {furthestTime.seconds} second{if furthestTime.seconds > 1 then "s" else ""}`
 		end
 		if furthestTime.milliseconds > 0 then
-			furthestTimeString ..= " " .. (tostring(furthestTime.milliseconds) .. " milliseconds")
+			furthestTimeString ..= ` {furthestTime.milliseconds} milliseconds`
 		end
 		logServer(furthestTimeString, "src/server/tiles/classes/dungeon_generation.ts", 205)
 		self._hasGenerated:set(true)

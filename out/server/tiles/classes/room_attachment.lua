@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.2.0
+-- Compiled with roblox-ts v2.3.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local _utils = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils")
 local getDistance = _utils.getDistance
@@ -44,14 +44,14 @@ do
 		local _vector3_2 = Vector3.new(0, 2, 0)
 		local result = _fn:Raycast((_exp - _arg0 + _vector3_2).Position, Vector3.new(0, -5, 0))
 		if result ~= nil then
-			logServer("attachment for " .. (tostring(self._tile.originModel) .. (" to " .. (tostring(part) .. (" overlaps with a part! " .. tostring((result.Instance:FindFirstAncestorOfClass("Model"))))))), "src/server/tiles/classes/room_attachment.ts", 34, "Warning")
+			logServer(`attachment for {self._tile.originModel} to {part} overlaps with a part! {result.Instance:FindFirstAncestorOfClass("Model")}`, "src/server/tiles/classes/room_attachment.ts", 34, "Warning")
 			make("BoolValue", {
 				Parent = part,
 				Value = true,
 				Name = "HasAttachment",
 			})
-			local _tileList = tileList
-			local _arg0_1 = function(v)
+			-- ▼ ReadonlyArray.find ▼
+			local _callback = function(v)
 				local _exp_1 = v._model:WaitForChild("centerPoint")
 				local _result = result.Instance:FindFirstAncestorOfClass("Model")
 				if _result ~= nil then
@@ -59,10 +59,9 @@ do
 				end
 				return _exp_1 == _result
 			end
-			-- ▼ ReadonlyArray.find ▼
 			local _result
-			for _i, _v in _tileList do
-				if _arg0_1(_v, _i - 1, _tileList) == true then
+			for _i, _v in tileList do
+				if _callback(_v, _i - 1, tileList) == true then
 					_result = _v
 					break
 				end
@@ -70,27 +69,27 @@ do
 			-- ▲ ReadonlyArray.find ▲
 			local tile = _result
 			if tile ~= nil then
-				local _attachmentPoints = tile.attachmentPoints
-				local _arg0_2 = function(v)
-					return not v:FindFirstChild("HasAttachment")
-				end
+				local _exp_1 = tile.attachmentPoints
 				-- ▼ ReadonlyArray.filter ▼
 				local _newValue = {}
+				local _callback_1 = function(v)
+					return not v:FindFirstChild("HasAttachment")
+				end
 				local _length = 0
-				for _k, _v in _attachmentPoints do
-					if _arg0_2(_v, _k - 1, _attachmentPoints) == true then
+				for _k, _v in _exp_1 do
+					if _callback_1(_v, _k - 1, _exp_1) == true then
 						_length += 1
 						_newValue[_length] = _v
 					end
 				end
 				-- ▲ ReadonlyArray.filter ▲
-				local _arg0_3 = function(v)
+				-- ▼ ReadonlyArray.find ▼
+				local _callback_2 = function(v)
 					return getDistance(v.Position, part.Position).Magnitude < 2
 				end
-				-- ▼ ReadonlyArray.find ▼
 				local _result_1
 				for _i, _v in _newValue do
-					if _arg0_3(_v, _i - 1, _newValue) == true then
+					if _callback_2(_v, _i - 1, _newValue) == true then
 						_result_1 = _v
 						break
 					end

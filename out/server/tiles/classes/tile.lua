@@ -1,4 +1,4 @@
--- Compiled with roblox-ts v2.2.0
+-- Compiled with roblox-ts v2.3.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local TileParser = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "tileParser").default
 local RoomAttachment = TS.import(script, game:GetService("ServerScriptService"), "TS", "tiles", "classes", "room_attachment").default
@@ -25,14 +25,14 @@ do
 	end
 	function Tile:_findAttachmentPoints()
 		local _exp = self._model:GetDescendants()
-		local _arg0 = function(v)
-			return v:IsA("Part") and v.Name == "Doorway"
-		end
 		-- ▼ ReadonlyArray.filter ▼
 		local _newValue = {}
+		local _callback = function(v)
+			return v:IsA("Part") and v.Name == "Doorway"
+		end
 		local _length = 0
 		for _k, _v in _exp do
-			if _arg0(_v, _k - 1, _exp) == true then
+			if _callback(_v, _k - 1, _exp) == true then
 				_length += 1
 				_newValue[_length] = _v
 			end
