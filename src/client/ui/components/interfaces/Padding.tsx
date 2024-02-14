@@ -1,4 +1,4 @@
-import { BindingOrValue } from "@rbxts/pretty-react-hooks";
+import { BindingOrValue } from "@rbxts/pretty-roact-hooks";
 import Roact from "@rbxts/roact";
 
 interface Props {
