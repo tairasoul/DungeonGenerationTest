@@ -1,7 +1,7 @@
 import { RunService, ServerStorage } from "@rbxts/services";
 import RandomTileAttacher from "./random_tile_attachment";
 import { config } from "../interfaces/dungeon_config";
-import { benchmark, getNextAfterCondition_Reverse, getRandom, logServer } from "shared/utils";
+import { benchmark, getDistance, getNextAfterCondition_Reverse, getRandom, logServer } from "shared/utils";
 import { dungeonFolder } from "shared/vars/folders";
 import Tile from "./tile";
 import { RoomInfo } from "../interfaces/room";
@@ -88,7 +88,7 @@ export = class Generator {
             if (!randomized) return;
             let randomThis;
             let attempts = 0;
-            while (attempts < 2) {
+            while (attempts < tile.attachmentPoints.size()) {
                 randomThis = getRandom(tile.attachmentPoints, (inst) => !inst.FindFirstChild("HasAttachment"));
                 if (randomThis) break;
                 tile = getNextAfterCondition_Reverse(this.tiles, (item) => item === tile) as Tile;
@@ -105,7 +105,8 @@ export = class Generator {
             const tc = new Tile(randomized);
             if (tile.attachTile(tc, randomThis, this.tiles)) {
                 const cframe = tc._model.GetPivot();
-                if (cframe.X < this.config.STARTING_PART.Position.X || cframe.Z < this.config.STARTING_PART.Position.Z) {
+                if (getDistance(cframe.Position, (this.config.STARTING_PART.FindFirstAncestorOfClass("Model") ?? this.config.STARTING_PART).GetPivot().Position).Magnitude < 70) {
+                    logServer(`tile ${tostring(tc)} is too close to starting room! removing.`, $file.filePath, $file.lineNumber, "Warning");
                     clone.ClearAllChildren();
                     clone.Parent = undefined;
                     if (maxRetries !== 0) genTile(maxRetries - 1)
@@ -132,15 +133,15 @@ export = class Generator {
         const genFurthestTile = (exclusions: Set<Tile> = new Set()) => {
             logServer(`generating tile at furthest tile, with type ${this.config.LAST_ROOM_TYPE}`, $file.filePath, $file.lineNumber);
             const furthestTile = findFurthestTileFromSpecificTile(firstTile, exclusions);
-            if (!furthestTile) return;
+            if (!furthestTile[0]) return;
         
             const randomizedTile = tiles.getTileOfType(this.config.LAST_ROOM_TYPE);
             if (!randomizedTile) return;
         
             let randomAttachmentPoint;
             let attempts = 0;
-            while (attempts < 2) {
-                randomAttachmentPoint = getRandom(furthestTile.attachmentPoints, inst => !inst.FindFirstChild("HasAttachment"));
+            while (attempts < furthestTile[0].attachmentPoints.size()) {
+                randomAttachmentPoint = getRandom(furthestTile[0].attachmentPoints, inst => !inst.FindFirstChild("HasAttachment"));
                 if (randomAttachmentPoint) break;
                 attempts++;
             }
@@ -148,7 +149,7 @@ export = class Generator {
                 // Create a new set with the updated exclusions including the current furthest tile
                 const newExclusions: Set<Tile> = new Set();
                 exclusions.forEach((v) => newExclusions.add(v));
-                newExclusions.add(furthestTile);
+                newExclusions.add(furthestTile[0]);
                 
                 // Call genFurthestTile again with the updated exclusions set
                 genFurthestTile(newExclusions);
@@ -160,9 +161,10 @@ export = class Generator {
             clone.Parent = this.tileStorage;
             const newTile = new Tile(randomizedTile);
         
-            if (furthestTile.attachTile(newTile, randomAttachmentPoint, this.tiles)) {
-                const index = this.tiles.indexOf(furthestTile) + 1;
+            if (furthestTile[0].attachTile(newTile, randomAttachmentPoint, this.tiles)) {
+                const index = this.tiles.indexOf(furthestTile[0]) + 1;
                 this.tiles.insert(index, newTile);
+                logServer(`generated last tile ${math.round(furthestTile[1])} studs away`, $file.filePath, $file.lineNumber)
             } else {
                 logServer(`failed to generate tile at furthest tile, retrying`, $file.filePath, $file.lineNumber);
                 clone.ClearAllChildren();
@@ -171,7 +173,7 @@ export = class Generator {
                 // Create a new set with the updated exclusions including the current furthest tile
                 const newExclusions: Set<Tile> = new Set();
                 exclusions.forEach((v) => newExclusions.add(v));
-                newExclusions.add(furthestTile);
+                newExclusions.add(furthestTile[0]);
                 
                 // Call genFurthestTile again with the updated exclusions set
                 genFurthestTile(newExclusions);
@@ -199,7 +201,7 @@ export = class Generator {
             furthestTimeString += ` ${furthestTime.seconds} second${furthestTime.seconds > 1 ? "s" : ""}`;
         }
         if (furthestTime.milliseconds > 0) {
-            furthestTimeString += ` ${furthestTime.milliseconds} milliseconds`;
+            furthestTimeString += ` ${furthestTime.milliseconds} millisecond${furthestTime.milliseconds > 1 ? "s" : ""}`;
         }
 
         logServer(furthestTimeString, $file.filePath, $file.lineNumber);

@@ -1,6 +1,6 @@
 import Tile from '../classes/tile';
 
-export function findFurthestTileFromSpecificTile(startTile: Tile, exclusions: Set<Tile> = new Set()): Tile | undefined {
+export function findFurthestTileFromSpecificTile(startTile: Tile, exclusions: Set<Tile> = new Set()): [Tile | undefined, number] {
     const visited: Set<Tile> = new Set(); // Set to track visited tiles
     let furthestTile: Tile | undefined;
     let maxDistance = -math.huge;
@@ -26,12 +26,12 @@ export function findFurthestTileFromSpecificTile(startTile: Tile, exclusions: Se
                 maxDistance = distance;
                 furthestTile = currentTile;
             }
+        }
 
-            // Explore neighboring tiles recursively
-            for (const [neighborTile, neighborDistance] of currentTile.connections) {
-                if (!visited.has(neighborTile) && !exclusions.has(neighborTile)) {
-                    dfs(neighborTile, distance + neighborDistance);
-                }
+        // Explore neighboring tiles recursively
+        for (const [neighborTile, neighborDistance] of currentTile.connections) {
+            if (!visited.has(neighborTile) && !exclusions.has(neighborTile)) {
+                dfs(neighborTile, distance + neighborDistance);
             }
         }
     }
@@ -39,5 +39,5 @@ export function findFurthestTileFromSpecificTile(startTile: Tile, exclusions: Se
     // Start DFS from the given start tile
     dfs(startTile, 0);
 
-    return furthestTile;
+    return [furthestTile, maxDistance];
 }

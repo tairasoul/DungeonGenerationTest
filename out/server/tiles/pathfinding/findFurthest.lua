@@ -25,17 +25,17 @@ local function findFurthestTileFromSpecificTile(startTile, exclusions)
 				maxDistance = distance
 				furthestTile = currentTile
 			end
-			-- Explore neighboring tiles recursively
-			for neighborTile, neighborDistance in currentTile.connections do
-				if not (visited[neighborTile] ~= nil) and not (exclusions[neighborTile] ~= nil) then
-					dfs(neighborTile, distance + neighborDistance)
-				end
+		end
+		-- Explore neighboring tiles recursively
+		for neighborTile, neighborDistance in currentTile.connections do
+			if not (visited[neighborTile] ~= nil) and not (exclusions[neighborTile] ~= nil) then
+				dfs(neighborTile, distance + neighborDistance)
 			end
 		end
 	end
 	-- Start DFS from the given start tile
 	dfs(startTile, 0)
-	return furthestTile
+	return { furthestTile, maxDistance }
 end
 return {
 	findFurthestTileFromSpecificTile = findFurthestTileFromSpecificTile,

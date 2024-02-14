@@ -41,4 +41,8 @@ export default class Tile {
         const distance = getDistance(this.TileData.centerPoint.Position, tile.TileData.centerPoint.Position).Magnitude;
         this.connections.set(tile, distance);
     }
+
+    toString() {
+        return `${this._model.Name} of type ${this.info.roomType} (Tile)`
+    }
 }

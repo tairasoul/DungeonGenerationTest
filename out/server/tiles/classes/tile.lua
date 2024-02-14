@@ -56,6 +56,12 @@ do
 		local _tile = tile
 		_connections[_tile] = distance
 	end
+	function Tile:toString()
+		return `{self._model.Name} of type {self.info.roomType} (Tile)`
+	end
+	function Tile:__tostring()
+		return self:toString()
+	end
 end
 return {
 	default = Tile,
