@@ -15,7 +15,7 @@ const folder = ServerStorage.WaitForChild("Tiles") as Folder;
 const randomizer = new RandomTileAttacher(folder);
 
 const tiles = randomizer.tileRandomizer;
-export default class Generator {
+export = class Generator {
     private config: config;
     private tiles: Tile[] = [];
     private tileStorage: Folder;

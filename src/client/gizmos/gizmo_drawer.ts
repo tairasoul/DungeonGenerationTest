@@ -3,7 +3,7 @@ import { Workspace } from "@rbxts/services";
 
 ceive.Init();
 
-export default new class GizmoDrawer {
+export = new class GizmoDrawer {
     DRAW_ATTACHMENT_POINT_DIRECTION = true;
     private loop: thread | undefined;
     private stoploop = false;

@@ -73,7 +73,4 @@ do
 	end
 	_class = GizmoDrawer
 end
-local default = _class.new()
-return {
-	default = default,
-}
+return _class.new()

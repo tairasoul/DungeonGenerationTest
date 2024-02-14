@@ -13,6 +13,6 @@ export default createRemotes(
         clearDungeon: remote<Server>(),
         serverLog: remote<Client, [logString: string, srcFile: string, lineNumber: number, logType: "Warning" | "Error"  | "Message"]>(),
         upgradesAvailable: remote<Client, [upgrades: upgrade[]]>(),
-        pickUpgrade: remote<Server, [identifier: string]>().middleware(throttleMiddleware({throttle: 10}))
+        pickUpgrade: remote<Server, [identifier: string]>().middleware(throttleMiddleware({throttle: 2}))
     }
 );

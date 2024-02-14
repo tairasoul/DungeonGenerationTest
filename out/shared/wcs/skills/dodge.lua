@@ -5,7 +5,7 @@ local Skill = _wcs.Skill
 local SkillDecorator = _wcs.SkillDecorator
 local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
-local healthRegistry = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "registries", "healthSystem").default
+local healthRegistry = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "registries", "healthSystem")
 local getAllPlayerParts = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "utils").getAllPlayerParts
 local Dodge
 do

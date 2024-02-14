@@ -22,6 +22,9 @@ do
 	function UIHandler:openUpgrades(upgrades)
 		self._screens.Upgrade = Roact.mount(Upgrades({
 			upgrades = upgrades,
+			upgraded = function()
+				return self:closeUpgrades()
+			end,
 		}), Players.LocalPlayer:WaitForChild("PlayerGui"))
 	end
 	function UIHandler:closeUpgrades()
@@ -31,7 +34,4 @@ do
 	end
 	_class = UIHandler
 end
-local default = _class.new()
-return {
-	default = default,
-}
+return _class.new()

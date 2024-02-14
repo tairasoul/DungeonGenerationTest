@@ -1,6 +1,6 @@
 import HealthSystem from "../frameworks/character/health";
 
-export default new class Registry {
+export = new class Registry {
     private healthSystems: HealthSystem[] = [];
 
     getSystemForHumanoid(humanoid: Humanoid) {

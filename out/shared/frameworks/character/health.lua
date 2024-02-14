@@ -3,9 +3,9 @@ local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_incl
 local _fusion = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "fusion", "src")
 local Value = _fusion.Value
 local Observer = _fusion.Observer
-local HealthSystem
+local _class
 do
-	HealthSystem = setmetatable({}, {
+	local HealthSystem = setmetatable({}, {
 		__tostring = function()
 			return "HealthSystem"
 		end,
@@ -220,7 +220,6 @@ do
 		end
 		self.shield:set(sp)
 	end
+	_class = HealthSystem
 end
-return {
-	default = HealthSystem,
-}
+return _class

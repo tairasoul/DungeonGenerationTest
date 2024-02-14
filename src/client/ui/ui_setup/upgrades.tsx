@@ -9,16 +9,17 @@ type upgrade = {
     description: string;
 }
 
-interface UIProps extends Roact.PropsWithChildren {
+interface UIProps {
     upgrades: upgrade[];
+    upgraded: () => unknown;
 }
 
 export function Upgrades(props?: UIProps) {
     const elems = [];
     for (const upgrade of props?.upgrades ?? []) {
-        elems.push(<Upgrade upgradeName={upgrade.name} upgradeDescription={upgrade.description} identifier={upgrade.identifier} upgradeIcon={upgrade.icon}></Upgrade>)
+        elems.push(<Upgrade upgradeName={upgrade.name} upgradeDescription={upgrade.description} identifier={upgrade.identifier} upgradeIcon={upgrade.icon} upgradeEvent={props?.upgraded ?? (() => {})}/>)
     }
-    return <UpgradeUI>
+    return <UpgradeUI Position={new UDim2(0.5, 0, 0, 20)}>
         {elems}
     </UpgradeUI>
 }

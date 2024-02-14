@@ -10,7 +10,7 @@ local default = createRemotes({
 	serverLog = remote(),
 	upgradesAvailable = remote(),
 	pickUpgrade = remote().middleware(throttleMiddleware({
-		throttle = 10,
+		throttle = 2,
 	})),
 })
 return {

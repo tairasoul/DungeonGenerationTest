@@ -14,20 +14,33 @@ local function Upgrades(props)
 		_condition = {}
 	end
 	for _, upgrade in _condition do
-		local _arg0 = Roact.createElement(Upgrade, {
+		local _attributes = {
 			upgradeName = upgrade.name,
 			upgradeDescription = upgrade.description,
 			identifier = upgrade.identifier,
 			upgradeIcon = upgrade.icon,
-		})
+		}
+		local _result_1 = props
+		if _result_1 ~= nil then
+			_result_1 = _result_1.upgraded
+		end
+		local _condition_1 = _result_1
+		if _condition_1 == nil then
+			_condition_1 = (function() end)
+		end
+		_attributes.upgradeEvent = _condition_1
+		local _arg0 = Roact.createElement(Upgrade, _attributes)
 		table.insert(elems, _arg0)
 	end
+	local _attributes = {
+		Position = UDim2.new(0.5, 0, 0, 20),
+	}
 	local _children = {}
 	local _length = #_children
 	for _k, _v in elems do
 		_children[_length + _k] = _v
 	end
-	return Roact.createElement(UpgradeUI, {}, _children)
+	return Roact.createElement(UpgradeUI, _attributes, _children)
 end
 return {
 	Upgrades = Upgrades,

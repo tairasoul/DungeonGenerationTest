@@ -1,5 +1,4 @@
 import { Value, Observer } from "@rbxts/fusion";
-import make from "@rbxts/make";
 
 type listeners = {
     health: {callback: () => void, destroy: () => void}[];
@@ -7,7 +6,7 @@ type listeners = {
     valid: {callback: () => void, destroy: () => void}[];
 }
 
-export default class HealthSystem {
+export = class HealthSystem {
     maxHealth = Value(6);
     health = Value(this.maxHealth.get());
     maxShield = Value(3);

@@ -1,6 +1,6 @@
 -- Compiled with roblox-ts v2.3.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
-local HealthSystem = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "frameworks", "character", "health").default
+local HealthSystem = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "frameworks", "character", "health")
 local _class
 do
 	local Registry = setmetatable({}, {
@@ -71,7 +71,4 @@ do
 	end
 	_class = Registry
 end
-local default = _class.new()
-return {
-	default = default,
-}
+return _class.new()

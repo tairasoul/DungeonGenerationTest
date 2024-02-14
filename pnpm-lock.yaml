@@ -47,6 +47,9 @@ dependencies:
   '@rbxts/easy-path':
     specifier: ^1.0.7
     version: 1.0.7
+  '@rbxts/fade-ts':
+    specifier: ^2.0.1
+    version: 2.0.1
   '@rbxts/faker':
     specifier: ^0.2.8
     version: 0.2.8
@@ -68,9 +71,12 @@ dependencies:
   '@rbxts/gizmo':
     specifier: ^2.0.5
     version: 2.0.5
+  '@rbxts/heatup':
+    specifier: ^0.1.2
+    version: 0.1.2
   '@rbxts/horseman':
     specifier: ^1.1.7
-    version: 1.1.7(@rbxts/flipper@2.0.1)(@rbxts/types@1.0.750)
+    version: 1.1.7(@rbxts/flipper@2.0.1)(@rbxts/types@1.0.751)
   '@rbxts/immut':
     specifier: 0.4.4-ts.0
     version: 0.4.4-ts.0
@@ -146,12 +152,9 @@ dependencies:
   '@rbxts/precomputed':
     specifier: ^1.0.2
     version: 1.0.2
-  '@rbxts/pretty-react-hooks':
-    specifier: ^0.3.3
-    version: 0.3.3(@rbxts/flipper@2.0.1)(@rbxts/react-roblox@0.2.0)(@rbxts/react-ts@1.0.1)
   '@rbxts/pretty-roact-hooks':
-    specifier: ^3.2.1
-    version: 3.2.1(@rbxts/flipper@2.0.1)(@rbxts/react-ts@1.0.1)(@rbxts/roact-hooked@2.6.2)
+    specifier: npm:@rbxts/pretty-react-hooks@^0.3.3
+    version: /@rbxts/pretty-react-hooks@0.3.3(@rbxts/flipper@2.0.1)(@rbxts/react-roblox@0.2.0)(@rbxts/react-ts@1.0.1)
   '@rbxts/promise-forward':
     specifier: ^1.0.5
     version: 1.0.5
@@ -185,6 +188,9 @@ dependencies:
   '@rbxts/reward-containers':
     specifier: ^1.0.1
     version: 1.0.1
+  '@rbxts/rewire':
+    specifier: ^0.3.0
+    version: 0.3.0
   '@rbxts/rich-text-stream':
     specifier: ^2.1.3
     version: 2.1.3
@@ -197,21 +203,9 @@ dependencies:
   '@rbxts/roact-compat-internal':
     specifier: ^0.3.1
     version: 0.3.1
-  '@rbxts/roact-hooked':
-    specifier: ^2.6.2
-    version: 2.6.2(@rbxts/react-ts@1.0.1)
-  '@rbxts/roact-hooked-plus':
-    specifier: ^1.8.1
-    version: 1.8.1(@rbxts/react-ts@1.0.1)(@rbxts/roact-hooked@2.6.2)
-  '@rbxts/roact-hooks':
-    specifier: 0.5.1-ts.0
-    version: 0.5.1-ts.0
   '@rbxts/roact-reflex':
-    specifier: ^2.1.0
-    version: 2.1.0(@rbxts/react-ts@1.0.1)(@rbxts/reflex@4.3.1)(@rbxts/roact-hooked@2.6.2)
-  '@rbxts/roact-rodux':
-    specifier: 0.2.2-ts.8
-    version: 0.2.2-ts.8(@rbxts/react-ts@1.0.1)(@rbxts/rodux@3.0.0-ts.3)(@rbxts/types@1.0.750)
+    specifier: npm:@rbxts/react-reflex@^0.2.0
+    version: /@rbxts/react-reflex@0.2.0(@rbxts/react-ts@1.0.1)(@rbxts/reflex@4.3.1)
   '@rbxts/rodux':
     specifier: 3.0.0-ts.3
     version: 3.0.0-ts.3
@@ -302,11 +296,11 @@ dependencies:
 
 devDependencies:
   '@rbxts/compiler-types':
-    specifier: 2.2.0-types.0
-    version: 2.2.0-types.0
+    specifier: 2.3.0-types.0
+    version: 2.3.0-types.0
   '@rbxts/types':
-    specifier: ^1.0.750
-    version: 1.0.750
+    specifier: ^1.0.751
+    version: 1.0.751
   typescript:
     specifier: ^5.3.3
     version: 5.3.3
@@ -395,6 +389,11 @@ packages:
 
   /@rbxts/compiler-types@2.2.0-types.0:
     resolution: {integrity: sha512-ycsIGfp49MypbRi4eEPCXTjbb2iLKL1/2GjRrFLuLJL74fCfVtbAXIo2LiZhPrgqIiBLomb4JN5Rcqv4304bzw==}
+    dev: false
+
+  /@rbxts/compiler-types@2.3.0-types.0:
+    resolution: {integrity: sha512-2kllUXLlK22OzSi3GmLT+/O70U9oB2iXp4rGFk5FLwc1pqf4W9EsInuJ0t7poLE2XnqnpW/ojff9CUNivI2+lw==}
+    dev: true
 
   /@rbxts/component@1.2.0:
     resolution: {integrity: sha512-LnojBJDpBWa9GQX/PUlXYAT+HwrlKdvrvsJOOZyPHGGtGUQMGhns1FBWkJG7d8y52SDeK3XCud0HQz8LMrYVYA==}
@@ -432,6 +431,10 @@ packages:
 
   /@rbxts/experimental-reflect@1.0.0:
     resolution: {integrity: sha512-HOcMaP5OxabTn34+skbzb8DkkF3hMhn9Plxu+qJ9yfO5gL1nKyyIbHAk94D1G2brSTEeWXE8T25G64lKuNUaRg==}
+    dev: false
+
+  /@rbxts/fade-ts@2.0.1:
+    resolution: {integrity: sha512-URI+saSm4onAje7JfAc1ptJLrS7ganVO9PYmEZ9WkveTBJzGCPkRBjbby9qoaGjruCV0khJ9lc/mHDyhz77WsA==}
     dev: false
 
   /@rbxts/faker@0.2.8:
@@ -474,7 +477,17 @@ packages:
     resolution: {integrity: sha512-4mxZUHgstnIx+pOhUHamVtBxdHhaTUuAvZw5nSg01EztLcDqCudvlk1p56GQaj0o/aj0/5S7k46fN3XMiKTtHg==}
     dev: false
 
-  /@rbxts/horseman@1.1.7(@rbxts/flipper@2.0.1)(@rbxts/types@1.0.750):
+  /@rbxts/hashlib@1.0.1:
+    resolution: {integrity: sha512-WbSZpRAA2XHRaLuDE8GfVZPepPLXfwnrptWbVAfNsotF524ialWGa5ix9qK16L3RW7ElBuSCBHKckIGguNXhOg==}
+    dev: false
+
+  /@rbxts/heatup@0.1.2:
+    resolution: {integrity: sha512-MSXGkSYql5NUoWI8MbKQ/xLirMR07cOeDOVaARyooX71XXvcSzdp/wdrdHdOq0yMsT9pzxOGNknf38LYBPsfbQ==}
+    dependencies:
+      '@rbxts/hashlib': 1.0.1
+    dev: false
+
+  /@rbxts/horseman@1.1.7(@rbxts/flipper@2.0.1)(@rbxts/types@1.0.751):
     resolution: {integrity: sha512-B5EyQDS6x5fyVK7+xF36cNwbSxAk210yEB20PZOMRSy035+ZYAR1bJjyVwYFe3e11UyK2eSallN+1XsUZnL5Tw==}
     dependencies:
       '@rbxts/colour-utils': 1.4.1
@@ -490,7 +503,7 @@ packages:
       '@rbxts/roact-hooked-plus': 1.8.1(@rbxts/roact-hooked@2.6.2)(@rbxts/roact@1.4.4-ts.0)
       '@rbxts/roact-hooks': 0.4.1-ts.3
       '@rbxts/roact-reflex': 2.1.0(@rbxts/reflex@4.3.1)(@rbxts/roact-hooked@2.6.2)(@rbxts/roact@1.4.4-ts.0)
-      '@rbxts/roact-rodux': 0.2.2-ts.8(@rbxts/roact@1.4.4-ts.0)(@rbxts/rodux@3.0.0-ts.3)(@rbxts/types@1.0.750)
+      '@rbxts/roact-rodux': 0.2.2-ts.8(@rbxts/roact@1.4.4-ts.0)(@rbxts/rodux@3.0.0-ts.3)(@rbxts/types@1.0.751)
       '@rbxts/rodux': 3.0.0-ts.3
       '@rbxts/services': 1.5.3
       '@rbxts/sift': 0.0.8
@@ -544,7 +557,7 @@ packages:
   /@rbxts/lerp-functions@1.0.2:
     resolution: {integrity: sha512-ZNcy/VTyAmCX8Pgc/w4ij6Tf7Ez4e3S44s91cdgQBt347Xkxxu1G2phI/CLJvIXRWNA2hRz8898KBYqq1kXKfA==}
     dependencies:
-      '@rbxts/types': 1.0.750
+      '@rbxts/types': 1.0.751
     dev: false
 
   /@rbxts/linked-lists@1.0.4:
@@ -577,7 +590,7 @@ packages:
     resolution: {integrity: sha512-ZL1FMxDqWv1TIzE064JFen75rgybV7ulQHTUVqXuvngDBa3lP3btFiIdUO2MMJAOZpHKinC9jFudcCenrprcPg==}
     dependencies:
       '@rbxts/compiler-types': 1.2.3-types.1
-      '@rbxts/types': 1.0.750
+      '@rbxts/types': 1.0.751
     dev: false
 
   /@rbxts/math@1.1.0:
@@ -644,20 +657,6 @@ packages:
       '@rbxts/flipper': 2.0.1
       '@rbxts/react-roblox': 0.2.0
       '@rbxts/roact': /@rbxts/react-ts@1.0.1
-      '@rbxts/services': 1.5.3
-      '@rbxts/set-timeout': 1.1.2
-    dev: false
-
-  /@rbxts/pretty-roact-hooks@3.2.1(@rbxts/flipper@2.0.1)(@rbxts/react-ts@1.0.1)(@rbxts/roact-hooked@2.6.2):
-    resolution: {integrity: sha512-fn97QUp3mRn0uO9m6XmnrmngBTpf7JFiqyoz3NIiv1ir0Tad/odoehijjTwWR6gXEmClSEjXDj+oNDLumsOCyA==}
-    peerDependencies:
-      '@rbxts/flipper': ^2.0.1
-      '@rbxts/roact': 1.4.4-ts.0
-      '@rbxts/roact-hooked': ^2.3.3
-    dependencies:
-      '@rbxts/flipper': 2.0.1
-      '@rbxts/roact': /@rbxts/react-ts@1.0.1
-      '@rbxts/roact-hooked': 2.6.2(@rbxts/react-ts@1.0.1)
       '@rbxts/services': 1.5.3
       '@rbxts/set-timeout': 1.1.2
     dev: false
@@ -773,6 +772,10 @@ packages:
       '@rbxts/testez': 0.3.1-ts.7
     dev: false
 
+  /@rbxts/rewire@0.3.0:
+    resolution: {integrity: sha512-wChhGZ3kEkEsMK9ZuwKpwRsC7OGVZlvxrYMR3beFgCIPXE58JKLziBLkDACmd709XCCEmsMAqv9HMCMhSTD08Q==}
+    dev: false
+
   /@rbxts/rich-text-stream@2.1.3:
     resolution: {integrity: sha512-YHv7ETSUPebgvYbbvHhc1XSSUjE4iS8raIxpTj2TsL3aUawsHaKSWqp0lFjd0j10rcE/KviAbMTYtdpfbeWkMQ==}
     dev: false
@@ -792,18 +795,6 @@ packages:
       '@rbxts/react-internal': 0.2.2
       '@rbxts/react-roblox': 0.1.2
       '@rbxts/shared-internal': 0.2.1
-    dev: false
-
-  /@rbxts/roact-hooked-plus@1.8.1(@rbxts/react-ts@1.0.1)(@rbxts/roact-hooked@2.6.2):
-    resolution: {integrity: sha512-ipJf6pZcQZlx/0hyisQz2eoRECg38knUgjkEvx2dvAHfs0+IDgera7mcwv6zTMACqalaXu00inc4E5dpOrs54A==}
-    peerDependencies:
-      '@rbxts/roact': '*'
-      '@rbxts/roact-hooked': ^2.0.0
-    dependencies:
-      '@rbxts/flipper': 2.0.1
-      '@rbxts/roact': /@rbxts/react-ts@1.0.1
-      '@rbxts/roact-hooked': 2.6.2(@rbxts/react-ts@1.0.1)
-      '@rbxts/services': 1.5.3
     dev: false
 
   /@rbxts/roact-hooked-plus@1.8.1(@rbxts/roact-hooked@2.6.2)(@rbxts/roact@1.4.4-ts.0):
@@ -838,22 +829,6 @@ packages:
     resolution: {integrity: sha512-+8A42hDsSwZNnXDe1XIRpJhjSpxFvkBa8nB5QM1zuL2q5G6h6SGp7augY6vp6euze/gH4/Laho07PUM8bz0RKQ==}
     dev: false
 
-  /@rbxts/roact-hooks@0.5.1-ts.0:
-    resolution: {integrity: sha512-itua7KY/bMr97nDFrafE5svBuoB/OYHi8gAjAPhAtjWlGxvQx613EUwNkElxlqx25YqXT6xEAU70V97nC1w2wQ==}
-    dev: false
-
-  /@rbxts/roact-reflex@2.1.0(@rbxts/react-ts@1.0.1)(@rbxts/reflex@4.3.1)(@rbxts/roact-hooked@2.6.2):
-    resolution: {integrity: sha512-2RKp9P4MQn2rxK6xk0lcaAZNlD9+X2zLvqkueFSuW4HvgrX3wWtk4RGKjRzRu+pvnszIhdgJpsUZT+lyTObsSQ==}
-    peerDependencies:
-      '@rbxts/reflex': ^4.1.0
-      '@rbxts/roact': 1.4.4-ts.0
-      '@rbxts/roact-hooked': ^2.3.3
-    dependencies:
-      '@rbxts/reflex': 4.3.1
-      '@rbxts/roact': /@rbxts/react-ts@1.0.1
-      '@rbxts/roact-hooked': 2.6.2(@rbxts/react-ts@1.0.1)
-    dev: false
-
   /@rbxts/roact-reflex@2.1.0(@rbxts/reflex@4.3.1)(@rbxts/roact-hooked@2.6.2)(@rbxts/roact@1.4.4-ts.0):
     resolution: {integrity: sha512-2RKp9P4MQn2rxK6xk0lcaAZNlD9+X2zLvqkueFSuW4HvgrX3wWtk4RGKjRzRu+pvnszIhdgJpsUZT+lyTObsSQ==}
     peerDependencies:
@@ -876,19 +851,7 @@ packages:
       '@rbxts/roact-hooked': 2.6.2(@rbxts/react-ts@1.0.1)
     dev: false
 
-  /@rbxts/roact-rodux@0.2.2-ts.8(@rbxts/react-ts@1.0.1)(@rbxts/rodux@3.0.0-ts.3)(@rbxts/types@1.0.750):
-    resolution: {integrity: sha512-qeVAOtIYvU3HhCqILZHDn1VAcat6XMJ/CdAEq/2jqNd15lxtuqSso07BapVfmP8qmRnznwWlGJ9eDOhOpr9xPA==}
-    peerDependencies:
-      '@rbxts/roact': ^1.4.4-ts.0
-      '@rbxts/rodux': ^3.0.0-ts.3
-      '@rbxts/types': ^1.0.627
-    dependencies:
-      '@rbxts/roact': /@rbxts/react-ts@1.0.1
-      '@rbxts/rodux': 3.0.0-ts.3
-      '@rbxts/types': 1.0.750
-    dev: false
-
-  /@rbxts/roact-rodux@0.2.2-ts.8(@rbxts/roact@1.4.4-ts.0)(@rbxts/rodux@3.0.0-ts.3)(@rbxts/types@1.0.750):
+  /@rbxts/roact-rodux@0.2.2-ts.8(@rbxts/roact@1.4.4-ts.0)(@rbxts/rodux@3.0.0-ts.3)(@rbxts/types@1.0.751):
     resolution: {integrity: sha512-qeVAOtIYvU3HhCqILZHDn1VAcat6XMJ/CdAEq/2jqNd15lxtuqSso07BapVfmP8qmRnznwWlGJ9eDOhOpr9xPA==}
     peerDependencies:
       '@rbxts/roact': ^1.4.4-ts.0
@@ -897,7 +860,7 @@ packages:
     dependencies:
       '@rbxts/roact': 1.4.4-ts.0
       '@rbxts/rodux': 3.0.0-ts.3
-      '@rbxts/types': 1.0.750
+      '@rbxts/types': 1.0.751
     dev: false
 
   /@rbxts/roact@1.3.0-ts.15:
@@ -1012,8 +975,8 @@ packages:
       '@rbxts/services': 1.5.3
     dev: false
 
-  /@rbxts/types@1.0.750:
-    resolution: {integrity: sha512-7lfKLHnZSOo1gH6l8pZA+piQEKgsgRt2Ca2dbtRF4wsuUAfhvvaKIn6GMORs1g9u2DxAaUIHv/5CYpzN8QJtQw==}
+  /@rbxts/types@1.0.751:
+    resolution: {integrity: sha512-+Hwyjc7if15MOee9qKgzuUlABG9h3DhOrurxxezYQ/UOeehOK0veidks8cyOPLXdwSmhV2LNWTWDfGKZcmPWWw==}
 
   /@rbxts/ui-labs@1.0.2:
     resolution: {integrity: sha512-PED8QJTBQFIXzJBDE0Vz6CKGn3+0X3rHzQAlAQjFX/JZxaK2M/UMkZ0GZiH3SQqhPnrcPxi+qXyBPnpqxDaZ1Q==}
@@ -1036,7 +999,7 @@ packages:
       '@rbxts/rodux': 3.0.0-ts.3
       '@rbxts/roselect': 0.1.2
       '@rbxts/services': 1.5.3
-      '@rbxts/types': 1.0.750
+      '@rbxts/types': 1.0.751
       roblox-ts: 2.2.0
       typescript: 5.3.3
     dev: false

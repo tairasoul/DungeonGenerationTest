@@ -18,9 +18,9 @@ local Value = _fusion.Value
 local folder = ServerStorage:WaitForChild("Tiles")
 local randomizer = RandomTileAttacher.new(folder)
 local tiles = randomizer.tileRandomizer
-local Generator
+local _class
 do
-	Generator = setmetatable({}, {
+	local Generator = setmetatable({}, {
 		__tostring = function()
 			return "Generator"
 		end,
@@ -334,7 +334,6 @@ do
 		logServer(furthestTimeString, "src/server/tiles/classes/dungeon_generation.ts", 205)
 		self._hasGenerated:set(true)
 	end
+	_class = Generator
 end
-return {
-	default = Generator,
-}
+return _class
