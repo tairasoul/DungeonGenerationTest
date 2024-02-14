@@ -1,6 +1,6 @@
 import { Players, ReplicatedStorage, UserInputService } from "@rbxts/services";
 import { Character, CreateClient } from "@rbxts/wcs";
-import { Dodge as dodge } from "shared/wcs/skills/dodge";
+import wcsInfo from "shared/wcs";
 
 const client = CreateClient();
 client.RegisterDirectory(ReplicatedStorage.TS.wcs.movesets);
@@ -21,5 +21,5 @@ UserInputService.JumpRequest.Connect(() => {
 
 UserInputService.JumpRequest.Connect(() => {
     const char = getCurrentWCS_Character();
-    char?.GetSkillFromConstructor(dodge)?.Start();
+    char?.GetSkillFromConstructor(wcsInfo.skills.Dodge)?.Start();
 })

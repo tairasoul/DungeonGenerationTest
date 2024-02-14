@@ -1,5 +1,5 @@
 import remotes from "shared/remotes";
-import Generator from "./classes/dungeon_generation";
+import Generator from ".";
 import { ServerScriptService, Workspace } from "@rbxts/services";
 import { config } from "./interfaces/dungeon_config";
 

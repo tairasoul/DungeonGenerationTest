@@ -6,7 +6,7 @@ local UserInputService = game:GetService("UserInputService")
 local _wcs = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "wcs", "out")
 local Character = _wcs.Character
 local CreateClient = _wcs.CreateClient
-local dodge = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "wcs", "skills", "dodge").Dodge
+local wcsInfo = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "wcs")
 local client = CreateClient()
 client:RegisterDirectory(ReplicatedStorage.TS.wcs.movesets)
 client:RegisterDirectory(ReplicatedStorage.TS.wcs.skills)
@@ -26,7 +26,7 @@ UserInputService.JumpRequest:Connect(function()
 	local char = getCurrentWCS_Character()
 	local _result = char
 	if _result ~= nil then
-		_result = _result:GetSkillFromConstructor(dodge)
+		_result = _result:GetSkillFromConstructor(wcsInfo.skills.Dodge)
 		if _result ~= nil then
 			_result:Start()
 		end

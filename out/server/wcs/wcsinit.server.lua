@@ -5,7 +5,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local _wcs = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "wcs", "out")
 local Character = _wcs.Character
 local CreateServer = _wcs.CreateServer
-local main = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "wcs", "movesets", "main")
+local wcsInfo = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "wcs")
 local server = CreateServer()
 server:RegisterDirectory(ReplicatedStorage.TS.wcs.movesets)
 server:RegisterDirectory(ReplicatedStorage.TS.wcs.skills)
@@ -14,7 +14,7 @@ server:Start()
 Players.PlayerAdded:Connect(function(player)
 	player.CharacterAdded:Connect(function(model)
 		local wcs = Character.new(model)
-		wcs:ApplyMoveset(main);
+		wcs:ApplyMoveset(wcsInfo.movesets.main);
 		(model:WaitForChild("Humanoid")).Died:Once(function()
 			return wcs:Destroy()
 		end)

@@ -1,9 +1,7 @@
 import Roact from "@rbxts/roact";
 import { Players } from "@rbxts/services";
 import { Upgrades } from "../ui_setup/upgrades";
-import { upgrade } from "shared/remotes";
-
-//const mounted = Roact.mount(Upgrades(), );
+import { upgrade } from "shared/remotes"; 
 
 export = new class UIHandler {
     private screens: { [key: string]: Roact.Tree | void } = {};

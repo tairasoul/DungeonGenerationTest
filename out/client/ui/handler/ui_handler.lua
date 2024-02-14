@@ -3,7 +3,6 @@ local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_incl
 local Roact = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "RoactTS")
 local Players = game:GetService("Players")
 local Upgrades = TS.import(script, script.Parent.Parent, "ui_setup", "upgrades").Upgrades
---const mounted = Roact.mount(Upgrades(), );
 local _class
 do
 	local UIHandler = setmetatable({}, {
