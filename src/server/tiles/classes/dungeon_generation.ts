@@ -88,7 +88,7 @@ export = class Generator {
             if (!randomized) return;
             let randomThis;
             let attempts = 0;
-            while (attempts < tile.attachmentPoints.size()) {
+            while (attempts < 15) {
                 randomThis = getRandom(tile.attachmentPoints, (inst) => !inst.FindFirstChild("HasAttachment"));
                 if (randomThis) break;
                 tile = getNextAfterCondition_Reverse(this.tiles, (item) => item === tile) as Tile;
@@ -105,7 +105,7 @@ export = class Generator {
             const tc = new Tile(randomized);
             if (tile.attachTile(tc, randomThis, this.tiles)) {
                 const cframe = tc._model.GetPivot();
-                if (getDistance(cframe.Position, (this.config.STARTING_PART.FindFirstAncestorOfClass("Model") ?? this.config.STARTING_PART).GetPivot().Position).Magnitude < 70) {
+                if (getDistance(cframe.Position, (this.config.STARTING_PART.FindFirstAncestorOfClass("Model") ?? this.config.STARTING_PART).GetPivot().Position).Magnitude < 50) {
                     logServer(`tile ${tostring(tc)} is too close to starting room! removing.`, $file.filePath, $file.lineNumber, "Warning");
                     clone.ClearAllChildren();
                     clone.Parent = undefined;
@@ -124,7 +124,7 @@ export = class Generator {
 
         const genTileBatch = () => {
             logServer(`generating ${this.config.TILES} tiles`, $file.filePath, $file.lineNumber);
-            for (let i = 0; i < this.config.TILES - 1; i++) {
+            for (let i = 0; i < this.config.TILES - 2; i++) {
                 RunService.Heartbeat.Wait();
                 genTile(20);
             }

@@ -19,12 +19,14 @@ do
 		self._screens = {}
 	end
 	function UIHandler:openUpgrades(upgrades)
-		self._screens.Upgrade = Roact.mount(Upgrades({
+		local elem = Upgrades({
 			upgrades = upgrades,
 			upgraded = function()
 				return self:closeUpgrades()
 			end,
-		}), Players.LocalPlayer:WaitForChild("PlayerGui"))
+		})
+		print(elem)
+		self._screens.Upgrade = Roact.mount(elem, Players.LocalPlayer:WaitForChild("PlayerGui"))
 	end
 	function UIHandler:closeUpgrades()
 		if self._screens.Upgrade then

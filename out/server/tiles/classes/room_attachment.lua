@@ -23,15 +23,21 @@ do
 		self:calculateOffsets()
 	end
 	function RoomAttachment:calculateOffsets()
-		local centerPoint = self._tile.centerPoint.Position
-		local offset = getDistance(centerPoint, self._tile.attachmentPoint.Position)
+		local centerPoint = self._tile.originModel:GetPivot()
+		local ap = self._tile.attachmentPoint
+		local offset = getDistance(centerPoint.Position, ap.Position)
 		self._AttachmentOffset = {
-			part = self._tile.attachmentPoint,
+			part = ap,
 			offset = offset,
 		}
 	end
 	function RoomAttachment:attachToPart(part, tileList)
 		local offset = self._AttachmentOffset
+		if not offset then
+			return {
+				result = false,
+			}
+		end
 		local center = self._tile.originModel
 		local pos = offset.offset
 		local lookVector = part.CFrame.LookVector
@@ -44,7 +50,7 @@ do
 		local _vector3_2 = Vector3.new(0, 2, 0)
 		local result = _fn:Raycast((_exp - _arg0 + _vector3_2).Position, Vector3.new(0, -5, 0))
 		if result ~= nil then
-			logServer(`attachment for {self._tile.originModel} to {part} overlaps with a part! {result.Instance:FindFirstAncestorOfClass("Model")}`, "src/server/tiles/classes/room_attachment.ts", 34, "Warning")
+			logServer(`attachment for {self._tile.originModel} to {part} overlaps with a part! {result.Instance:FindFirstAncestorOfClass("Model")}'s overlapping part: {result.Instance}`, "src/server/tiles/classes/room_attachment.ts", 38, "Warning")
 			make("BoolValue", {
 				Parent = part,
 				Value = true,
@@ -122,8 +128,8 @@ do
 		local _fn_1 = center
 		local _exp_1 = part:GetPivot()
 		local _arg0_1 = lookVector * newPos
-		local _vector3_3 = Vector3.new(0, 1, 0)
-		_fn_1:PivotTo(_exp_1 - _arg0_1 - _vector3_3)
+		local _vector3_3 = Vector3.new(0, pos.Y)
+		_fn_1:PivotTo(_exp_1 - _arg0_1 + _vector3_3)
 		if not part:FindFirstChild("HasAttachment") then
 			make("BoolValue", {
 				Parent = part,

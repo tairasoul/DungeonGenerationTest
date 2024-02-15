@@ -4,7 +4,7 @@ import { getDistance, logServer } from "shared/utils";
 import make from "@rbxts/make";
 import { Workspace } from "@rbxts/services";
 import tile from "./tile";
-import { $file, $print } from "rbxts-transform-debug";
+import { $file } from "rbxts-transform-debug";
 
 export default class RoomAttachment {
     _tile: Tile;
@@ -15,23 +15,27 @@ export default class RoomAttachment {
     }
 
     calculateOffsets() {
-        const centerPoint = this._tile.centerPoint.Position;
-        const offset = getDistance(centerPoint, this._tile.attachmentPoint.Position);
+        const centerPoint = this._tile.originModel.GetPivot();
+        const ap = this._tile.attachmentPoint;
+        const offset = getDistance(centerPoint.Position, ap.Position);
         this.AttachmentOffset = {
-            part: this._tile.attachmentPoint,
+            part: ap,
             offset
         }
     }
 
-    attachToPart(part: Part, tileList: tile[]) {
+    attachToPart(part: Part, tileList: tile[]): {result: boolean, tile?: tile} {
         const offset = this.AttachmentOffset;
+        if (!offset) return {
+            result: false
+        }
         const center = this._tile.originModel;
-        const pos = (offset as PartOffset).offset;
+        const pos = offset.offset;
         const lookVector = part.CFrame.LookVector;
         const newPos = new Vector3(pos.X, 0, pos.X).add(new Vector3(pos.Z, 0, pos.Z));
         const result = Workspace.Raycast(part.GetPivot().sub(lookVector.mul(newPos)).add(new Vector3(0, 2, 0)).Position, new Vector3(0, -5, 0));
         if (result !== undefined) {
-            logServer(`attachment for ${this._tile.originModel} to ${part} overlaps with a part! ${result.Instance.FindFirstAncestorOfClass("Model")}`, $file.filePath, $file.lineNumber, "Warning");
+            logServer(`attachment for ${this._tile.originModel} to ${part} overlaps with a part! ${result.Instance.FindFirstAncestorOfClass("Model")}'s overlapping part: ${result.Instance}`, $file.filePath, $file.lineNumber, "Warning");
             make("BoolValue", {Parent: part, Value: true, Name: "HasAttachment"});
             const tile = tileList.find((v) => v._model.WaitForChild("centerPoint") === result.Instance.FindFirstAncestorOfClass("Model")?.WaitForChild("centerPoint")) as tile;
             if (tile !== undefined) {
@@ -47,7 +51,7 @@ export default class RoomAttachment {
                 }
             } 
         }
-        center.PivotTo(part.GetPivot().sub(lookVector.mul(newPos)).sub(new Vector3(0, 1, 0)));
+        center.PivotTo(part.GetPivot().sub(lookVector.mul(newPos)).add(new Vector3(0, pos.Y)));
         if (!part.FindFirstChild("HasAttachment")) make("BoolValue", {Parent: part, Value: true, Name: "HasAttachment"});
         make("BoolValue", {Parent: (offset as PartOffset).part, Value: true, Name: "HasAttachment"});
         make("ObjectValue", {Parent: part, Value: this._tile.attachmentPoint, Name: "AttachmentPart"});

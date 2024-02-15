@@ -1,5 +1,4 @@
 import { Tile } from "server/tiles/interfaces/parser";
-import { RoomTypes } from "server/tiles/interfaces/room";
 
 export default class TileParser {
     private model: Model;
@@ -14,13 +13,15 @@ export default class TileParser {
         const attachmentPoint = this.model.WaitForChild("AttachmentPoint") as Part;
         const centerPoint = this.model.WaitForChild("centerPoint") as Part;
         const validPoints = children as Part[];
+        const chance = tonumber(this.model.Name.split("%")[1]) ?? 100
 
         return {
             attachmentPoint,
             types: roomInfo,
             originModel: this.model,
             centerPoint,
-            validPoints
+            validPoints,
+            chance
         };
     }
 

@@ -39,6 +39,7 @@ do
 		return {
 			roomType = tile.roomType,
 			roomModel = clone,
+			chance = tileData.chance,
 		}
 	end
 end

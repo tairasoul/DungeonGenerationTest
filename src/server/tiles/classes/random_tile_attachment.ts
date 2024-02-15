@@ -34,7 +34,8 @@ export default class RandomTileAttacher {
 
         return {
             roomType: tile.roomType,
-            roomModel: clone
+            roomModel: clone,
+            chance: tileData.chance
         };
     }
 }

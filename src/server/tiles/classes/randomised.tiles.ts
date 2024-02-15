@@ -1,6 +1,7 @@
 import { RoomTypes, RoomInfo } from "../interfaces/room";
-import { getRandom } from "shared/utils";
+import { getRandom, randomChance } from "shared/utils";
 import tileFolderParser from "./tileFolderParser";
+import TileParser from "./tileParser";
 
 export default class TileRandomizer {
     parser: tileFolderParser
@@ -17,7 +18,8 @@ export default class TileRandomizer {
                 instances.push(
                     {
                         roomModel: room,
-                        roomType
+                        roomType,
+                        chance: tonumber(room.Name.split("%")[1]) ?? 100
                     }
                 )
             }
@@ -25,18 +27,24 @@ export default class TileRandomizer {
         return instances;
     }
 
-    getRandomTile(): RoomInfo | undefined {
+    getRandomTile(recursions: number = 0): RoomInfo | undefined {
         const validInstances = this.getValidInstances();
-        return getRandom(validInstances);
+        const rnd = getRandom(validInstances, (inst) => randomChance(inst.chance));
+        if (!rnd && recursions < 10) return this.getRandomTile(++recursions);
+        return rnd;
     }
 
-    getTileOfType(roomType: RoomTypes): RoomInfo | undefined {
+    getTileOfType(roomType: RoomTypes, recursions: number = 0): RoomInfo | undefined {
         const validInstances = this.getValidInstances([roomType]);
-        return getRandom(validInstances);
+        const rnd = getRandom(validInstances, (inst) => randomChance(inst.chance));
+        if (!rnd && recursions < 10) return this.getTileOfType(roomType, ++recursions);
+        return rnd;
     }
 
-    getTileOfTypes(roomTypes: RoomTypes[]): RoomInfo | undefined {
+    getTileOfTypes(roomTypes: RoomTypes[], recursions: number = 0): RoomInfo | undefined {
         const validInstances = this.getValidInstances(roomTypes);
-        return getRandom(validInstances);
+        const rnd = getRandom(validInstances, (inst) => randomChance(inst.chance));
+        if (!rnd && recursions < 10) return this.getTileOfTypes(roomTypes);
+        return rnd;
     }
 }

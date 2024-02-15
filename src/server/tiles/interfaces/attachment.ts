@@ -5,5 +5,5 @@ export type PartOffset = {
 
 export type RotationOffset = {
     part: Part;
-    offset: Vector3;
+    offset: CFrame;
 }

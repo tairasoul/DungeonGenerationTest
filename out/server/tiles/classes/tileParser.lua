@@ -34,12 +34,18 @@ do
 		local attachmentPoint = self._model:WaitForChild("AttachmentPoint")
 		local centerPoint = self._model:WaitForChild("centerPoint")
 		local validPoints = children
+		local _condition = tonumber(string.split(self._model.Name, "%")[2])
+		if _condition == nil then
+			_condition = 100
+		end
+		local chance = _condition
 		return {
 			attachmentPoint = attachmentPoint,
 			types = roomInfo,
 			originModel = self._model,
 			centerPoint = centerPoint,
 			validPoints = validPoints,
+			chance = chance,
 		}
 	end
 	function TileParser:_getRoomInfo()

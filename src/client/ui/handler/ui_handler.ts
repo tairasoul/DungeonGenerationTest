@@ -6,7 +6,9 @@ import { upgrade } from "shared/remotes";
 export = new class UIHandler {
     private screens: { [key: string]: Roact.Tree | void } = {};
     openUpgrades(upgrades: upgrade[]) {
-        this.screens["Upgrade"] = Roact.mount(Upgrades({upgrades, upgraded: () => this.closeUpgrades()}), Players.LocalPlayer.WaitForChild("PlayerGui"));
+        const elem = Upgrades({upgrades, upgraded: () => this.closeUpgrades()});
+        print(elem);
+        this.screens["Upgrade"] = Roact.mount(elem, Players.LocalPlayer.WaitForChild("PlayerGui"));
     }
 
     closeUpgrades() {

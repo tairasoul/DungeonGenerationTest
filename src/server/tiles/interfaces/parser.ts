@@ -6,4 +6,5 @@ export type Tile = {
     originModel: Model;
     centerPoint: Part;
     validPoints: Part[];
+    chance: number;
 }

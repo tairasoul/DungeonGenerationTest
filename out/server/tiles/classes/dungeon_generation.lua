@@ -173,7 +173,7 @@ do
 			end
 			local randomThis
 			local attempts = 0
-			while attempts < #tile.attachmentPoints do
+			while attempts < 15 do
 				randomThis = getRandom(tile.attachmentPoints, function(inst)
 					return not inst:FindFirstChild("HasAttachment")
 				end)
@@ -198,7 +198,7 @@ do
 			local tc = Tile.new(randomized)
 			if tile:attachTile(tc, randomThis, self._tiles) then
 				local cframe = tc._model:GetPivot()
-				if getDistance(cframe.Position, (self._config.STARTING_PART:FindFirstAncestorOfClass("Model") or self._config.STARTING_PART):GetPivot().Position).Magnitude < 70 then
+				if getDistance(cframe.Position, (self._config.STARTING_PART:FindFirstAncestorOfClass("Model") or self._config.STARTING_PART):GetPivot().Position).Magnitude < 50 then
 					logServer(`tile {tostring(tc)} is too close to starting room! removing.`, "src/server/tiles/classes/dungeon_generation.ts", 109, "Warning")
 					clone:ClearAllChildren()
 					clone.Parent = nil
@@ -231,7 +231,7 @@ do
 					else
 						_shouldIncrement = true
 					end
-					if not (i < self._config.TILES - 1) then
+					if not (i < self._config.TILES - 2) then
 						break
 					end
 					RunService.Heartbeat:Wait()
